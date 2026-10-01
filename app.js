@@ -697,6 +697,97 @@ function percentMore() {
   };
 }
 
+/* ---------- Verrannollisuus ---------- */
+
+const nb = (n, unit) => `${n} ${unit}`;
+
+// Suoraan verrannollinen: y = k · x. Lasketaan ensin yhden yksikön arvo k.
+const DIRECT_STORIES = [
+  { k: [2, 3, 4], x1: [2, 3, 4, 5], x2: [4, 6, 7, 8, 10], unit: '€',
+    story: (x1, y1, x2) => `${nb(x1, 'kg')} omenoita maksaa ${nb(y1, '€')}. Paljonko maksaa ${nb(x2, 'kg')} omenoita?`,
+    one: 'Lasketaan ensin, paljonko 1 kg maksaa.' },
+  { k: [10, 12, 15, 20], x1: [2, 3, 4, 5], x2: [3, 6, 7, 8], unit: '€',
+    story: (x1, y1, x2) => `Nella ansaitsee kesätyössä ${nb(y1, '€')} ${x1} tunnissa. Paljonko hän ansaitsee ${x2} tunnissa?`,
+    one: 'Lasketaan ensin, paljonko Nella ansaitsee 1 tunnissa.' },
+  { k: [10, 12, 15, 20], x1: [2, 3, 4], x2: [5, 6], unit: 'km',
+    story: (x1, y1, x2) => `Pyöräilijä ajaa tasaista vauhtia ${nb(y1, 'km')} ${x1} tunnissa. Kuinka pitkälle hän ajaa ${x2} tunnissa?`,
+    one: 'Lasketaan ensin, kuinka pitkälle pyöräilijä ajaa 1 tunnissa.' },
+  { k: [1, 2, 3], x1: [2, 4], x2: [3, 5, 6, 8], unit: 'dl',
+    story: (x1, y1, x2) => `Pannukakkuun ${x1} hengelle tarvitaan ${nb(y1, 'dl')} maitoa. Paljonko maitoa tarvitaan ${x2} hengelle?`,
+    one: 'Lasketaan ensin, paljonko maitoa tarvitaan 1 hengelle.' },
+  { k: [2, 3], x1: [2, 3, 4], x2: [5, 6, 7, 9], unit: '€',
+    story: (x1, y1, x2) => `${x1} jäätelöä maksaa ${nb(y1, '€')}. Paljonko maksaa ${x2} jäätelöä?`,
+    one: 'Lasketaan ensin, paljonko 1 jäätelö maksaa.' },
+];
+
+function proportionDirect() {
+  const t = pick(DIRECT_STORIES);
+  const k = pick(t.k);
+  let x1, x2;
+  do { x1 = pick(t.x1); x2 = pick(t.x2); } while (x1 === x2);
+  const y1 = k * x1, y2 = k * x2;
+  const u = n => nb(n, t.unit);
+  return {
+    label: 'Suoraan verrannollinen',
+    prompt: t.story(x1, y1, x2),
+    problem: '',
+    answer: { type: 'single', label: 'Vastaus =', unit: t.unit, value: y2 },
+    steps: [
+      {
+        text: `Suoraan verrannollinen: kun määrä kasvaa, myös ${t.unit === '€' ? 'hinta' : 'tulos'} kasvaa samassa suhteessa. ${t.one}`,
+        math: [`${u(y1)} : ${x1} = ${u(k)}`],
+      },
+      { text: `Kerrotaan uudella määrällä ${x2}.`, math: [`${x2} · ${u(k)} = ${u(y2)}`] },
+      { text: 'Tarkistus: yhden yksikön arvo pysyy samana.', math: [`${u(y2)} : ${x2} = ${u(k)} ✓`] },
+    ],
+    final: u(y2),
+  };
+}
+
+// Kääntäen verrannollinen: x · y = P pysyy samana.
+const INVERSE_STORIES = [
+  { x1: [2, 3, 4, 6], y1: [4, 6, 8, 12], x2: [2, 3, 4, 6, 8, 12], unit: 'päivää',
+    story: (x1, y1, x2) => `${x1} maalaria maalaa talon ${y1} päivässä. Kuinka monessa päivässä ${x2} maalaria maalaa saman talon?`,
+    whole: P => `Koko työ on ${P} "maalaripäivää" (yksi maalari tekisi sen ${P} päivässä).`,
+    rule: 'kun maalareita on enemmän, aikaa kuluu vähemmän' },
+  { x1: [40, 50, 60, 80, 100], y1: [2, 3, 4, 6], x2: [20, 30, 40, 50, 60, 80, 100, 120], unit: 'h',
+    story: (x1, y1, x2) => `Automatka kestää ${nb(y1, 'tuntia')}, kun ajetaan nopeudella ${nb(x1, 'km/h')}. Kuinka monta tuntia matka kestää nopeudella ${nb(x2, 'km/h')}?`,
+    whole: P => `Matkan pituus on ${nb(P, 'km')}.`,
+    rule: 'kun nopeus kasvaa, aikaa kuluu vähemmän' },
+  { x1: [2, 3, 4, 6], y1: [4, 5, 6, 8, 10], x2: [2, 3, 4, 5, 6, 8, 10, 12], unit: 'karkkia',
+    story: (x1, y1, x2) => `Karkkipussin karkit jaetaan tasan. Kun lapsia on ${x1}, jokainen saa ${y1} karkkia. Montako karkkia jokainen saa, jos lapsia on ${x2}?`,
+    whole: P => `Karkkeja on yhteensä ${P}.`,
+    rule: 'kun lapsia on enemmän, jokainen saa vähemmän' },
+  { x1: [2, 3, 4, 5], y1: [6, 8, 10, 12], x2: [2, 3, 4, 5, 6, 8, 10], unit: 'päivää',
+    story: (x1, y1, x2) => `Koiranruokasäkki riittää ${x1} koiralle ${y1} päiväksi. Kuinka moneksi päiväksi sama säkki riittää ${x2} koiralle?`,
+    whole: P => `Ruokaa on yhteensä ${P} "koirapäivän" verran (yhdelle koiralle se riittäisi ${P} päivää).`,
+    rule: 'kun koiria on enemmän, ruoka loppuu nopeammin' },
+];
+
+function proportionInverse() {
+  const t = pick(INVERSE_STORIES);
+  let x1, y1, x2, P;
+  do {
+    x1 = pick(t.x1); y1 = pick(t.y1); x2 = pick(t.x2); P = x1 * y1;
+  } while (x1 === x2 || P % x2 !== 0 || P / x2 < 2); // vähintään 2, jotta taivutus toimii
+  const y2 = P / x2;
+  return {
+    label: 'Kääntäen verrannollinen',
+    prompt: t.story(x1, y1, x2),
+    problem: '',
+    answer: { type: 'single', label: 'Vastaus =', unit: t.unit, value: y2 },
+    steps: [
+      {
+        text: `Kääntäen verrannollinen: ${t.rule}. Kertolaskun tulos pysyy aina samana. ${t.whole(P)}`,
+        math: [`${x1} · ${y1} = ${P}`],
+      },
+      { text: `Jaetaan tulo uudella määrällä ${x2}.`, math: [`${P} : ${x2} = ${y2}`] },
+      { text: 'Tarkistus: tulo pysyy samana.', math: [`${x2} · ${y2} = ${P} = ${x1} · ${y1} ✓`] },
+    ],
+    final: nb(y2, t.unit),
+  };
+}
+
 /* ---------- Kategoriat ---------- */
 
 const CATEGORIES = [
@@ -712,6 +803,13 @@ const CATEGORIES = [
       { id: 'korko', name: 'Korkoa korolle', short: 'Korko', gens: [[percentCompound, 1]] },
       { id: 'osuus', name: 'Prosenttiosuus', short: 'Osuus', gens: [[percentRatio, 1]] },
       { id: 'enemman', name: 'Prosenttia enemmän', short: 'Enemmän', gens: [[percentMore, 1]] },
+    ],
+  },
+  {
+    id: 'verrannollisuus', name: 'Verrannollisuus', short: 'Verranto',
+    subs: [
+      { id: 'suoraan', name: 'Suoraan verrannollinen', short: 'Suoraan', gens: [[proportionDirect, 1]] },
+      { id: 'kaantaen', name: 'Kääntäen verrannollinen', short: 'Kääntäen', gens: [[proportionInverse, 1]] },
     ],
   },
 ];
@@ -752,7 +850,7 @@ function parseSet(str) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { CATEGORIES, percentMore, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
+  module.exports = { CATEGORIES, proportionDirect, proportionInverse, percentMore, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
 }
 
 
