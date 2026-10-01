@@ -652,6 +652,51 @@ function percentRatio() {
   };
 }
 
+// Kuinka monta prosenttia enemmän A on kuin B (vertailukohta on pienempi luku B).
+// Tilanne: [vertailuluvut, prosentit, yksikkö, tarina ja kysymys]
+const MORE_STORIES = [
+  [[10, 20, 25, 40, 50, 80, 100], [10, 20, 25, 30, 40, 50, 60, 75, 100], '',
+    (A, B) => `Kuinka monta prosenttia enemmän ${A} on kuin ${B}?`],
+  [[8, 10, 12, 20], [10, 25, 50], '€',
+    (A, B) => `Pizza maksoi viime vuonna ${B}. Nyt se maksaa ${A}. Kuinka monta prosenttia kalliimpi pizza on nyt?`],
+  [[120, 140, 150, 160], [10, 20, 25], 'cm',
+    (A, B) => `Leo on ${B} pitkä ja hänen isänsä ${A} pitkä. Kuinka monta prosenttia pidempi isä on kuin Leo?`],
+  [[4, 5, 8, 10], [20, 25, 50, 75, 100], 'km',
+    (A, B) => `Emma juoksi ${B} ja Leo ${A}. Kuinka monta prosenttia pidemmän matkan Leo juoksi kuin Emma?`],
+  [[40, 50, 80, 200], [10, 20, 25, 50], 'asiakasta',
+    (A, B) => `Kaupassa kävi eilen ${B} ja tänään ${A}. Kuinka monta prosenttia enemmän asiakkaita kävi tänään?`],
+];
+
+function percentMore() {
+  const [bases, pcts, unit, story] = pick(MORE_STORIES);
+  let B, p;
+  do { B = pick(bases); p = pick(pcts); } while ((B * p) % 100 !== 0);
+  const A = B + (B * p) / 100;
+  const D = A - B;
+  const u = n => (unit ? `${n}\u00a0${unit}` : String(n));
+  return {
+    label: 'Prosentit · prosenttia enemmän',
+    prompt: story(u(A), u(B)),
+    problem: '',
+    answer: { type: 'single', label: 'Vastaus =', unit: '%', value: p },
+    steps: [
+      {
+        text: 'Lasketaan ensin erotus, eli kuinka paljon enemmän on.',
+        math: [`${u(A)} − ${u(B)} = ${u(D)}`],
+      },
+      {
+        text: `Vertailukohta on ${u(B)}, eli luku johon verrataan. Jaetaan erotus vertailukohdalla ja muutetaan prosenteiksi.`,
+        math: [`${u(D)} : ${u(B)} = ${dec(p / 100)} = ${p}\u00a0%`],
+      },
+      {
+        text: `Tarkistus: ${p}\u00a0% enemmän tarkoittaa ${100 + p}\u00a0% vertailukohdasta.`,
+        math: [`${dec((100 + p) / 100, 2)} · ${u(B)} = ${u(A)} ✓`],
+      },
+    ],
+    final: `${p}\u00a0%`,
+  };
+}
+
 /* ---------- Kategoriat ---------- */
 
 const CATEGORIES = [
@@ -666,6 +711,7 @@ const CATEGORIES = [
       { id: 'korotus', name: 'Korotus', short: 'Korotus', gens: [[percentIncrease, 1]] },
       { id: 'korko', name: 'Korkoa korolle', short: 'Korko', gens: [[percentCompound, 1]] },
       { id: 'osuus', name: 'Prosenttiosuus', short: 'Osuus', gens: [[percentRatio, 1]] },
+      { id: 'enemman', name: 'Prosenttia enemmän', short: 'Enemmän', gens: [[percentMore, 1]] },
     ],
   },
 ];
@@ -706,7 +752,7 @@ function parseSet(str) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { CATEGORIES, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
+  module.exports = { CATEGORIES, percentMore, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
 }
 
 
