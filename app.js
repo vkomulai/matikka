@@ -502,14 +502,14 @@ if (typeof document !== 'undefined') {
   const $ = id => document.getElementById(id);
   const els = {
     cats: $('cats'), score: $('score'), badge: $('badge'), prompt: $('prompt'), problem: $('problem'),
-    inputs: $('inputs'), hint: $('hint'), feedback: $('feedback'), keypad: $('keypad'),
+    inputs: $('inputs'), feedback: $('feedback'), keypad: $('keypad'),
     keyCheck: $('key-check'), extra1: $('key-extra1'), extra2: $('key-extra2'),
     solution: $('solution'), steps: $('steps'), final: $('final'),
   };
 
   const state = {
     cat: CATEGORIES[0], task: null, scored: false, solved: false, correct: 0, total: 0,
-    fields: [], values: {}, active: null,
+    fields: [], values: {}, active: null, hint: '',
   };
 
   els.cats.innerHTML = CATEGORIES.map(c =>
@@ -538,15 +538,15 @@ if (typeof document !== 'undefined') {
     if (answer.type === 'set') {
       setExtraKey(els.extra1, 'pm', '±', 'Plus-miinus');
       setExtraKey(els.extra2, 'comma', ',', 'Pilkku');
-      els.hint.textContent = 'Jos ratkaisuja on useampi, erota ne pilkulla (esim. 3, −3) tai kirjoita ±3.';
+      state.hint = 'Useampi ratkaisu: esim. 3, −3 tai ±3';
     } else if (answer.type === 'pair') {
       setExtraKey(els.extra1, 'x', `<var>x</var>`, 'Valitse x-kenttä');
       setExtraKey(els.extra2, 'y', `<var>y</var>`, 'Valitse y-kenttä');
-      els.hint.textContent = 'Vaihda kenttää napauttamalla sitä.';
+      state.hint = 'Vaihda kenttää napauttamalla sitä.';
     } else {
       setExtraKey(els.extra1, 'clear', 'C', 'Tyhjennä');
       setExtraKey(els.extra2, null);
-      els.hint.textContent = '';
+      state.hint = '';
     }
     paintFields();
   }
@@ -559,8 +559,9 @@ if (typeof document !== 'undefined') {
     }
   }
 
+  // Ilman palautetta paikalla näytetään vihje, jotta tila ei mene hukkaan.
   function clearFeedback() {
-    els.feedback.textContent = '';
+    els.feedback.textContent = state.hint;
     els.feedback.className = 'feedback';
   }
 

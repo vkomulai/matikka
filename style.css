@@ -264,8 +264,6 @@ body {
 }
 @keyframes blink { 50% { opacity: 0; } }
 
-.hint { color: var(--muted); font-size: .85rem; margin: 8px 0 0; }
-.hint:empty { display: none; }
 
 .feedback {
   margin-top: 10px;
@@ -274,6 +272,7 @@ body {
   border-radius: 10px;
   font-weight: 600;
 }
+.feedback:not(.ok):not(.bad) { color: var(--muted); font-weight: 400; font-size: .85rem; padding-left: 0; }
 .feedback.ok { background: var(--ok-soft); color: var(--ok); }
 .feedback.bad { background: var(--bad-soft); color: var(--bad); }
 
@@ -403,3 +402,20 @@ body {
   white-space: nowrap;
 }
 .op var { font-family: "Cambria Math", Georgia, serif; }
+
+/* Puhelin: tiivis asettelu, jotta näppäimistö ja napit mahtuvat ruudulle */
+@media (max-width: 640px) {
+  .wrap { padding-top: 8px; }
+  .card { padding: 12px 14px 14px; }
+  .prompt { margin: 6px 0 2px; font-size: 1rem; }
+  .problem { padding: 2px 0 10px; }
+  .field { font-size: 1.2rem; }
+  .field-box { height: 42px; font-size: 1.2rem; }
+  .feedback { margin-top: 6px; min-height: 38px; padding: 8px 12px; font-size: .95rem; }
+  .keypad { grid-auto-rows: 44px; gap: 6px; margin-top: 6px; }
+  .keypad button { font-size: 1.25rem; border-radius: 10px; }
+  .keypad .key-check { font-size: .95rem; }
+  .actions { margin-top: 8px; gap: 6px; }
+  .actions .btn { min-height: 40px; padding: 8px 10px; }
+  .footnote { display: none; }
+}
