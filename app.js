@@ -448,6 +448,101 @@ function systemElim() {
   };
 }
 
+/* ---------- Prosentit ---------- */
+
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+// Desimaaliluku suomalaisittain: 2.2 -> "2,2"
+const dec = (n, digits) => (digits === undefined ? String(n) : n.toFixed(digits)).replace('.', ',').replace('-', '−');
+// Sentit euroiksi: 220 -> "2,20 €", 7000 -> "70 €"
+const eur = cents => (cents % 100 === 0 ? `${cents / 100} €` : `${dec(cents / 100, 2)} €`);
+
+// Arpoo hinnan (sentteinä) ja prosentin niin, että muutos on tasasentteinä.
+function pickPrice(prices, percents) {
+  let price, p;
+  do { price = Math.round(pick(prices) * 100); p = pick(percents); } while ((price * p) % 100 !== 0);
+  return [price, p];
+}
+
+const DISCOUNT_ITEMS = [
+  ['Takki', [60, 80, 100, 120, 150, 200]],
+  ['Huppari', [30, 40, 50, 60]],
+  ['Reppu', [20, 40, 50, 60]],
+  ['Lenkkarit', [60, 80, 90, 100, 120]],
+  ['Pelikonsoli', [200, 300, 400, 500]],
+  ['Polkupyörä', [200, 300, 400, 500, 600]],
+  ['Puhelin', [200, 300, 400, 500, 800]],
+  ['Lippis', [20, 25, 30]],
+];
+
+const INCREASE_ITEMS = [
+  ['Bensalitra', [2]],
+  ['Bussilippu', [2, 3, 4]],
+  ['Elokuvalippu', [10, 12, 15]],
+  ['Pizza', [10, 12, 15]],
+  ['Jäätelö', [2, 3, 4]],
+  ['Kuukausikortti', [40, 50, 60]],
+  ['Kahvikuppi', [2, 3, 4]],
+];
+
+// Alennus: hinta − p %
+function percentDiscount() {
+  const [item, prices] = pick(DISCOUNT_ITEMS);
+  const plural = item === 'Lenkkarit';
+  const [price, p] = pickPrice(prices, [10, 20, 25, 30, 40, 50]);
+  const change = (price * p) / 100;
+  const result = price - change;
+  return {
+    label: 'Prosentit · alennus',
+    prompt: `${item} ${plural ? 'maksavat' : 'maksaa'} ${eur(price)}. Alennus on ${p} %. Mikä on alennettu hinta?`,
+    problem: '',
+    answer: { type: 'single', label: 'Hinta =', unit: '€', decimal: true, value: result / 100 },
+    steps: [
+      {
+        text: `Lasketaan alennus euroina. ${p} % tarkoittaa ${p} sadasosaa eli ${dec(p / 100, 2)}.`,
+        math: [`${p} % · ${eur(price)} = ${dec(p / 100, 2)} · ${eur(price)} = ${eur(change)}`],
+      },
+      {
+        text: 'Vähennetään alennus alkuperäisestä hinnasta.',
+        math: [`${eur(price)} − ${eur(change)} = ${eur(result)}`],
+      },
+      {
+        text: `Tarkistus toisella tavalla: alennuksen jälkeen jäljelle jää 100 % − ${p} % = ${100 - p} % hinnasta.`,
+        math: [`${dec((100 - p) / 100, 2)} · ${eur(price)} = ${eur(result)} ✓`],
+      },
+    ],
+    final: eur(result),
+  };
+}
+
+// Korotus: hinta + p %
+function percentIncrease() {
+  const [item, prices] = pick(INCREASE_ITEMS);
+  const [price, p] = pickPrice(prices, [5, 10, 20, 25, 50]);
+  const change = (price * p) / 100;
+  const result = price + change;
+  return {
+    label: 'Prosentit · korotus',
+    prompt: `${item} maksaa ${eur(price)}. Hinta nousee ${p} %. Mikä on korotettu hinta?`,
+    problem: '',
+    answer: { type: 'single', label: 'Hinta =', unit: '€', decimal: true, value: result / 100 },
+    steps: [
+      {
+        text: `Lasketaan korotus euroina. ${p} % tarkoittaa ${p} sadasosaa eli ${dec(p / 100, 2)}.`,
+        math: [`${p} % · ${eur(price)} = ${dec(p / 100, 2)} · ${eur(price)} = ${eur(change)}`],
+      },
+      {
+        text: 'Lisätään korotus alkuperäiseen hintaan.',
+        math: [`${eur(price)} + ${eur(change)} = ${eur(result)}`],
+      },
+      {
+        text: `Tarkistus toisella tavalla: uusi hinta on 100 % + ${p} % = ${100 + p} % vanhasta hinnasta.`,
+        math: [`${dec((100 + p) / 100, 2)} · ${eur(price)} = ${eur(result)} ✓`],
+      },
+    ],
+    final: eur(result),
+  };
+}
+
 /* ---------- Kategoriat ---------- */
 
 const CATEGORIES = [
@@ -455,6 +550,7 @@ const CATEGORIES = [
   { id: 'yhtalot', name: 'Yhtälön ratkaisu', short: 'Yhtälöt', gens: [[linBasic, 3], [linBothSides, 2]] },
   { id: 'potenssit', name: 'x² ja x³ -yhtälöt', short: 'x² ja x³', gens: [[squareEq, 1], [cubeEq, 1]] },
   { id: 'yhtaloparit', name: 'Yhtälöparit', short: 'Parit', gens: [[systemKnown, 1], [systemXY, 2]] },
+  { id: 'prosentit', name: 'Prosentit', short: 'Prosentit', gens: [[percentDiscount, 1], [percentIncrease, 1]] },
 ];
 
 function generate(cat) {
@@ -492,7 +588,7 @@ function parseSet(str) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { CATEGORIES, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
+  module.exports = { CATEGORIES, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
 }
 
 
@@ -532,7 +628,8 @@ if (typeof document !== 'undefined') {
     state.active = state.fields[0][0];
     els.inputs.innerHTML = state.fields.map(([id, label]) =>
       `<div class="field math"><span class="field-label">${label}</span>` +
-      `<button type="button" class="field-box${answer.type === 'set' ? ' wide' : ''}" data-field="${id}" aria-label="Vastauskenttä ${id}"></button></div>`
+      `<button type="button" class="field-box${answer.type === 'set' ? ' wide' : ''}" data-field="${id}" aria-label="Vastauskenttä ${id}"></button>` +
+      (answer.unit ? `<span class="field-unit">${answer.unit}</span>` : '') + '</div>'
     ).join('');
 
     if (answer.type === 'set') {
@@ -545,7 +642,8 @@ if (typeof document !== 'undefined') {
       state.hint = 'Vaihda kenttää napauttamalla sitä.';
     } else {
       setExtraKey(els.extra1, 'clear', 'C', 'Tyhjennä');
-      setExtraKey(els.extra2, null);
+      if (answer.decimal) setExtraKey(els.extra2, 'dec', ',', 'Desimaalipilkku');
+      else setExtraKey(els.extra2, null);
       state.hint = '';
     }
     paintFields();
@@ -662,6 +760,8 @@ if (typeof document !== 'undefined') {
       v = '';
     } else if (key === 'minus' || key === 'pm') {
       v = toggleSign(v, key === 'minus' ? '−' : '±');
+    } else if (key === 'dec') {
+      if (!v.includes(',')) v += /\d$/.test(v) ? ',' : '0,';
     } else if (key === 'comma') {
       if (v && !v.endsWith(', ') && !isSign(v.slice(-1))) v += ', ';
     } else {
@@ -698,6 +798,7 @@ if (typeof document !== 'undefined') {
     else if (e.key === 'Escape' || e.key === 'Delete') key = 'clear';
     else if (e.key === 'Enter') key = 'check';
     else if (type === 'set' && (e.key === ',' || e.key === ' ')) key = 'comma';
+    else if (state.task.answer.decimal && (e.key === ',' || e.key === '.')) key = 'dec';
     else if (type === 'set' && e.key === '+') key = 'pm';
     else if (type === 'pair' && e.key === 'Tab') key = state.active === 'x' ? 'y' : 'x';
     if (!key) return;

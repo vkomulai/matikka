@@ -419,3 +419,14 @@ body {
   .actions .btn { min-height: 40px; padding: 8px 10px; }
   .footnote { display: none; }
 }
+
+/* Sanalliset tehtävät: ei erillistä kaavaa, joten teksti isommaksi */
+.problem:empty { display: none; }
+.prompt:has(+ .problem:empty) { font-size: 1.2rem; line-height: 1.45; margin-bottom: 14px; }
+.field-unit { font-family: system-ui, -apple-system, sans-serif; font-size: 1.2rem; }
+
+@media (max-width: 640px) {
+  .cats { gap: 2px; }
+  .cats a { padding: 7px 2px; font-size: .82rem; }
+  .prompt:has(+ .problem:empty) { font-size: 1.1rem; margin-bottom: 10px; }
+}
