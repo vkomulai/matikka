@@ -543,6 +543,41 @@ function percentIncrease() {
   };
 }
 
+// Korkoa korolle: pääoma kasvaa p % vuodessa n vuoden ajan
+function percentCompound() {
+  let start, p, n, years;
+  do {
+    start = pick([100, 200, 400, 500, 1000, 2000]) * 100;
+    p = pick([2, 5, 10, 20]);
+    n = pick([2, 2, 3]);
+    years = [start];
+    for (let i = 0; i < n; i++) years.push((years[i] * (100 + p)) / 100);
+  } while (!years.every(Number.isInteger)); // vain tasasentit
+  const result = years[n];
+  const k = dec((100 + p) / 100, 2);
+  return {
+    label: 'Prosentit · korkoa korolle',
+    prompt: `Tilille talletetaan ${eur(start)}. Vuotuinen korko on ${p}\u00a0% ja korko lisätään tilille aina vuoden lopussa. Paljonko tilillä on rahaa ${n} vuoden kuluttua?`,
+    problem: '',
+    answer: { type: 'single', label: 'Pääoma =', unit: '€', decimal: true, value: result / 100 },
+    steps: [
+      {
+        text: `Korko ${p}\u00a0% lisätään pääomaan, joten uusi pääoma on 100\u00a0% + ${p}\u00a0% = ${100 + p}\u00a0% edellisestä. Kerroin on siis ${k}.`,
+        math: [`${100 + p}\u00a0% = ${k}`],
+      },
+      {
+        text: 'Kerrotaan pääoma kertoimella joka vuosi. Seuraavan vuoden korko lasketaan jo kasvaneesta summasta (korkoa korolle).',
+        math: years.slice(1).map((c, i) => `${i + 1}. vuosi: ${eur(years[i])} · ${k} = ${eur(c)}`),
+      },
+      {
+        text: `Tarkistus yhdellä laskulla: kerrotaan ${n} kertaa kertoimella ${k}.`,
+        math: [`${eur(start)} · ${pow(k, n)} = ${eur(result)} ✓`],
+      },
+    ],
+    final: eur(result),
+  };
+}
+
 /* ---------- Kategoriat ---------- */
 
 const CATEGORIES = [
@@ -550,7 +585,7 @@ const CATEGORIES = [
   { id: 'yhtalot', name: 'Yhtälön ratkaisu', short: 'Yhtälöt', gens: [[linBasic, 3], [linBothSides, 2]] },
   { id: 'potenssit', name: 'x² ja x³ -yhtälöt', short: 'x² ja x³', gens: [[squareEq, 1], [cubeEq, 1]] },
   { id: 'yhtaloparit', name: 'Yhtälöparit', short: 'Parit', gens: [[systemKnown, 1], [systemXY, 2]] },
-  { id: 'prosentit', name: 'Prosentit', short: 'Prosentit', gens: [[percentDiscount, 1], [percentIncrease, 1]] },
+  { id: 'prosentit', name: 'Prosentit', short: 'Prosentit', gens: [[percentDiscount, 1], [percentIncrease, 1], [percentCompound, 1]] },
 ];
 
 function generate(cat) {
@@ -588,7 +623,7 @@ function parseSet(str) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { CATEGORIES, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
+  module.exports = { CATEGORIES, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
 }
 
 
