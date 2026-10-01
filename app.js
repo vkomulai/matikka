@@ -578,6 +578,80 @@ function percentCompound() {
   };
 }
 
+// Kuinka monta prosenttia pienempi luku on suuremmasta, ja kuinka monta prosenttia se on pienempi.
+// Jokainen tilanne: [isot luvut, prosentit, yksikkö, tarina, kysymys a, kysymys b]
+const RATIO_STORIES = [
+  [[20, 40, 50, 60, 80, 100], [50, 60, 70, 75, 80, 90], '€',
+    (B, S) => `Pelin normaalihinta on ${B}, mutta alennusmyynnissä se maksaa ${S}.`,
+    'Kuinka monta prosenttia alennushinta on normaalihinnasta?',
+    'Kuinka monta prosenttia alennushinta on normaalihintaa halvempi?'],
+  [[20, 30, 40, 50], [50, 60, 70, 75, 80, 90], '€',
+    (B, S) => `Vanha puhelinliittymä maksoi ${B} kuukaudessa. Uusi liittymä maksaa ${S} kuukaudessa.`,
+    'Kuinka monta prosenttia uuden liittymän hinta on vanhan hinnasta?',
+    'Kuinka monta prosenttia uusi liittymä on vanhaa halvempi?'],
+  [[160, 180, 200], [50, 60, 70, 75, 80, 90], 'cm',
+    (B, S) => `Isä on ${B} pitkä ja hänen tyttärensä on ${S} pitkä.`,
+    'Kuinka monta prosenttia tyttären pituus on isän pituudesta?',
+    'Kuinka monta prosenttia tytär on isää lyhyempi?'],
+  [[20, 25, 30, 40], [10, 20, 25, 40, 50], 'kg',
+    (B, S) => `Koira painaa ${B} ja kissa ${S}.`,
+    'Kuinka monta prosenttia kissan paino on koiran painosta?',
+    'Kuinka monta prosenttia kissa on koiraa kevyempi?'],
+  [[10, 20, 40], [25, 50, 60, 75, 80, 90], 'km',
+    (B, S) => `Emma pyöräili ${B} ja Leo pyöräili ${S}.`,
+    'Kuinka monta prosenttia Leon matka on Emman matkasta?',
+    'Kuinka monta prosenttia Leon matka on Emman matkaa lyhyempi?'],
+  [[200, 300, 400, 500], [75, 80, 90, 95], 'oppilasta',
+    (B, S) => `Koulussa oli viime vuonna ${B}. Tänä vuonna koulussa on ${S}.`,
+    'Kuinka monta prosenttia tämän vuoden oppilasmäärä on viime vuoden määrästä?',
+    'Kuinka monta prosenttia oppilaita on nyt vähemmän?'],
+  [[50, 60, 80, 100], [25, 40, 50, 60, 75], 'min',
+    (B, S) => `Matka kouluun kestää kävellen ${B} ja bussilla ${S}.`,
+    'Kuinka monta prosenttia bussimatkan kesto on kävelymatkan kestosta?',
+    'Kuinka monta prosenttia bussimatka on kävelyä lyhyempi?'],
+];
+
+function percentRatio() {
+  const [bigs, pcts, unit, story, qa, qb] = pick(RATIO_STORIES);
+  let B, p;
+  do { B = pick(bigs); p = pick(pcts); } while ((B * p) % 100 !== 0);
+  const S = (B * p) / 100;
+  const D = B - S;
+  const u = n => `${n}\u00a0${unit}`;
+  const pa = p, pb = 100 - p;
+  return {
+    label: 'Prosentit · prosenttiosuus',
+    prompt: `${story(u(B), u(S))}<span class="q">a) ${qa}</span><span class="q">b) ${qb}</span>`,
+    problem: '',
+    answer: {
+      type: 'parts',
+      parts: [
+        { id: 'a', label: 'a)', unit: '%', value: pa },
+        { id: 'b', label: 'b)', unit: '%', value: pb },
+      ],
+    },
+    steps: [
+      {
+        text: `a) Osuus lasketaan jakamalla osa kokonaisuudella. Vertailukohta on ${u(B)}, joten jaetaan sillä. Lopuksi muutetaan desimaaliluku prosenteiksi (kerrotaan 100:lla).`,
+        math: [`${u(S)} : ${u(B)} = ${dec(pa / 100)} = ${pa}\u00a0%`],
+      },
+      {
+        text: `b) Lasketaan ensin erotus, eli kuinka paljon pienempi luku on.`,
+        math: [`${u(B)} − ${u(S)} = ${u(D)}`],
+      },
+      {
+        text: `Verrataan erotusta samaan vertailukohtaan ${u(B)}.`,
+        math: [`${u(D)} : ${u(B)} = ${dec(pb / 100)} = ${pb}\u00a0%`],
+      },
+      {
+        text: 'Tarkistus: a- ja b-kohdan prosenttien summa on 100 %.',
+        math: [`100\u00a0% − ${pa}\u00a0% = ${pb}\u00a0% ✓`],
+      },
+    ],
+    final: `a) ${pa}\u00a0% &nbsp; b) ${pb}\u00a0%`,
+  };
+}
+
 /* ---------- Kategoriat ---------- */
 
 const CATEGORIES = [
@@ -585,9 +659,18 @@ const CATEGORIES = [
   { id: 'yhtalot', name: 'Yhtälön ratkaisu', short: 'Yhtälöt', gens: [[linBasic, 3], [linBothSides, 2]] },
   { id: 'potenssit', name: 'x² ja x³ -yhtälöt', short: 'x² ja x³', gens: [[squareEq, 1], [cubeEq, 1]] },
   { id: 'yhtaloparit', name: 'Yhtälöparit', short: 'Parit', gens: [[systemKnown, 1], [systemXY, 2]] },
-  { id: 'prosentit', name: 'Prosentit', short: 'Prosentit', gens: [[percentDiscount, 1], [percentIncrease, 1], [percentCompound, 1]] },
+  {
+    id: 'prosentit', name: 'Prosentit', short: 'Prosentit',
+    subs: [
+      { id: 'alennus', name: 'Alennus', short: 'Alennus', gens: [[percentDiscount, 1]] },
+      { id: 'korotus', name: 'Korotus', short: 'Korotus', gens: [[percentIncrease, 1]] },
+      { id: 'korko', name: 'Korkoa korolle', short: 'Korko', gens: [[percentCompound, 1]] },
+      { id: 'osuus', name: 'Prosenttiosuus', short: 'Osuus', gens: [[percentRatio, 1]] },
+    ],
+  },
 ];
 
+// cat voi olla kategoria tai alakategoria; molemmissa on gens.
 function generate(cat) {
   const total = cat.gens.reduce((s, [, w]) => s + w, 0);
   let r = Math.random() * total;
@@ -623,7 +706,7 @@ function parseSet(str) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { CATEGORIES, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
+  module.exports = { CATEGORIES, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
 }
 
 
@@ -632,14 +715,14 @@ if (typeof module !== 'undefined') {
 if (typeof document !== 'undefined') {
   const $ = id => document.getElementById(id);
   const els = {
-    cats: $('cats'), score: $('score'), badge: $('badge'), prompt: $('prompt'), problem: $('problem'),
+    cats: $('cats'), subcats: $('subcats'), score: $('score'), badge: $('badge'), prompt: $('prompt'), problem: $('problem'),
     inputs: $('inputs'), feedback: $('feedback'), keypad: $('keypad'),
     keyCheck: $('key-check'), extra1: $('key-extra1'), extra2: $('key-extra2'),
     solution: $('solution'), steps: $('steps'), final: $('final'),
   };
 
   const state = {
-    cat: CATEGORIES[0], task: null, scored: false, solved: false, correct: 0, total: 0,
+    cat: CATEGORIES[0], sub: null, task: null, scored: false, solved: false, correct: 0, total: 0,
     fields: [], values: {}, active: null, hint: '',
   };
 
@@ -656,15 +739,15 @@ if (typeof document !== 'undefined') {
   }
 
   function renderInputs(answer) {
-    state.fields = answer.type === 'pair'
-      ? [['x', `${X} =`], ['y', `${Y} =`]]
-      : [['ans', answer.label]];
+    if (answer.type === 'pair') state.fields = [['x', `${X} =`], ['y', `${Y} =`]];
+    else if (answer.type === 'parts') state.fields = answer.parts.map(p => [p.id, p.label, p.unit]);
+    else state.fields = [['ans', answer.label, answer.unit]];
     state.values = Object.fromEntries(state.fields.map(([id]) => [id, '']));
     state.active = state.fields[0][0];
-    els.inputs.innerHTML = state.fields.map(([id, label]) =>
+    els.inputs.innerHTML = state.fields.map(([id, label, unit]) =>
       `<div class="field math"><span class="field-label">${label}</span>` +
       `<button type="button" class="field-box${answer.type === 'set' ? ' wide' : ''}" data-field="${id}" aria-label="Vastauskenttä ${id}"></button>` +
-      (answer.unit ? `<span class="field-unit">${answer.unit}</span>` : '') + '</div>'
+      (unit ? `<span class="field-unit">${unit}</span>` : '') + '</div>'
     ).join('');
 
     if (answer.type === 'set') {
@@ -675,6 +758,10 @@ if (typeof document !== 'undefined') {
       setExtraKey(els.extra1, 'x', `<var>x</var>`, 'Valitse x-kenttä');
       setExtraKey(els.extra2, 'y', `<var>y</var>`, 'Valitse y-kenttä');
       state.hint = 'Vaihda kenttää napauttamalla sitä.';
+    } else if (answer.type === 'parts') {
+      setExtraKey(els.extra1, 'a', 'a)', 'Valitse a-kohta');
+      setExtraKey(els.extra2, 'b', 'b)', 'Valitse b-kohta');
+      state.hint = 'Vastaa molempiin kohtiin.';
     } else {
       setExtraKey(els.extra1, 'clear', 'C', 'Tyhjennä');
       if (answer.decimal) setExtraKey(els.extra2, 'dec', ',', 'Desimaalipilkku');
@@ -704,7 +791,7 @@ if (typeof document !== 'undefined') {
   }
 
   function newTask() {
-    const t = generate(state.cat);
+    const t = generate(state.sub || state.cat);
     state.task = t;
     state.scored = false;
     state.solved = false;
@@ -738,6 +825,14 @@ if (typeof document !== 'undefined') {
       ok = vals.length === want.length && vals.every((v, i) => v === want[i]);
       if (!ok && vals.length < want.length && vals.every(v => want.includes(v))) {
         msg = 'Melkein! Yhtälöllä on useampi kuin yksi ratkaisu.';
+      }
+    } else if (a.type === 'parts') {
+      const vals = a.parts.map(p => parseNumber(state.values[p.id]));
+      if (vals.some(v => v === null)) return setFeedback(false, 'Vastaa kaikkiin kohtiin.');
+      const right = a.parts.map((p, i) => Math.abs(vals[i] - p.value) < 1e-9);
+      ok = right.every(Boolean);
+      if (!ok && right.some(Boolean)) {
+        msg = a.parts.map((p, i) => `${p.label} ${right[i] ? 'oikein' : 'ei vielä'}`).join(', ') + '.';
       }
     } else {
       const vx = parseNumber(state.values.x);
@@ -781,7 +876,7 @@ if (typeof document !== 'undefined') {
   function press(key) {
     if (key === 'check') return state.solved ? newTask() : check();
     if (state.solved) return;
-    if (key === 'x' || key === 'y') {
+    if (state.fields.some(([id]) => id === key)) {
       state.active = key;
       return paintFields();
     }
@@ -835,7 +930,10 @@ if (typeof document !== 'undefined') {
     else if (type === 'set' && (e.key === ',' || e.key === ' ')) key = 'comma';
     else if (state.task.answer.decimal && (e.key === ',' || e.key === '.')) key = 'dec';
     else if (type === 'set' && e.key === '+') key = 'pm';
-    else if (type === 'pair' && e.key === 'Tab') key = state.active === 'x' ? 'y' : 'x';
+    else if (e.key === 'Tab' && state.fields.length > 1) {
+      const i = state.fields.findIndex(([id]) => id === state.active);
+      key = state.fields[(i + 1) % state.fields.length][0];
+    }
     if (!key) return;
     e.preventDefault();
     press(key);
@@ -846,12 +944,26 @@ if (typeof document !== 'undefined') {
     els.solution.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function selectFromHash() {
-    const id = location.hash.slice(1);
-    state.cat = CATEGORIES.find(c => c.id === id) || CATEGORIES[0];
-    for (const a of els.cats.querySelectorAll('a')) {
-      if (a.dataset.id === state.cat.id) a.setAttribute('aria-current', 'page');
+  const markCurrent = (nav, id) => {
+    for (const a of nav.querySelectorAll('a')) {
+      if (a.dataset.id === id) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
+    }
+  };
+
+  // Osoite on muotoa #kategoria tai #kategoria/alakategoria
+  function selectFromHash() {
+    const [catId, subId] = location.hash.slice(1).split('/');
+    state.cat = CATEGORIES.find(c => c.id === catId) || CATEGORIES[0];
+    state.sub = state.cat.subs ? state.cat.subs.find(s => s.id === subId) || state.cat.subs[0] : null;
+    markCurrent(els.cats, state.cat.id);
+
+    els.subcats.hidden = !state.sub;
+    if (state.sub) {
+      els.subcats.innerHTML = state.cat.subs.map(s =>
+        `<a href="#${state.cat.id}/${s.id}" data-id="${s.id}"><span class="long">${s.name}</span><span class="short">${s.short}</span></a>`
+      ).join('');
+      markCurrent(els.subcats, state.sub.id);
     }
     newTask();
   }
