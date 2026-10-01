@@ -827,4 +827,27 @@ if (typeof document !== 'undefined') {
   window.addEventListener('hashchange', selectFromHash);
 
   selectFromHash();
+
+  /* ---------- Päivitykset ---------- */
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
+  // iPhone pitää sovelluksen auki taustalla eikä lataa sivua uudelleen.
+  // Kun sovellukseen palataan, tarkistetaan onko julkaistu uusi versio
+  // (GitHub Pagesin ETag muuttuu jokaisessa julkaisussa) ja ladataan se.
+  const siteVersion = () =>
+    fetch(location.pathname, { method: 'HEAD', cache: 'no-store' })
+      .then(r => r.headers.get('etag') || r.headers.get('last-modified'))
+      .catch(() => null);
+
+  let loadedVersion = null;
+  siteVersion().then(v => { loadedVersion = v; });
+
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== 'visible' || !loadedVersion) return;
+    const v = await siteVersion();
+    if (v && v !== loadedVersion) location.reload();
+  });
 }
