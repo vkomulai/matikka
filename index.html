@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Matikkatreeni</title>
+  <meta name="description" content="Harjoittele yhtälöitä: 1. asteen yhtälöt, potenssiyhtälöt ja yhtälöparit välivaiheineen.">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b1e28" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Matikka">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#sijoitus">Matikka<span>treeni</span></a>
+      <nav class="cats" id="cats" aria-label="Kategoriat"></nav>
+      <div class="score" id="score" aria-live="polite">Oikein 0 / 0</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card" id="task">
+      <span class="badge" id="badge"></span>
+      <p class="prompt" id="prompt"></p>
+      <div class="problem math" id="problem"></div>
+
+      <div class="inputs" id="inputs"></div>
+      <p class="hint" id="hint"></p>
+      <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+
+      <div class="keypad" id="keypad">
+        <button type="button" data-key="1">1</button>
+        <button type="button" data-key="2">2</button>
+        <button type="button" data-key="3">3</button>
+        <button type="button" data-key="back" class="key-fn" aria-label="Poista">⌫</button>
+        <button type="button" data-key="4">4</button>
+        <button type="button" data-key="5">5</button>
+        <button type="button" data-key="6">6</button>
+        <button type="button" data-key="minus" class="key-fn" aria-label="Miinus">−</button>
+        <button type="button" data-key="7">7</button>
+        <button type="button" data-key="8">8</button>
+        <button type="button" data-key="9">9</button>
+        <button type="button" data-key="check" class="key-check" id="key-check">Tarkista</button>
+        <button type="button" class="key-fn" id="key-extra1"></button>
+        <button type="button" data-key="0">0</button>
+        <button type="button" class="key-fn" id="key-extra2"></button>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn" id="btn-solution">Näytä ratkaisu</button>
+        <button type="button" class="btn btn-new" id="btn-new">↻ Uusi lasku</button>
+      </div>
+
+      <section class="solution" id="solution" hidden>
+        <h2>Ratkaisu välivaiheineen</h2>
+        <ol class="steps" id="steps"></ol>
+        <div class="final">
+          <span class="final-label">Vastaus</span>
+          <span class="math" id="final"></span>
+        </div>
+        <button type="button" class="btn btn-primary btn-block" id="btn-new-2">↻ Uusi lasku</button>
+      </section>
+    </section>
+
+    <p class="footnote">Uusia aiheita tulossa pian.</p>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
