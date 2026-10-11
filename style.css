@@ -460,3 +460,111 @@ body {
   .prompt:has(.q) { font-size: 1rem; line-height: 1.35; margin-bottom: 8px; }
   .prompt:has(.q) .q { font-size: 1rem; margin-top: 4px; }
 }
+
+/* Kurssivalinta (ylin taso) */
+.courses {
+  display: inline-flex;
+  border: 1.5px solid var(--accent);
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.courses a {
+  padding: 4px 12px;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: .02em;
+}
+.courses a + a { border-left: 1.5px solid var(--accent); }
+.courses a[aria-current="page"] { background: var(--accent); color: var(--accent-text); }
+.cats[hidden] { display: none; }
+
+.empty { text-align: center; color: var(--muted); padding: 32px 20px; }
+.empty p { margin: 4px 0; }
+.empty strong { color: var(--text); }
+
+@media (max-width: 640px) {
+  .courses a { padding: 3px 10px; font-size: .8rem; }
+}
+
+/* --- Englanti: monivalinta ja sanajärjestys --- */
+.keypad[hidden], .problem[hidden] { display: none; }
+
+.sentence { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.problem.sentence { font-size: 1.4rem; line-height: 1.4; overflow-x: visible; }
+.problem.sentence strong { color: var(--ok); }
+.blank {
+  display: inline-block;
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+  line-height: 1;
+  letter-spacing: -.05em;
+}
+.prompt .fi { display: block; margin-top: 4px; color: var(--muted); font-size: .95rem; font-style: italic; }
+
+.choices { display: grid; gap: 8px; max-width: 440px; }
+.choice {
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--key);
+  color: var(--text);
+  cursor: pointer;
+}
+.choice:active { filter: brightness(.92); }
+.choice-key {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  font-size: .8rem;
+  color: var(--muted);
+  background: var(--surface);
+}
+.choice.right { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.choice.wrong { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); text-decoration: line-through; }
+.choice:disabled { cursor: default; }
+.choice:disabled:not(.right):not(.wrong) { opacity: .5; }
+
+.build, .pool { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.build {
+  min-height: 60px;
+  padding: 8px;
+  border: 1.5px dashed var(--border);
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+.build.ok { border-style: solid; border-color: var(--ok); background: var(--ok-soft); }
+.build-empty { color: var(--muted); font-size: .9rem; padding-left: 4px; }
+.build-end { font-size: 1.15rem; font-weight: 600; margin-left: -4px; }
+.tile {
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--key);
+  color: var(--text);
+  cursor: pointer;
+}
+.build .tile { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.tile-used { visibility: hidden; }
+.text-actions { display: flex; gap: 8px; margin-top: 12px; max-width: 440px; }
+.text-actions .btn { flex: 1; }
+.text-actions:not(:has(.btn:not([hidden]))) { display: none; }
+
+.steps .sentence { font-size: 1.1rem; }
+.final .sentence { font-size: 1.15rem; }

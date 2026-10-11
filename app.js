@@ -788,9 +788,9 @@ function proportionInverse() {
   };
 }
 
-/* ---------- Kategoriat ---------- */
+/* ---------- Kurssit ja kategoriat ---------- */
 
-const CATEGORIES = [
+const MAY1_CATEGORIES = [
   { id: 'sijoitus', name: 'Sijoitus', short: 'Sijoitus', gens: [[substitution, 1]] },
   { id: 'yhtalot', name: 'Yhtälön ratkaisu', short: 'Yhtälöt', gens: [[linBasic, 3], [linBothSides, 2]] },
   { id: 'potenssit', name: 'x² ja x³ -yhtälöt', short: 'x² ja x³', gens: [[squareEq, 1], [cubeEq, 1]] },
@@ -813,6 +813,20 @@ const CATEGORIES = [
     ],
   },
 ];
+
+// Englannin tehtävät ovat omassa tiedostossaan (selaimessa ladattu ennen tätä).
+const ENG_CATEGORIES = typeof ENGLISH_CATEGORIES !== 'undefined'
+  ? ENGLISH_CATEGORIES
+  : require('./english.js').ENGLISH_CATEGORIES;
+
+// Kurssi on ylin taso; jokaisella kurssilla on omat kategoriansa.
+const COURSES = [
+  { id: 'may1', name: 'MAY1', categories: MAY1_CATEGORIES },
+  { id: 'mab7', name: 'MAB7', categories: [] },
+  { id: 'eng', name: 'ENG', categories: ENG_CATEGORIES },
+];
+
+const CATEGORIES = COURSES.flatMap(c => c.categories);
 
 // cat voi olla kategoria tai alakategoria; molemmissa on gens.
 function generate(cat) {
@@ -850,7 +864,7 @@ function parseSet(str) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { CATEGORIES, proportionDirect, proportionInverse, percentMore, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
+  module.exports = { COURSES, CATEGORIES, proportionDirect, proportionInverse, percentMore, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
 }
 
 
@@ -859,20 +873,19 @@ if (typeof module !== 'undefined') {
 if (typeof document !== 'undefined') {
   const $ = id => document.getElementById(id);
   const els = {
-    cats: $('cats'), subcats: $('subcats'), score: $('score'), badge: $('badge'), prompt: $('prompt'), problem: $('problem'),
+    courses: $('courses'), cats: $('cats'), subcats: $('subcats'), task: $('task'), empty: $('empty'), score: $('score'), badge: $('badge'), prompt: $('prompt'), problem: $('problem'),
     inputs: $('inputs'), feedback: $('feedback'), keypad: $('keypad'),
     keyCheck: $('key-check'), extra1: $('key-extra1'), extra2: $('key-extra2'),
     solution: $('solution'), steps: $('steps'), final: $('final'),
+    btnNew: $('btn-new'), btnNew2: $('btn-new-2'), btnSolution: $('btn-solution'), solutionTitle: $('solution').querySelector('h2'),
   };
 
   const state = {
-    cat: CATEGORIES[0], sub: null, task: null, scored: false, solved: false, correct: 0, total: 0,
+    course: COURSES[0], cat: CATEGORIES[0], sub: null, task: null, scored: false, solved: false, correct: 0, total: 0,
     fields: [], values: {}, active: null, hint: '',
   };
 
-  els.cats.innerHTML = CATEGORIES.map(c =>
-    `<a href="#${c.id}" data-id="${c.id}"><span class="long">${c.name}</span><span class="short">${c.short}</span></a>`
-  ).join('');
+  els.courses.innerHTML = COURSES.map(c => `<a href="#${c.id}" data-id="${c.id}">${c.name}</a>`).join('');
 
   function setExtraKey(btn, key, label, ariaLabel) {
     btn.dataset.key = key || '';
@@ -882,7 +895,44 @@ if (typeof document !== 'undefined') {
     btn.setAttribute('aria-label', ariaLabel || '');
   }
 
+  const isText = answer => answer.type === 'choice' || answer.type === 'order';
+
+  // Monivalinta: vaihtoehdot napteina. Sanajärjestys: rakennettava lause ja sanavarasto.
+  function renderTextInputs(answer) {
+    state.fields = [];
+    if (answer.type === 'choice') {
+      state.hint = '';
+      els.inputs.innerHTML =
+        '<div class="choices">' + answer.options.map((o, i) =>
+          `<button type="button" class="choice" data-choice="${i}"><span class="choice-key">${i + 1}</span>${o}</button>`
+        ).join('') + '</div>' +
+        '<div class="text-actions"><button type="button" class="btn btn-primary" data-act="next" hidden>Seuraava →</button></div>';
+    } else {
+      state.built = [];
+      state.hint = 'Napauta sanoja oikeassa järjestyksessä. Sanan saa pois napauttamalla sitä uudelleen.';
+      els.inputs.innerHTML =
+        '<div class="build" id="build"></div><div class="pool" id="pool"></div>' +
+        '<div class="text-actions"><button type="button" class="btn" data-act="clear">Tyhjennä</button>' +
+        '<button type="button" class="btn btn-primary" data-act="check">Tarkista</button></div>';
+      paintOrder();
+    }
+  }
+
+  function paintOrder() {
+    const a = state.task.answer;
+    const tile = i => `<button type="button" class="tile" data-tile="${i}">${a.tiles[i]}</button>`;
+    const build = els.inputs.querySelector('#build');
+    build.innerHTML = state.built.length
+      ? state.built.map(tile).join('') + `<span class="build-end">${a.end}</span>`
+      : '<span class="build-empty">Lause muodostuu tähän</span>';
+    els.inputs.querySelector('#pool').innerHTML =
+      a.tiles.map((_, i) => state.built.includes(i) ? `<span class="tile tile-used">${a.tiles[i]}</span>` : tile(i)).join('');
+    build.classList.toggle('ok', state.solved);
+  }
+
   function renderInputs(answer) {
+    els.keypad.hidden = isText(answer);
+    if (isText(answer)) return renderTextInputs(answer);
     if (answer.type === 'pair') state.fields = [['x', `${X} =`], ['y', `${Y} =`]];
     else if (answer.type === 'parts') state.fields = answer.parts.map(p => [p.id, p.label, p.unit]);
     else state.fields = [['ans', answer.label, answer.unit]];
@@ -942,23 +992,43 @@ if (typeof document !== 'undefined') {
     els.badge.textContent = t.label;
     els.prompt.innerHTML = t.prompt;
     els.problem.innerHTML = t.problem;
+    els.problem.className = 'problem ' + (t.text ? 'sentence' : 'math');
+    els.problem.hidden = t.text && !t.problem;
+    els.btnNew.textContent = els.btnNew2.textContent = t.text ? '↻ Uusi tehtävä' : '↻ Uusi lasku';
+    els.btnSolution.textContent = t.text ? 'Näytä vastaus' : 'Näytä ratkaisu';
+    els.solutionTitle.textContent = t.text ? 'Vastaus ja selitys' : 'Ratkaisu välivaiheineen';
     renderInputs(t.answer);
     clearFeedback();
     els.keyCheck.textContent = 'Tarkista';
     els.solution.hidden = true;
     els.steps.innerHTML = t.steps.map(s =>
-      `<li><p>${s.text}</p><div class="math">${s.math.map(m => `<div>${m}</div>`).join('')}</div></li>`
+      `<li><p>${s.text}</p><div class="${t.text ? 'sentence' : 'math'}">${s.math.map(m => `<div>${m}</div>`).join('')}</div></li>`
     ).join('');
     els.final.innerHTML = t.final;
+    els.final.className = t.text ? 'sentence' : 'math';
     window.scrollTo({ top: 0 });
   }
 
-  function check() {
+  function check(choice) {
     const a = state.task.answer;
     let ok;
     let msg = null;
 
-    if (a.type === 'single') {
+    if (a.type === 'choice') {
+      ok = a.options[choice] === a.value;
+      const btn = els.inputs.querySelector(`[data-choice="${choice}"]`);
+      btn.classList.add(ok ? 'right' : 'wrong');
+      btn.disabled = !ok;
+      if (ok) {
+        els.problem.innerHTML = a.filled;
+        for (const b of els.inputs.querySelectorAll('.choice')) b.disabled = true;
+        els.inputs.querySelector('[data-act="next"]').hidden = false;
+      }
+    } else if (a.type === 'order') {
+      if (state.built.length < a.tiles.length) return setFeedback(false, 'Käytä kaikki sanat.');
+      ok = a.accepted.includes(state.built.map(i => a.tiles[i]).join(' '));
+      if (ok) els.inputs.querySelector('[data-act="check"]').textContent = 'Seuraava →';
+    } else if (a.type === 'single') {
       const v = parseNumber(state.values.ans);
       if (v === null) return setFeedback(false, 'Kirjoita vastaus ensin.');
       ok = Math.abs(v - a.value) < 1e-9;
@@ -998,10 +1068,11 @@ if (typeof document !== 'undefined') {
     if (ok) {
       state.solved = true;
       els.keyCheck.textContent = 'Seuraava →';
-      paintFields();
-      setFeedback(true, 'Oikein! Hienoa!');
+      if (a.type === 'order') paintOrder();
+      else paintFields();
+      setFeedback(true, state.task.why ? `Oikein! ${state.task.why}` : 'Oikein! Hienoa!');
     } else {
-      setFeedback(false, msg || 'Ei aivan. Yritä uudelleen tai katso ratkaisu.');
+      setFeedback(false, msg || `Ei aivan. Yritä uudelleen tai katso ${state.task.text ? 'vastaus' : 'ratkaisu'}.`);
     }
   }
 
@@ -1051,6 +1122,40 @@ if (typeof document !== 'undefined') {
     if (btn && btn.dataset.key) press(btn.dataset.key);
   });
 
+  // Tekstitehtävien (englanti) napit
+  els.inputs.addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn || !state.task || !isText(state.task.answer)) return;
+    const act = btn.dataset.act;
+    if (act === 'next' || (act === 'check' && state.solved)) return newTask();
+    if (state.solved) return;
+    if (btn.dataset.choice !== undefined) return check(Number(btn.dataset.choice));
+    if (act === 'check') return check();
+    if (act === 'clear') state.built = [];
+    else if (btn.dataset.tile !== undefined) {
+      const i = Number(btn.dataset.tile);
+      const at = state.built.indexOf(i);
+      if (at >= 0) state.built.splice(at, 1);
+      else state.built.push(i);
+    } else return;
+    clearFeedback();
+    paintOrder();
+  });
+
+  function textKey(e) {
+    const a = state.task.answer;
+    if (e.key === 'Enter') return state.solved ? newTask() : a.type === 'order' ? check() : null;
+    if (state.solved) return;
+    if (a.type === 'choice' && /^[1-9]$/.test(e.key) && Number(e.key) <= a.options.length) {
+      const btn = els.inputs.querySelector(`[data-choice="${Number(e.key) - 1}"]`);
+      if (!btn.disabled) check(Number(e.key) - 1);
+    } else if (a.type === 'order' && e.key === 'Backspace') {
+      state.built.pop();
+      clearFeedback();
+      paintOrder();
+    } else return;
+  }
+
   els.inputs.addEventListener('click', e => {
     const box = e.target.closest('.field-box');
     if (box && !state.solved) {
@@ -1061,10 +1166,14 @@ if (typeof document !== 'undefined') {
 
   // Fyysinen näppäimistö (tietokoneella)
   document.addEventListener('keydown', e => {
-    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.metaKey || e.ctrlKey || e.altKey || els.task.hidden) return;
     const focused = document.activeElement;
     if (e.key === 'Enter' && focused && focused.matches('a, button:not(.field-box)')) return;
     const type = state.task.answer.type;
+    if (isText(state.task.answer)) {
+      if (['Enter', 'Backspace'].includes(e.key) || /^\d$/.test(e.key)) e.preventDefault();
+      return textKey(e);
+    }
     let key = null;
     if (/^\d$/.test(e.key)) key = e.key;
     else if (e.key === '-') key = 'minus';
@@ -1095,18 +1204,37 @@ if (typeof document !== 'undefined') {
     }
   };
 
-  // Osoite on muotoa #kategoria tai #kategoria/alakategoria
+  const navLink = (href, item) =>
+    `<a href="#${href}" data-id="${item.id}"><span class="long">${item.name}</span><span class="short">${item.short}</span></a>`;
+
+  // Osoite on muotoa #kurssi/kategoria/alakategoria. Vanhat osoitteet ilman
+  // kurssia (#prosentit/osuus) ohjautuvat ensimmäiselle kurssille.
   function selectFromHash() {
-    const [catId, subId] = location.hash.slice(1).split('/');
-    state.cat = CATEGORIES.find(c => c.id === catId) || CATEGORIES[0];
+    const parts = location.hash.slice(1).split('/');
+    const course = COURSES.find(c => c.id === parts[0]);
+    if (course) parts.shift();
+    state.course = course || COURSES[0];
+    const [catId, subId] = parts;
+    const cats = state.course.categories;
+    markCurrent(els.courses, state.course.id);
+
+    els.cats.innerHTML = cats.map(c => navLink(`${state.course.id}/${c.id}`, c)).join('');
+    els.cats.hidden = cats.length === 0;
+    els.task.hidden = cats.length === 0;
+    els.empty.hidden = cats.length > 0;
+    if (cats.length === 0) {
+      els.subcats.hidden = true;
+      els.empty.querySelector('strong').textContent = state.course.name;
+      return;
+    }
+
+    state.cat = cats.find(c => c.id === catId) || cats[0];
     state.sub = state.cat.subs ? state.cat.subs.find(s => s.id === subId) || state.cat.subs[0] : null;
     markCurrent(els.cats, state.cat.id);
 
     els.subcats.hidden = !state.sub;
     if (state.sub) {
-      els.subcats.innerHTML = state.cat.subs.map(s =>
-        `<a href="#${state.cat.id}/${s.id}" data-id="${s.id}"><span class="long">${s.name}</span><span class="short">${s.short}</span></a>`
-      ).join('');
+      els.subcats.innerHTML = state.cat.subs.map(s => navLink(`${state.course.id}/${state.cat.id}/${s.id}`, s)).join('');
       markCurrent(els.subcats, state.sub.id);
     }
     newTask();
