@@ -1070,7 +1070,8 @@ if (typeof document !== 'undefined') {
       els.keyCheck.textContent = 'Seuraava →';
       if (a.type === 'order') paintOrder();
       else paintFields();
-      setFeedback(true, state.task.why ? `Oikein! ${state.task.why}` : 'Oikein! Hienoa!');
+      setFeedback(true, 'Oikein! Hienoa!');
+      if (state.task.text) showSolution(); // selitys näkyy heti, kun vastaus on oikein
     } else {
       setFeedback(false, msg || `Ei aivan. Yritä uudelleen tai katso ${state.task.text ? 'vastaus' : 'ratkaisu'}.`);
     }

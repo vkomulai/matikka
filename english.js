@@ -8,11 +8,11 @@
 const ENG_SIMPLE = `
 My brother ___ football every Saturday. | plays / play / playing | Veljeni pelaa jalkapalloa joka lauantai. | Toistuva tapa (every Saturday) → present simple. He/she/it-muodossa verbiin lisätään -s.
 We ___ in a small town near Tampere. | live / lives / living | Asumme pienessä kaupungissa Tampereen lähellä. | Pysyvä asia → present simple. We-muodossa verbi on perusmuodossa ilman -s:ää.
-Water ___ at 100 degrees. | boils / boil / boiling | Vesi kiehuu sadassa asteessa. | Yleinen totuus → present simple. Water = it → verbiin -s.
+Water ___ at 100 degrees. | boils / boil / boiling | Vesi kiehuu sadassa asteessa. | Yleinen totuus → present simple. Subjektina on water (= it), joten verbiin tulee -s.
 ___ your sister speak French? | Does / Do / Is | Puhuuko siskosi ranskaa? | Present simplen kysymys: he/she/it → does + verbin perusmuoto.
 I ___ like coffee. | don't / doesn't / not | En pidä kahvista. | Present simplen kielto: I/you/we/they → don't + perusmuoto.
 Tom ___ eat meat. | doesn't / don't / isn't | Tom ei syö lihaa. | He/she/it → doesn't + perusmuoto. Kun doesn't on mukana, verbiin ei tule -s:ää.
-It ___ a lot in Lapland in winter. | snows / snow / snowing | Lapissa sataa talvella paljon lunta. | Toistuva asia → present simple. It → verbiin -s.
+It ___ a lot in Lapland in winter. | snows / snow / snowing | Lapissa sataa talvella paljon lunta. | Toistuva asia → present simple. Subjektina on it, joten verbiin tulee -s.
 We ___ to Spain last summer. | went / go / have gone | Matkustimme Espanjaan viime kesänä. | Tarkka mennyt aika (last summer) → past simple. go – went – gone.
 I ___ a great film yesterday. | saw / see / have seen | Näin eilen loistavan elokuvan. | Yesterday = päättynyt aika → past simple. see – saw – seen.
 ___ you call your grandmother last night? | Did / Do / Have | Soititko isoäidillesi eilen illalla? | Past simplen kysymys: did + verbin perusmuoto.
@@ -24,12 +24,12 @@ Shakespeare ___ many famous plays. | wrote / writed / has wrote | Shakespeare ki
 I have never ___ sushi. | eaten / ate / eat | En ole koskaan syönyt sushia. | Present perfect = have/has + verbin 3. muoto. eat – ate – eaten.
 She ___ in Helsinki since 2015. | has lived / lived / lives | Hän on asunut Helsingissä vuodesta 2015. | Since + alkuhetki: tilanne jatkuu yhä → present perfect (has + 3. muoto).
 ___ you ever been to London? | Have / Did / Were | Oletko koskaan käynyt Lontoossa? | Ever = koskaan elämäsi aikana → present perfect: have + subjekti + been.
-We ___ known each other for ten years. | have / has / are | Olemme tunteneet toisemme kymmenen vuotta. | Present perfect: I/you/we/they → have + 3. muoto (known).
+We ___ known each other for ten years. | have / has / are | Olemme tunteneet toisemme kymmenen vuotta. | Present perfect: I/you/we/they-muodossa have + 3. muoto (known).
 I can't find my keys. I ___ them. | have lost / lose / losing | En löydä avaimiani. Olen hukannut ne. | Mennyt teko, jonka seuraus näkyy nyt → present perfect.
 He has already ___ his homework. | done / did / do | Hän on jo tehnyt läksynsä. | Present perfect: has + 3. muoto. do – did – done.
 They haven't arrived ___. | yet / already / ago | He eivät ole vielä saapuneet. | Kieltolauseen lopussa yet = vielä. Ago kuuluu past simpleen.
-My parents ___ been married for 25 years. | have / has / are | Vanhempani ovat olleet naimisissa 25 vuotta. | Monikko (my parents = they) → have + been.
-Look! Someone ___ the window. | has broken / have broken / breaking | Katso! Joku on rikkonut ikkunan. | Someone = he/she → has. break – broke – broken.
+My parents ___ been married for 25 years. | have / has / are | Vanhempani ovat olleet naimisissa 25 vuotta. | Subjektina on my parents (= they), joten käytetään muotoa have + been.
+Look! Someone ___ the window. | has broken / have broken / breaking | Katso! Joku on rikkonut ikkunan. | Subjektina on someone (= he/she), joten käytetään muotoa has. break – broke – broken.
 How long ___ you had this phone? | have / did / do | Kuinka kauan sinulla on ollut tämä puhelin? | How long + tilanne joka jatkuu yhä → present perfect.
 When we got to the station, the train had already ___. | left / leave / leaving | Kun pääsimme asemalle, juna oli jo lähtenyt. | Past perfect (had + 3. muoto): tapahtui ennen toista mennyttä tapahtumaa. leave – left – left.
 I ___ never seen snow before I moved to Finland. | had / have / was | En ollut koskaan nähnyt lunta ennen kuin muutin Suomeen. | Aikaisempi menneisyys (ennen muuttoa) → past perfect: had + 3. muoto.
@@ -41,13 +41,13 @@ The film ___ already started when we arrived. | had / has / was | Elokuva oli jo
 const ENG_CONTINUOUS = `
 Be quiet! The baby ___. | is sleeping / sleeps / sleeping | Ole hiljaa! Vauva nukkuu. | Juuri nyt käynnissä → present continuous: am/is/are + -ing.
 Look! It ___ outside. | is snowing / snows / snowing | Katso! Ulkona sataa lunta. | Look! = tapahtuu nyt → present continuous.
-I ___ a book about space at the moment. | am reading / read / reading | Luen parhaillaan kirjaa avaruudesta. | At the moment = parhaillaan → present continuous. I → am.
+I ___ a book about space at the moment. | am reading / read / reading | Luen parhaillaan kirjaa avaruudesta. | At the moment = parhaillaan → present continuous. Subjektina on I, joten käytetään muotoa am.
 What ___ you doing right now? | are / do / is | Mitä teet juuri nyt? | Present continuous -kysymys: are + you + -ing.
 They ___ watching TV. They are playing cards. | aren't / don't / isn't | He eivät katso televisiota. He pelaavat korttia. | Present continuousin kielto: am/is/are + not + -ing.
-Listen! Someone ___ the piano. | is playing / play / playing | Kuuntele! Joku soittaa pianoa. | Listen! = nyt → present continuous. Someone → is.
-My sister ___ in London this month. | is working / working / are working | Siskoni on töissä Lontoossa tämän kuun. | Tilapäinen tilanne (this month) → present continuous. My sister = she → is.
+Listen! Someone ___ the piano. | is playing / play / playing | Kuuntele! Joku soittaa pianoa. | Listen! = nyt → present continuous. Subjektina on someone, joten käytetään muotoa is.
+My sister ___ in London this month. | is working / working / are working | Siskoni on töissä Lontoossa tämän kuun. | Tilapäinen tilanne (this month) → present continuous. Subjektina on my sister (= she), joten käytetään muotoa is.
 Why ___ you laughing? | are / do / is | Miksi naurat? | Present continuous: are + you + -ing.
-Shh! I ___ to the radio. | am listening / listen / listening | Hys! Kuuntelen radiota. | Juuri nyt käynnissä → present continuous. I → am.
+Shh! I ___ to the radio. | am listening / listen / listening | Hys! Kuuntelen radiota. | Juuri nyt käynnissä → present continuous. Subjektina on I, joten käytetään muotoa am.
 I usually ___ to school, but today I am taking the bus. | walk / am walking / walking | Kävelen yleensä kouluun, mutta tänään menen bussilla. | Usually = tapa → present simple. Today = nyt → present continuous.
 Every morning she ___ coffee, but this morning she is drinking tea. | drinks / is drinking / drinking | Joka aamu hän juo kahvia, mutta tänä aamuna hän juo teetä. | Every morning = toistuva tapa → present simple.
 I ___ you are right. | think / am thinking / thinking | Minusta olet oikeassa. | Tilaverbejä (think = olla mieltä, know, like, want) ei yleensä käytetä kestomuodossa.
@@ -55,17 +55,17 @@ I ___ what you mean. | know / am knowing / knowing | Tiedän, mitä tarkoitat. |
 He ___ a new car. It's red. | has / is having / having | Hänellä on uusi auto. Se on punainen. | Have = omistaa on tilaverbi → present simple.
 I ___ dinner when the phone rang. | was cooking / am cooking / have cooking | Olin laittamassa ruokaa, kun puhelin soi. | Kesken ollut toiminta, joka keskeytyi → past continuous: was/were + -ing.
 What were you doing at eight last night? – I ___ TV. | was watching / am watching / watch | Mitä teit eilen kello kahdeksan? – Katsoin televisiota. | Käynnissä tiettynä hetkenä menneisyydessä → past continuous.
-While we ___ in the park, it started to rain. | were walking / are walking / walk | Kun kävelimme puistossa, alkoi sataa. | While + käynnissä ollut toiminta → past continuous. We → were.
+While we ___ in the park, it started to rain. | were walking / are walking / walk | Kun kävelimme puistossa, alkoi sataa. | While + käynnissä ollut toiminta → past continuous. Subjektina on we, joten käytetään muotoa were.
 They ___ playing football when the accident happened. | were / was / are | He pelasivat jalkapalloa, kun onnettomuus tapahtui. | Past continuous: they → were + -ing.
 The sun ___ and the birds were singing. | was shining / is shining / shines | Aurinko paistoi ja linnut lauloivat. | Taustakuvaus menneisyydessä → past continuous.
 She was ___ a shower when I called. | having / have / had | Hän oli suihkussa, kun soitin. | Past continuous: was + -ing-muoto.
-At midnight last night we ___ still dancing. | were / was / are | Eilen keskiyöllä tanssimme vielä. | Last night = menneisyys → past continuous. We → were.
+At midnight last night we ___ still dancing. | were / was / are | Eilen keskiyöllä tanssimme vielä. | Last night = menneisyys → past continuous. Subjektina on we, joten käytetään muotoa were.
 I ___ waiting for you for an hour! | have been / am / has been | Olen odottanut sinua tunnin! | Alkoi aiemmin ja jatkuu yhä (for an hour) → present perfect continuous: have been + -ing.
 It has been ___ all day. | raining / rain / rained | On satanut koko päivän. | Present perfect continuous: has been + -ing.
 How long have you ___ learning English? | been / being / be | Kuinka kauan olet opiskellut englantia? | Present perfect continuous: have + been + -ing.
-She is tired because she ___ running. | has been / have been / is been | Hän on väsynyt, koska hän on juossut. | Juuri päättynyt toiminta, jonka seuraus näkyy → present perfect continuous. She → has been.
+She is tired because she ___ running. | has been / have been / is been | Hän on väsynyt, koska hän on juossut. | Juuri päättynyt toiminta, jonka seuraus näkyy → present perfect continuous. Subjektina on she, joten käytetään muotoa has been.
 We have been ___ the house since May. | painting / paint / painted | Olemme maalanneet taloa toukokuusta asti. | Have been + -ing: toiminta jatkuu yhä (since May).
-They ___ playing games since this morning. | have been / are / has been | He ovat pelanneet pelejä aamusta asti. | Since + jatkuu yhä → present perfect continuous. They → have been.
+They ___ playing games since this morning. | have been / are / has been | He ovat pelanneet pelejä aamusta asti. | Since + jatkuu yhä → present perfect continuous. Subjektina on they, joten käytetään muotoa have been.
 He was out of breath because he ___ been running. | had / has / was | Hän oli hengästynyt, koska hän oli juossut. | Ennen toista menneisyyden hetkeä jatkunut toiminta → past perfect continuous: had been + -ing.
 We had been ___ for two hours when the bus finally came. | waiting / wait / waited | Olimme odottaneet kaksi tuntia, kun bussi vihdoin tuli. | Past perfect continuous: had been + -ing.
 Her eyes were red. She had ___ crying. | been / being / be | Hänen silmänsä olivat punaiset. Hän oli itkenyt. | Past perfect continuous: had + been + -ing.
@@ -82,18 +82,18 @@ In the future, people ___ live on Mars. | will / are / going | Tulevaisuudessa i
 It ___ take long. Just five minutes. | won't / doesn't will / isn't | Se ei kestä kauan. Vain viisi minuuttia. | Willin kielto: won't + perusmuoto.
 Will you ___ at home tonight? | be / are / being | Oletko kotona tänä iltana? | Will + verbin perusmuoto (be).
 Look at those dark clouds! It ___ rain. | is going to / going to / is going | Katso noita tummia pilviä! Kohta sataa. | Ennuste näkyvän merkin perusteella → be going to + perusmuoto.
-We ___ going to visit our grandparents next weekend. | are / will / have | Aiomme käydä isovanhempiemme luona ensi viikonloppuna. | Suunnitelma → be going to. We → are.
+We ___ going to visit our grandparents next weekend. | are / will / have | Aiomme käydä isovanhempiemme luona ensi viikonloppuna. | Suunnitelma → be going to. Subjektina on we, joten käytetään muotoa are.
 She is going ___ a new phone. | to buy / buy / buying | Hän aikoo ostaa uuden puhelimen. | Be going to + verbin perusmuoto.
 I'm not going ___ watch that film. | to / for / at | En aio katsoa sitä elokuvaa. | Be going to: going-sanan jälkeen tulee aina to.
 What ___ you going to do after school? | are / will / do | Mitä aiot tehdä koulun jälkeen? | Be going to -kysymys: are + you + going to.
-Be careful! You ___ going to fall! | are / will / do | Varo! Olet kaatumassa! | Ennuste näkyvän merkin perusteella → be going to. You → are.
+Be careful! You ___ going to fall! | are / will / do | Varo! Olet kaatumassa! | Ennuste näkyvän merkin perusteella → be going to. Subjektina on you, joten käytetään muotoa are.
 He has saved money because he ___ buy a car. | is going to / will going to / going | Hän on säästänyt rahaa, koska hän aikoo ostaa auton. | Etukäteen tehty suunnitelma → be going to.
 They ___ get married next June. They have booked the church. | are going to / will to / going to | He menevät naimisiin ensi kesäkuussa. He ovat varanneet kirkon. | Suunnitelma on jo tehty → be going to.
 I ___ meeting Anna at six tomorrow. | am / will / have | Tapaan Annan huomenna kuudelta. | Sovittu tapaaminen → present continuous (am/is/are + -ing) ilmaisee tulevaisuutta.
 We ___ flying to Rome on Monday. We have the tickets. | are / will / have | Lennämme Roomaan maanantaina. Meillä on liput. | Varattu ja sovittu asia → present continuous.
 What are you ___ this weekend? | doing / do / done | Mitä teet tänä viikonloppuna? | Sovitut menot → present continuous: are + -ing.
 The train ___ at 7.15 tomorrow morning. | leaves / leave / leaving | Juna lähtee huomenna aamulla 7.15. | Aikataulu → present simple, vaikka puhutaan tulevasta.
-The film ___ at eight tonight. | starts / start / starting | Elokuva alkaa tänä iltana kahdeksalta. | Aikataulu → present simple. The film = it → -s.
+The film ___ at eight tonight. | starts / start / starting | Elokuva alkaa tänä iltana kahdeksalta. | Aikataulu → present simple. Subjektina on the film (= it), joten verbiin tulee -s.
 Our flight ___ in Paris at ten in the evening. | arrives / arrive / arriving | Lentomme saapuu Pariisiin kymmeneltä illalla. | Aikataulu → present simple.
 I will call you when I ___ home. | get / will get / got | Soitan sinulle, kun pääsen kotiin. | Aikalauseessa (when, as soon as, before, after) ei käytetä willia, vaan present simple.
 As soon as she ___, we will start dinner. | arrives / will arrive / arrive | Heti kun hän saapuu, aloitamme päivällisen. | As soon as -lauseessa present simple, vaikka asia on tulevaisuudessa.
@@ -146,7 +146,7 @@ If it ___ tomorrow, we will stay at home. | rains / will rain / rained | Jos huo
 If you study hard, you ___ pass the test. | will / would / had | Jos opiskelet ahkerasti, pääset kokeesta läpi. | Tyyppi 1: päälauseessa will + perusmuoto.
 If you don't hurry, you ___ miss the bus. | will / would / did | Jos et pidä kiirettä, myöhästyt bussista. | Tyyppi 1: if + present simple, will + perusmuoto.
 I will call you if I ___ time. | have / will have / had | Soitan sinulle, jos minulla on aikaa. | Tyyppi 1: if-lauseessa present simple, vaikka asia on tulevaisuudessa.
-If she ___ the bus, she will be late. | misses / will miss / missed | Jos hän myöhästyy bussista, hän on myöhässä. | Tyyppi 1: if + present simple. She → -es.
+If she ___ the bus, she will be late. | misses / will miss / missed | Jos hän myöhästyy bussista, hän on myöhässä. | Tyyppi 1: if + present simple. Subjektina on she, joten verbiin tulee -es.
 We will go to the beach if the weather ___ nice. | is / will be / was | Menemme rannalle, jos sää on kaunis. | Tyyppi 1: if-lauseessa present simple.
 If you ___ careful, you will break it. | aren't / won't be / weren't | Jos et ole varovainen, rikot sen. | Tyyppi 1: if-lauseessa present simple → aren't.
 Unless you hurry, you ___ be late. | will / would / had | Ellet pidä kiirettä, myöhästyt. | Unless = ellei. Tyyppi 1: päälauseessa will.
