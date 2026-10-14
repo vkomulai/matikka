@@ -141,10 +141,15 @@ body {
   white-space: nowrap;
 }
 
+/* Aiheet omalle riville, jotta kaikki mahtuvat (englannin kuusi aihetta) */
+.topbar-inner .cats { order: 3; flex: 1 1 100%; flex-wrap: wrap; overflow: visible; }
+.score { margin-left: auto; }
+
 @media (max-width: 640px) {
   .topbar-inner { gap: 8px 12px; padding-top: 8px; padding-bottom: 8px; }
   .cats { order: 3; flex-basis: 100%; overflow: visible; }
-  .cats a { flex: 1; text-align: center; padding: 8px 6px; }
+  .cats { gap: 4px; }
+  .cats a { flex: 1 1 auto; text-align: center; padding: 8px 4px; font-size: .85rem; }
   .cats .long { display: none; }
   .cats .short { display: inline; }
   .score { margin-left: auto; }
@@ -479,7 +484,7 @@ body {
 }
 .courses a + a { border-left: 1.5px solid var(--accent); }
 .courses a[aria-current="page"] { background: var(--accent); color: var(--accent-text); }
-.cats[hidden] { display: none; }
+.cats[hidden], .courses[hidden] { display: none; }
 
 .empty { text-align: center; color: var(--muted); padding: 32px 20px; }
 .empty p { margin: 4px 0; }

@@ -1,6 +1,6 @@
 {
-  "name": "Matikkatreeni",
-  "short_name": "Matikka",
+  "name": "Kurssitreeni",
+  "short_name": "Kurssit",
   "lang": "fi",
   "start_url": "./",
   "display": "standalone",

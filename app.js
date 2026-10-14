@@ -788,6 +788,154 @@ function proportionInverse() {
   };
 }
 
+/* ---------- MAB7: todennäköisyys ---------- */
+
+const PCT = ' %';
+const prob = (p, label, prompt, steps) => ({
+  label: `Todennäköisyys · ${label}`,
+  prompt: `${prompt} Anna vastaus prosentteina.`,
+  problem: '',
+  answer: { type: 'single', label: 'Todennäköisyys =', unit: '%', decimal: true, value: p },
+  steps,
+  final: `${dec(p)}${PCT}`,
+});
+
+const BALL_COLORS = [['punainen', 'punaista'], ['sininen', 'sinistä'], ['vihreä', 'vihreää'], ['keltainen', 'keltaista']];
+
+// Pussi, jossa on kolmea väriä: { intro, colors: [[nominatiivi, lukumäärä], ...] }
+function pickUrn(total) {
+  const cs = shuffleArr(BALL_COLORS).slice(0, 3);
+  const a = rand(1, total - 2);
+  const b = rand(1, total - a - 1);
+  const counts = [a, b, total - a - b];
+  return {
+    total,
+    colors: cs.map(([nom, part], i) => ({ nom, part, n: counts[i] })),
+    intro: `Pussissa on ${total} palloa: ` +
+      cs.map(([, part], i) => `${counts[i]} ${part}`).join(', ').replace(/, ([^,]*)$/, ' ja $1') + '.',
+  };
+}
+
+function shuffleArr(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const CLASSICAL_STORIES = [
+  { totals: [20, 25], story: (n, k) => `Luokalla on ${n} oppilasta, joista ${k} pelaa jalkapalloa. Arvotaan yksi oppilas.`, q: 'Millä todennäköisyydellä hän pelaa jalkapalloa?' },
+  { totals: [10, 20, 50], story: (n, k) => `Arpajaisissa on ${n} arpaa, joista ${k} voittaa. Ostat yhden arvan.`, q: 'Millä todennäköisyydellä saat voiton?' },
+  { totals: [20, 25], story: (n, k) => `Kaupassa on ${n} jäätelömakua, joista ${k} on hedelmäisiä. Valitset yhden maun umpimähkään.`, q: 'Millä todennäköisyydellä valitset hedelmäisen maun?' },
+  { totals: [10, 20, 25], story: (n, k) => `Kirjahyllyssä on ${n} kirjaa, joista ${k} on jännityskirjoja. Otat yhden kirjan umpimähkään.`, q: 'Millä todennäköisyydellä se on jännityskirja?' },
+];
+
+function probClassical() {
+  if (Math.random() < 0.5) {
+    const urn = pickUrn(pick([10, 20, 25]));
+    const c = pick(urn.colors);
+    const p = (c.n * 100) / urn.total;
+    return prob(p, 'klassinen', `${urn.intro} Pussista nostetaan umpimähkään yksi pallo. Millä todennäköisyydellä se on ${c.nom}?`, [
+      { text: 'Todennäköisyys on suotuisten tulosten lukumäärä jaettuna kaikkien tulosten lukumäärällä.', math: [`P(${c.nom}) = ${c.n} / ${urn.total}`] },
+      { text: 'Muutetaan prosenteiksi.', math: [`${c.n} / ${urn.total} = ${dec(p / 100)} = ${dec(p)}${PCT}`] },
+    ]);
+  }
+  const t = pick(CLASSICAL_STORIES);
+  const n = pick(t.totals);
+  const k = rand(1, n - 1);
+  const p = (k * 100) / n;
+  return prob(p, 'klassinen', `${t.story(n, k)} ${t.q}`, [
+    { text: `Suotuisia tuloksia on ${k} ja kaikkia tuloksia ${n}. Todennäköisyys = suotuisat : kaikki.`, math: [`P = ${k} / ${n}`] },
+    { text: 'Muutetaan prosenteiksi.', math: [`${k} / ${n} = ${dec(p / 100)} = ${dec(p)}${PCT}`] },
+  ]);
+}
+
+const COMPLEMENT_STORIES = [
+  ['Bussi on ajoissa', 'bussi myöhästyy', 'Todennäköisyys, että bussi on ajoissa, on'],
+  ['Huomenna sataa', 'huomenna ei sada', 'Todennäköisyys, että huomenna sataa, on'],
+  ['Koripalloilija onnistuu vapaaheitossa', 'hän epäonnistuu vapaaheitossa', 'Koripalloilija onnistuu vapaaheitossa todennäköisyydellä'],
+  ['Kokeen läpäisee', 'koe ei mene läpi', 'Todennäköisyys läpäistä koe on'],
+  ['Ruokalassa on jonoa', 'ruokalassa ei ole jonoa', 'Todennäköisyys, että ruokalassa on jonoa, on'],
+];
+
+function probComplement() {
+  const [, neg, lead] = pick(COMPLEMENT_STORIES);
+  const a = pick([5, 10, 15, 20, 25, 30, 35, 40, 45, 60, 65, 70, 75, 80, 85, 90, 95]);
+  const p = 100 - a;
+  return prob(p, 'vastatapahtuma', `${lead} ${a}${PCT}. Millä todennäköisyydellä ${neg}?`, [
+    { text: 'Tapahtuman ja sen vastatapahtuman todennäköisyyksien summa on aina 100 % (eli 1). Vastatapahtuman todennäköisyys saadaan vähentämällä.', math: [`P(vastatapahtuma) = 100${PCT} − ${a}${PCT} = ${p}${PCT}`] },
+    { text: 'Tarkistus: todennäköisyydet yhteensä 100 %.', math: [`${a}${PCT} + ${p}${PCT} = 100${PCT} ✓`] },
+  ]);
+}
+
+const ADD_PCT_STORIES = [
+  { intro: 'Oppilas tulee kouluun', opts: ['jalan', 'pyörällä', 'bussilla'], what: 'tulee jalan tai pyörällä' },
+  { intro: 'Ruokalassa valitaan lounas:', opts: ['kala', 'kana', 'kasvisruoka'], what: 'valitsee kalan tai kanan' },
+  { intro: 'Perheen kesälomamatka suuntautuu', opts: ['Suomeen', 'Ruotsiin', 'muualle'], what: 'matka suuntautuu Suomeen tai Ruotsiin' },
+];
+
+function probAddition() {
+  if (Math.random() < 0.5) {
+    const urn = pickUrn(pick([10, 20, 25]));
+    const [c1, c2] = shuffleArr(urn.colors);
+    const p = ((c1.n + c2.n) * 100) / urn.total;
+    return prob(p, 'yhteenlaskusääntö', `${urn.intro} Pussista nostetaan umpimähkään yksi pallo. Millä todennäköisyydellä se on ${c1.nom} tai ${c2.nom}?`, [
+      { text: 'Pallo ei voi olla samalla kertaa kahta väriä, joten tapahtumat sulkevat toisensa pois. Silloin todennäköisyydet lasketaan yhteen.', math: [`P(${c1.nom} tai ${c2.nom}) = ${c1.n} / ${urn.total} + ${c2.n} / ${urn.total}`] },
+      { text: 'Lasketaan yhteen.', math: [`(${c1.n} + ${c2.n}) / ${urn.total} = ${c1.n + c2.n} / ${urn.total} = ${dec(p / 100)} = ${dec(p)}${PCT}`] },
+    ]);
+  }
+  const t = pick(ADD_PCT_STORIES);
+  const pcts = [10, 15, 20, 25, 30, 35, 40, 45, 50];
+  let a, b, c;
+  do { a = pick(pcts); b = pick(pcts); c = 100 - a - b; } while (c < 5 || c > 60);
+  const p = a + b;
+  return prob(p, 'yhteenlaskusääntö', `${t.intro} ${t.opts[0]} ${a}${PCT}, ${t.opts[1]} ${b}${PCT} ja ${t.opts[2]} loput. Millä todennäköisyydellä ${t.what}?`, [
+    { text: 'Vaihtoehdot sulkevat toisensa pois, joten todennäköisyydet lasketaan yhteen.', math: [`${a}${PCT} + ${b}${PCT} = ${p}${PCT}`] },
+    { text: `Tarkistus: loppu eli ${t.opts[2]} on ${c}${PCT}, ja yhteensä 100 %.`, math: [`${a}${PCT} + ${b}${PCT} + ${c}${PCT} = 100${PCT} ✓`] },
+  ]);
+}
+
+const MULT_STORIES = [
+  ['Mikko onnistuu vapaaheitossa', 'Aino onnistuu vapaaheitossa', 'Mikko ja Aino heittävät kumpikin yhden vapaaheiton. Mikko onnistuu todennäköisyydellä {a} ja Aino todennäköisyydellä {b}. Millä todennäköisyydellä molemmat onnistuvat?'],
+  ['Bussi on ajoissa aamulla', 'bussi on ajoissa iltapäivällä', 'Bussi on ajoissa aamulla todennäköisyydellä {a} ja iltapäivällä todennäköisyydellä {b}. Millä todennäköisyydellä bussi on ajoissa molemmilla kerroilla?'],
+  ['Kone A toimii', 'kone B toimii', 'Koulun kaksi tulostinta toimivat toisistaan riippumatta. Ensimmäinen toimii todennäköisyydellä {a} ja toinen todennäköisyydellä {b}. Millä todennäköisyydellä molemmat toimivat?'],
+];
+
+function probMultiplication() {
+  const r = Math.random();
+  if (r < 0.25) {
+    const n = pick([2, 3]);
+    const p = 100 / 2 ** n;
+    const lasku = Array(n).fill('0,5').join(' · ');
+    return prob(p, 'kertolaskusääntö', `Kolikkoa heitetään ${n} kertaa. Millä todennäköisyydellä tulee kruuna joka kerralla?`, [
+      { text: 'Heitot ovat riippumattomia toisistaan, joten todennäköisyydet kerrotaan keskenään. Yhden heiton kruunun todennäköisyys on 1/2 eli 0,5.', math: [`${lasku} = ${dec(p / 100)}`] },
+      { text: 'Muutetaan prosenteiksi.', math: [`${dec(p / 100)} = ${dec(p)}${PCT}`] },
+    ]);
+  }
+  if (r < 0.6) {
+    const urn = pickUrn(10);
+    const c1 = pick(urn.colors);
+    const c2 = pick(urn.colors);
+    const p = c1.n * c2.n;
+    return prob(p, 'kertolaskusääntö', `${urn.intro} Pussista nostetaan pallo, se palautetaan pussiin ja nostetaan uudestaan. Millä todennäköisyydellä ensin nousee ${c1.nom} ja sitten ${c2.nom} pallo?`, [
+      { text: 'Pallo palautetaan, joten nostot ovat riippumattomia ja pussi on samanlainen molemmilla kerroilla. Kerrotaan todennäköisyydet.', math: [`P = ${c1.n} / 10 · ${c2.n} / 10 = ${dec(c1.n / 10)} · ${dec(c2.n / 10)}`] },
+      { text: 'Lasketaan ja muutetaan prosenteiksi.', math: [`${dec(c1.n / 10)} · ${dec(c2.n / 10)} = ${dec(p / 100)} = ${p}${PCT}`] },
+    ]);
+  }
+  const [, , tpl] = pick(MULT_STORIES);
+  const pcts = [10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90];
+  let a, b;
+  do { a = pick(pcts); b = pick(pcts); } while ((a * b) % 10 !== 0);
+  const p = (a * b) / 100;
+  return prob(p, 'kertolaskusääntö', tpl.replace('{a}', `${a}${PCT}`).replace('{b}', `${b}${PCT}`), [
+    { text: 'Tapahtumat ovat riippumattomia, joten todennäköisyydet kerrotaan keskenään. Muutetaan ensin prosentit desimaaliluvuiksi.', math: [`${a}${PCT} = ${dec(a / 100)}, ${b}${PCT} = ${dec(b / 100)}`] },
+    { text: 'Kerrotaan.', math: [`${dec(a / 100)} · ${dec(b / 100)} = ${dec(p / 100)}`] },
+    { text: 'Muutetaan takaisin prosenteiksi.', math: [`${dec(p / 100)} = ${dec(p)}${PCT}`] },
+  ]);
+}
+
 /* ---------- Kurssit ja kategoriat ---------- */
 
 const MAY1_CATEGORIES = [
@@ -814,6 +962,18 @@ const MAY1_CATEGORIES = [
   },
 ];
 
+const MAB7_CATEGORIES = [
+  {
+    id: 'todennakoisyys', name: 'Todennäköisyys', short: 'Tn',
+    subs: [
+      { id: 'klassinen', name: 'Klassinen todennäköisyys', short: 'Klassinen', gens: [[probClassical, 1]] },
+      { id: 'vastatapahtuma', name: 'Vastatapahtuma', short: 'Vasta', gens: [[probComplement, 1]] },
+      { id: 'yhteenlasku', name: 'Yhteenlaskusääntö', short: 'Yhteenlasku', gens: [[probAddition, 1]] },
+      { id: 'kertolasku', name: 'Kertolaskusääntö', short: 'Kertolasku', gens: [[probMultiplication, 1]] },
+    ],
+  },
+];
+
 // Englannin tehtävät ovat omassa tiedostossaan (selaimessa ladattu ennen tätä).
 const ENG_CATEGORIES = typeof ENGLISH_CATEGORIES !== 'undefined'
   ? ENGLISH_CATEGORIES
@@ -821,12 +981,16 @@ const ENG_CATEGORIES = typeof ENGLISH_CATEGORIES !== 'undefined'
 
 // Kurssi on ylin taso; jokaisella kurssilla on omat kategoriansa.
 const COURSES = [
-  { id: 'may1', name: 'MAY1', categories: MAY1_CATEGORIES },
-  { id: 'mab7', name: 'MAB7', categories: [] },
+  { id: 'may1', name: 'MAY1', categories: MAY1_CATEGORIES, hidden: true },
+  { id: 'mab7', name: 'MAB7', categories: MAB7_CATEGORIES },
   { id: 'eng', name: 'ENG', categories: ENG_CATEGORIES },
 ];
 
 const CATEGORIES = COURSES.flatMap(c => c.categories);
+
+// Piilotetut kurssit (matematiikka) pysyvät koodissa mutta eivät näy valikossa.
+const VISIBLE_COURSES = COURSES.filter(c => !c.hidden);
+const DEFAULT_COURSE = COURSES.find(c => c.id === 'eng');
 
 // cat voi olla kategoria tai alakategoria; molemmissa on gens.
 function generate(cat) {
@@ -864,7 +1028,7 @@ function parseSet(str) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { COURSES, CATEGORIES, proportionDirect, proportionInverse, percentMore, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
+  module.exports = { probClassical, probComplement, probAddition, probMultiplication, COURSES, VISIBLE_COURSES, CATEGORIES, proportionDirect, proportionInverse, percentMore, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
 }
 
 
@@ -881,11 +1045,19 @@ if (typeof document !== 'undefined') {
   };
 
   const state = {
-    course: COURSES[0], cat: CATEGORIES[0], sub: null, task: null, scored: false, solved: false, correct: 0, total: 0,
+    course: DEFAULT_COURSE, cat: DEFAULT_COURSE.categories[0], sub: null, task: null, scored: false, solved: false, correct: 0, total: 0,
     fields: [], values: {}, active: null, hint: '',
   };
 
-  els.courses.innerHTML = COURSES.map(c => `<a href="#${c.id}" data-id="${c.id}">${c.name}</a>`).join('');
+  els.courses.innerHTML = VISIBLE_COURSES.map(c => `<a href="#${c.id}" data-id="${c.id}">${c.name}</a>`).join('');
+  els.courses.hidden = VISIBLE_COURSES.length < 2;
+
+  // Käyttäjän kurssivalinta säilyy selaimessa (localStorage voi puuttua, esim. yksityisessä tilassa).
+  const COURSE_KEY = 'kurssitreeni.course';
+  const storedCourse = () => {
+    try { return VISIBLE_COURSES.find(c => c.id === localStorage.getItem(COURSE_KEY)); } catch (e) { return undefined; }
+  };
+  const saveCourse = id => { try { localStorage.setItem(COURSE_KEY, id); } catch (e) { /* ei haittaa */ } };
 
   function setExtraKey(btn, key, label, ariaLabel) {
     btn.dataset.key = key || '';
@@ -1212,9 +1384,10 @@ if (typeof document !== 'undefined') {
   // kurssia (#prosentit/osuus) ohjautuvat ensimmäiselle kurssille.
   function selectFromHash() {
     const parts = location.hash.slice(1).split('/');
-    const course = COURSES.find(c => c.id === parts[0]);
+    const course = VISIBLE_COURSES.find(c => c.id === parts[0]);
     if (course) parts.shift();
-    state.course = course || COURSES[0];
+    state.course = course || storedCourse() || DEFAULT_COURSE;
+    saveCourse(state.course.id);
     const [catId, subId] = parts;
     const cats = state.course.categories;
     markCurrent(els.courses, state.course.id);
