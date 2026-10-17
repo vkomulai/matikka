@@ -984,9 +984,9 @@ function evEqual() {
   const p = round2(sum / n);
   const u = unit || '';
   return ev(p, u, 'tasajakauma', `${intro} ${what}`, [
-    { text: `Kaikki ${n} tulosta ovat yhtä todennäköisiä (1/${n}), joten odotusarvo on tulosten keskiarvo.`, math: [`E = (${vals.join(' + ')}) / ${n}`],
+    { text: `Odotusarvo on arvojen ja todennäköisyyksien tulojen summa. Kaikki ${n} tulosta ovat yhtä todennäköisiä, joten jokaisen todennäköisyys on 1/${n}.`, math: [`E = ${vals.map(v => `1/${n} · ${v}`).join(' + ')}`],
       table: evTbl(vals.map(v => [`${v}`, `1/${n}`, `${v}/${n}`]), `${sum}/${n}`) },
-    { text: 'Lasketaan.', math: [`${sum} / ${n} = ${dec(p)}${u ? ' ' + u : ''}`] },
+    { text: 'Lasketaan tulot yhteen.', math: [`E = ${vals.map(v => `${v}/${n}`).join(' + ')} = ${sum}/${n} = ${dec(p)}${u ? ' ' + u : ''}`] },
   ]);
 }
 
