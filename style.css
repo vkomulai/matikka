@@ -573,3 +573,9 @@ body {
 
 .steps .sentence { font-size: 1.1rem; }
 .final .sentence { font-size: 1.15rem; }
+
+.step-table { margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.step-table table { border-collapse: collapse; width: 100%; font-size: 1rem; }
+.step-table th, .step-table td { padding: 6px 10px; text-align: center; border-bottom: 1px solid var(--border, rgba(128, 128, 128, .3)); }
+.step-table th { color: var(--muted); font-weight: 600; font-size: .85rem; }
+.step-table tfoot td { font-weight: 700; border-bottom: 0; }

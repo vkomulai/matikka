@@ -950,6 +950,13 @@ const ev = (p, unit, label, prompt, steps) => ({
 });
 const round2 = x => Math.round(x * 100) / 100;
 
+// Välivaihetaulukko: rivit [arvo, todennäköisyys, tulo]; alariville kokonaisodotusarvo.
+const evTbl = (rows, total) => ({
+  head: ['Arvo', 'Todennäköisyys', 'Arvo · tn'],
+  rows,
+  foot: ['', 'Yhteensä', total],
+});
+
 // Tasan todennäköiset tulokset: odotusarvo on arvojen keskiarvo.
 function evEqual() {
   const t = Math.floor(Math.random() * 5);
@@ -977,7 +984,8 @@ function evEqual() {
   const p = round2(sum / n);
   const u = unit || '';
   return ev(p, u, 'tasajakauma', `${intro} ${what}`, [
-    { text: `Kaikki ${n} tulosta ovat yhtä todennäköisiä, joten odotusarvo on tulosten keskiarvo.`, math: [`E = (${vals.join(' + ')}) / ${n}`] },
+    { text: `Kaikki ${n} tulosta ovat yhtä todennäköisiä (1/${n}), joten odotusarvo on tulosten keskiarvo.`, math: [`E = (${vals.join(' + ')}) / ${n}`],
+      table: evTbl(vals.map(v => [`${v}`, `1/${n}`, `${v}/${n}`]), `${sum}/${n}`) },
     { text: 'Lasketaan.', math: [`${sum} / ${n} = ${dec(p)}${u ? ' ' + u : ''}`] },
   ]);
 }
@@ -1001,7 +1009,8 @@ function evTable() {
   const p = round2(terms.reduce((a, b) => a + b, 0));
   const desc = t.vals.map((v, i) => `${t.names(v)} todennäköisyydellä ${pp[i]}${PCT}`).join(', ').replace(/, ([^,]*)$/, ' ja $1');
   return ev(p, t.unit, 'todennäköisyystaulukko', `${t.intro} ${desc}. ${t.tail}`, [
-    { text: 'Odotusarvo lasketaan kertomalla jokainen arvo sen todennäköisyydellä ja laskemalla tulot yhteen.', math: [`E = ${t.vals.map((v, i) => `${v} · ${dec(pp[i] / 100)}`).join(' + ')}`] },
+    { text: 'Odotusarvo lasketaan kertomalla jokainen arvo sen todennäköisyydellä ja laskemalla tulot yhteen.', math: [`E = ${t.vals.map((v, i) => `${v} · ${dec(pp[i] / 100)}`).join(' + ')}`],
+      table: evTbl(t.vals.map((v, i) => [t.names(v), `${pp[i]}${PCT}`, dec(round2(terms[i]))]), `${dec(p)}`) },
     { text: 'Lasketaan tulot.', math: [`E = ${terms.map(x => dec(round2(x))).join(' + ')} = ${dec(p)} ${t.unit}`] },
   ]);
 }
@@ -1046,7 +1055,8 @@ function evCounts() {
   const p = round2(sum / total);
   const u = unit ? ' ' + unit : '';
   return ev(p, unit, 'epätasaiset todennäköisyydet', `${intro} ${ask}`, [
-    { text: `Todennäköisyydet eivät ole yhtä suuret. Jokaisen tuloksen todennäköisyys on suotuisten osuus kaikista (${total}). Odotusarvo on arvojen ja todennäköisyyksien tulojen summa.`, math: [`E = ${groups.map(g => `${g.n}/${total} · ${g.v}`).join(' + ')}`] },
+    { text: `Todennäköisyydet eivät ole yhtä suuret. Jokaisen tuloksen todennäköisyys on suotuisten osuus kaikista (${total}). Odotusarvo on arvojen ja todennäköisyyksien tulojen summa.`, math: [`E = ${groups.map(g => `${g.n}/${total} · ${g.v}`).join(' + ')}`],
+      table: evTbl(groups.map(g => [`${g.v}`, `${g.n}/${total}`, `${g.n * g.v}/${total}`]), `${sum}/${total}`) },
     { text: 'Lasketaan yhteen samalla nimittäjällä.', math: [`E = (${groups.map(g => g.n * g.v).join(' + ')}) / ${total} = ${sum} / ${total} = ${dec(p)}${u}`] },
   ]);
 }
@@ -1093,10 +1103,16 @@ function evLottery() {
   const sum = k1 * v1 + k2 * v2;
   const p = round2(sum / total);
   return ev(p, '€', 'arpajaiset', `${t.thing} ${total} ${t.item}. Niistä ${k1} voittaa ${money(v1)}, ${k2} voittaa ${money(v2)} ja loput eivät voita mitään. Mikä on voiton odotusarvo yhtä ${t.item === 'korttia' ? 'korttia' : t.item === 'lippua' ? 'lippua' : 'arpaa'} kohden?`, [
-    { text: `Voittojen todennäköisyydet: ${k1}/${total} ja ${k2}/${total}. Muut tulokset tuottavat 0 €.`, math: [`E = ${k1}/${total} · ${v1} + ${k2}/${total} · ${v2} + 0`] },
+    { text: `Voittojen todennäköisyydet: ${k1}/${total} ja ${k2}/${total}. Muut tulokset tuottavat 0 €.`, math: [`E = ${k1}/${total} · ${v1} + ${k2}/${total} · ${v2} + 0`],
+      table: evTbl([[`${v1} €`, `${k1}/${total}`, `${k1 * v1}/${total}`], [`${v2} €`, `${k2}/${total}`, `${k2 * v2}/${total}`], ['0 €', `${total - k1 - k2}/${total}`, '0']], `${sum}/${total}`) },
     { text: 'Lasketaan yhteen.', math: [`E = (${k1 * v1} + ${k2 * v2}) / ${total} = ${sum} / ${total} = ${dec(p)} €`] },
   ]);
 }
+
+const renderTable = ({ head, rows, foot }) => {
+  const row = (cells, tag) => `<tr>${cells.map(c => `<${tag}>${c}</${tag}>`).join('')}</tr>`;
+  return `<div class="step-table"><table><thead>${row(head, 'th')}</thead><tbody>${rows.map(r => row(r, 'td')).join('')}</tbody>${foot ? `<tfoot>${row(foot, 'td')}</tfoot>` : ''}</table></div>`;
+};
 
 /* ---------- Kurssit ja kategoriat ---------- */
 
@@ -1346,7 +1362,7 @@ if (typeof document !== 'undefined') {
     els.keyCheck.textContent = 'Tarkista';
     els.solution.hidden = true;
     els.steps.innerHTML = t.steps.map(s =>
-      `<li><p>${s.text}</p><div class="${t.text ? 'sentence' : 'math'}">${s.math.map(m => `<div>${m}</div>`).join('')}</div></li>`
+      `<li><p>${s.text}</p><div class="${t.text ? 'sentence' : 'math'}">${s.math.map(m => `<div>${m}</div>`).join('')}</div>${s.table ? renderTable(s.table) : ''}</li>`
     ).join('');
     els.final.innerHTML = t.final;
     els.final.className = t.text ? 'sentence' : 'math';
