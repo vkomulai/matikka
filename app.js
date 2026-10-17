@@ -936,6 +936,168 @@ function probMultiplication() {
   ]);
 }
 
+/* ---------- MAB7: odotusarvo ---------- */
+
+const EV = ' €';
+const money = n => `${dec(n)}${EV}`;
+const ev = (p, unit, label, prompt, steps) => ({
+  label: `Odotusarvo · ${label}`,
+  prompt,
+  problem: '',
+  answer: { type: 'single', label: 'Odotusarvo =', unit, decimal: !Number.isInteger(p), value: p },
+  steps,
+  final: `${dec(p)} ${unit}`,
+});
+const round2 = x => Math.round(x * 100) / 100;
+
+// Tasan todennäköiset tulokset: odotusarvo on arvojen keskiarvo.
+function evEqual() {
+  const t = Math.floor(Math.random() * 5);
+  let intro, vals, unit, what;
+  if (t === 0) {
+    intro = 'Heität tavallista noppaa.'; vals = [1, 2, 3, 4, 5, 6]; unit = ''; what = 'Mikä on silmäluvun odotusarvo?';
+  } else if (t === 1) {
+    const a = pick([6, 12, 18]), b = pick([3, 6]);
+    intro = `Heität noppaa. Kuutosesta saat ${money(a)}, nelosesta ja vitosesta ${money(b)}, muilla silmäluvuilla et saa mitään.`;
+    vals = [0, 0, 0, b, b, a]; unit = '€'; what = 'Mikä on voiton odotusarvo?';
+  } else if (t === 2) {
+    vals = shuffleArr([0, 2, 4, 6, 8, 10]).slice(0, 4);
+    intro = `Onnenpyörässä on neljä yhtä suurta sektoria, joiden voitot ovat ${vals.map(money).join(', ')}.`;
+    unit = '€'; what = 'Mikä on voiton odotusarvo yhdellä pyöräytyksellä?';
+  } else if (t === 3) {
+    const a = pick([2, 4, 6]), b = pick([10, 20]);
+    intro = `Kolikonheitossa kruunusta saat ${money(b)} ja klaavasta ${money(a)}.`;
+    vals = [b, a]; unit = '€'; what = 'Mikä on voiton odotusarvo?';
+  } else {
+    vals = shuffleArr([1, 2, 3, 5, 8, 10]).slice(0, 5);
+    intro = `Laatikossa on viisi lippua, joihin on kirjoitettu luvut ${vals.join(', ')}. Nostat yhden lipun umpimähkään.`;
+    unit = ''; what = 'Mikä on nostetun luvun odotusarvo?';
+  }
+  const n = vals.length, sum = vals.reduce((a, b) => a + b, 0);
+  const p = round2(sum / n);
+  const u = unit || '';
+  return ev(p, u, 'tasajakauma', `${intro} ${what}`, [
+    { text: `Kaikki ${n} tulosta ovat yhtä todennäköisiä, joten odotusarvo on tulosten keskiarvo.`, math: [`E = (${vals.join(' + ')}) / ${n}`] },
+    { text: 'Lasketaan.', math: [`${sum} / ${n} = ${dec(p)}${u ? ' ' + u : ''}`] },
+  ]);
+}
+
+// Tulokset ja niiden todennäköisyydet prosentteina: E = Σ arvo · todennäköisyys.
+const EV_PCT_STORIES = [
+  { intro: 'Pelissä voitat', unit: '€', vals: [0, 5, 20], names: v => `${v} €`, tail: 'Mikä on voiton odotusarvo?' },
+  { intro: 'Arpajaisissa voitot ovat', unit: '€', vals: [0, 2, 10, 50], names: v => `${v} €`, tail: 'Mikä on voiton odotusarvo yhdellä arvalla?' },
+  { intro: 'Kokeessa pisteet jakautuvat näin:', unit: 'p', vals: [2, 4, 6], names: v => `${v} p`, tail: 'Mikä on pisteiden odotusarvo?' },
+  { intro: 'Perheiden lemmikkien lukumäärä jakautuu seuraavasti:', unit: 'kpl', vals: [0, 1, 2, 3], names: v => `${v}`, tail: 'Mikä on lemmikkien lukumäärän odotusarvo?' },
+  { intro: 'Bussi on myöhässä seuraavasti:', unit: 'min', vals: [0, 2, 5, 10], names: v => `${v} min`, tail: 'Mikä on myöhästymisen odotusarvo?' },
+];
+
+function evTable() {
+  const t = pick(EV_PCT_STORIES);
+  const k = t.vals.length;
+  // todennäköisyydet 10 %:n välein, summa 100 %, jokainen vähintään 10 %
+  const pp = t.vals.map(() => 10);
+  for (let left = 10 - k; left > 0; left--) pp[rand(0, k - 1)] += 10;
+  const terms = t.vals.map((v, i) => v * pp[i] / 100);
+  const p = round2(terms.reduce((a, b) => a + b, 0));
+  const desc = t.vals.map((v, i) => `${t.names(v)} todennäköisyydellä ${pp[i]}${PCT}`).join(', ').replace(/, ([^,]*)$/, ' ja $1');
+  return ev(p, t.unit, 'todennäköisyystaulukko', `${t.intro} ${desc}. ${t.tail}`, [
+    { text: 'Odotusarvo lasketaan kertomalla jokainen arvo sen todennäköisyydellä ja laskemalla tulot yhteen.', math: [`E = ${t.vals.map((v, i) => `${v} · ${dec(pp[i] / 100)}`).join(' + ')}`] },
+    { text: 'Lasketaan tulot.', math: [`E = ${terms.map(x => dec(round2(x))).join(' + ')} = ${dec(p)} ${t.unit}`] },
+  ]);
+}
+
+// Epätasaiset todennäköisyydet lukumääristä: jokaisella tuloksella on eri määrä suotuisia vaihtoehtoja.
+function evCounts() {
+  const t = Math.floor(Math.random() * 5);
+  let intro, groups, ask, unit;
+  if (t === 0) {
+    const urn = pickUrn(pick([10, 20]));
+    const vals = shuffleArr([0, 2, 5, 10]).slice(0, 3);
+    groups = urn.colors.map((c, i) => ({ n: c.n, v: vals[i], name: c.nom }));
+    intro = `${urn.intro} Nostat umpimähkään yhden pallon: ${groups.map(g => `${g.name} pallo tuottaa ${money(g.v)}`).join(', ').replace(/, ([^,]*)$/, ' ja $1')}.`;
+    ask = 'Mikä on voiton odotusarvo?'; unit = '€';
+  } else if (t === 1) {
+    const sizes = pick([[1, 1, 2], [1, 3], [2, 2, 4], [1, 2, 5]]);
+    const vals = shuffleArr([0, 2, 4, 6, 10]).slice(0, sizes.length);
+    const tot = sizes.reduce((a, b) => a + b, 0);
+    groups = sizes.map((n, i) => ({ n, v: vals[i] }));
+    intro = `Onnenpyörä on jaettu ${tot} yhtä suureen osaan. ${groups.map(g => `${g.n} osaa tuottaa ${money(g.v)}`).join(', ').replace(/, ([^,]*)$/, ' ja $1')}.`;
+    ask = 'Mikä on voiton odotusarvo yhdellä pyöräytyksellä?'; unit = '€';
+  } else if (t === 2) {
+    const a = pick([6, 12]), b = pick([2, 3]);
+    groups = [{ n: 1, v: a }, { n: 2, v: b }, { n: 3, v: 0 }];
+    intro = `Heität noppaa. Jos tulee 6, saat ${money(a)}, jos tulee 4 tai 5, saat ${money(b)}, ja jos tulee 1, 2 tai 3, et saa mitään.`;
+    ask = 'Mikä on voiton odotusarvo?'; unit = '€';
+  } else if (t === 3) {
+    const cnt = pick([[4, 3, 3], [5, 3, 2], [2, 3, 5], [6, 3, 1]]);
+    const vals = pick([[1, 2, 5], [0, 5, 10], [2, 4, 10]]);
+    groups = cnt.map((n, i) => ({ n, v: vals[i] }));
+    intro = `Arpapussissa on 10 arpaa: ${groups.map(g => `${g.n} arvassa on ${money(g.v)}`).join(', ').replace(/, ([^,]*)$/, ' ja $1')}. Nostat yhden arvan.`;
+    ask = 'Mikä on voiton odotusarvo?'; unit = '€';
+  } else {
+    const cnt = pick([[10, 5, 5], [12, 6, 2], [8, 8, 4]]);
+    const vals = pick([[1, 2, 3], [0, 1, 4], [2, 3, 6]]);
+    groups = cnt.map((n, i) => ({ n, v: vals[i] }));
+    intro = `Luokassa on ${cnt.reduce((a, b) => a + b, 0)} oppilasta. ${groups.map(g => `${g.n} oppilaalla on ${g.v} sisarusta`).join(', ').replace(/, ([^,]*)$/, ' ja $1')}. Valitaan yksi oppilas umpimähkään.`;
+    ask = 'Mikä on sisarusten lukumäärän odotusarvo?'; unit = '';
+  }
+  const total = groups.reduce((a, g) => a + g.n, 0);
+  const sum = groups.reduce((a, g) => a + g.n * g.v, 0);
+  const p = round2(sum / total);
+  const u = unit ? ' ' + unit : '';
+  return ev(p, unit, 'epätasaiset todennäköisyydet', `${intro} ${ask}`, [
+    { text: `Todennäköisyydet eivät ole yhtä suuret. Jokaisen tuloksen todennäköisyys on suotuisten osuus kaikista (${total}). Odotusarvo on arvojen ja todennäköisyyksien tulojen summa.`, math: [`E = ${groups.map(g => `${g.n}/${total} · ${g.v}`).join(' + ')}`] },
+    { text: 'Lasketaan yhteen samalla nimittäjällä.', math: [`E = (${groups.map(g => g.n * g.v).join(' + ')}) / ${total} = ${sum} / ${total} = ${dec(p)}${u}`] },
+  ]);
+}
+
+// Toistot: odotettu lukumäärä = toistojen määrä · todennäköisyys.
+const EV_COUNT_STORIES = [
+  { n: [20, 40, 100], q: [50], story: n => `Kolikkoa heitetään ${n} kertaa.`, ask: 'Montako kruunaa odotusarvoisesti tulee?' },
+  { n: [12, 30, 60], q: null, frac: [1, 6], story: n => `Noppaa heitetään ${n} kertaa.`, ask: 'Montako kuutosta odotusarvoisesti tulee?' },
+  { n: [10, 20, 50], q: [80, 60, 70], story: (n, q) => `Koripalloilija onnistuu vapaaheitossa todennäköisyydellä ${q} %. Hän heittää ${n} vapaaheittoa.`, ask: 'Montako heittoa odotusarvoisesti onnistuu?' },
+  { n: [50, 100, 200], q: [10, 20, 5], story: (n, q) => `Bussi on myöhässä todennäköisyydellä ${q} %. Bussilla ajetaan ${n} päivää.`, ask: 'Montana päivänä bussi odotusarvoisesti on myöhässä?' },
+  { n: [200, 500, 1000], q: [2, 4, 5], story: (n, q) => `Tehtaan tuotteista ${q} % on viallisia. Tehtaalla valmistetaan ${n} tuotetta.`, ask: 'Montako tuotetta odotusarvoisesti on viallisia?' },
+];
+
+function evCount() {
+  const t = pick(EV_COUNT_STORIES);
+  const n = pick(t.n);
+  if (t.frac) {
+    const p = n / 6;
+    return ev(p, 'kpl', 'odotettu lukumäärä', `${t.story(n)} ${t.ask}`, [
+      { text: 'Kuutosen todennäköisyys on 1/6. Odotettu lukumäärä saadaan kertomalla toistojen määrä todennäköisyydellä.', math: [`E = ${n} · 1/6 = ${n} / 6 = ${p}`] },
+    ]);
+  }
+  const q = pick(t.q);
+  const p = (n * q) / 100;
+  return ev(p, 'kpl', 'odotettu lukumäärä', `${t.story(n, q)} ${t.ask}`, [
+    { text: `Odotettu lukumäärä saadaan kertomalla toistojen määrä todennäköisyydellä. Todennäköisyys ${q}${PCT} on ${dec(q / 100)}.`, math: [`E = ${n} · ${dec(q / 100)} = ${dec(p)}`] },
+  ]);
+}
+
+// Reilu hinta / odotettu voitto arvasta, kun voittoluokkia on kaksi.
+const EV_LOTTERY_STORIES = [
+  { total: [50, 100], thing: 'Arpajaisissa on', item: 'arpaa' },
+  { total: [20, 50], thing: 'Koulun lotossa on', item: 'lippua' },
+  { total: [40, 100], thing: 'Hyväntekeväisyysarpajaisissa on', item: 'arpaa' },
+  { total: [20, 40], thing: 'Pelissä on', item: 'korttia' },
+  { total: [50, 100], thing: 'Messuarvonnassa on', item: 'lippua' },
+];
+
+function evLottery() {
+  const t = pick(EV_LOTTERY_STORIES);
+  const total = pick(t.total);
+  const k1 = pick([1, 2]), k2 = pick([4, 5]);
+  const v1 = pick([50, 100, 200]), v2 = pick([5, 10, 20]);
+  const sum = k1 * v1 + k2 * v2;
+  const p = round2(sum / total);
+  return ev(p, '€', 'arpajaiset', `${t.thing} ${total} ${t.item}. Niistä ${k1} voittaa ${money(v1)}, ${k2} voittaa ${money(v2)} ja loput eivät voita mitään. Mikä on voiton odotusarvo yhtä ${t.item === 'korttia' ? 'korttia' : t.item === 'lippua' ? 'lippua' : 'arpaa'} kohden?`, [
+    { text: `Voittojen todennäköisyydet: ${k1}/${total} ja ${k2}/${total}. Muut tulokset tuottavat 0 €.`, math: [`E = ${k1}/${total} · ${v1} + ${k2}/${total} · ${v2} + 0`] },
+    { text: 'Lasketaan yhteen.', math: [`E = (${k1 * v1} + ${k2 * v2}) / ${total} = ${sum} / ${total} = ${dec(p)} €`] },
+  ]);
+}
+
 /* ---------- Kurssit ja kategoriat ---------- */
 
 const MAY1_CATEGORIES = [
@@ -970,6 +1132,16 @@ const MAB7_CATEGORIES = [
       { id: 'vastatapahtuma', name: 'Vastatapahtuma', short: 'Vasta', gens: [[probComplement, 1]] },
       { id: 'yhteenlasku', name: 'Yhteenlaskusääntö', short: 'Yhteenlasku', gens: [[probAddition, 1]] },
       { id: 'kertolasku', name: 'Kertolaskusääntö', short: 'Kertolasku', gens: [[probMultiplication, 1]] },
+    ],
+  },
+  {
+    id: 'odotusarvo', name: 'Odotusarvo', short: 'Odotus',
+    subs: [
+      { id: 'tasajakauma', name: 'Tasajakauma', short: 'Tasan', gens: [[evEqual, 1]] },
+      { id: 'taulukko', name: 'Todennäköisyystaulukko', short: 'Taulukko', gens: [[evTable, 1]] },
+      { id: 'epatasa', name: 'Epätasaiset todennäköisyydet', short: 'Epätasan', gens: [[evCounts, 1]] },
+      { id: 'lukumaara', name: 'Odotettu lukumäärä', short: 'Lukumäärä', gens: [[evCount, 1]] },
+      { id: 'arpajaiset', name: 'Arpajaiset', short: 'Arpa', gens: [[evLottery, 1]] },
     ],
   },
 ];
@@ -1028,7 +1200,7 @@ function parseSet(str) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { probClassical, probComplement, probAddition, probMultiplication, COURSES, VISIBLE_COURSES, CATEGORIES, proportionDirect, proportionInverse, percentMore, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
+  module.exports = { probClassical, evEqual, evCounts, evTable, evCount, evLottery, probComplement, probAddition, probMultiplication, COURSES, VISIBLE_COURSES, CATEGORIES, proportionDirect, proportionInverse, percentMore, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
 }
 
 
