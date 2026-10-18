@@ -69,6 +69,39 @@ There ___ any milk in the fridge. | isn't / aren't / doesn't | Jääkaapissa ei 
 There ___ any eggs left. | aren't / isn't / don't | Munia ei ole jäljellä. | There are/aren't + monikko (eggs).
 `;
 
+const ENG_PRESENT_Q = `
+___ you like pizza? | Do / Does / Are | Pidätkö pizzasta? | Present simplen kysymys: I/you/we/they → Do + subjekti + perusmuoto.
+___ she play the guitar? | Does / Do / Is | Soittaako hän kitaraa? | He/she/it → Does + subjekti + perusmuoto.
+Does your brother ___ football? | play / plays / playing | Pelaako veljesi jalkapalloa? | Does-kysymyksessä pääverbi on perusmuodossa. -s on jo apuverbissä (does).
+___ they live in Tampere? | Do / Does / Are | Asuvatko he Tampereella? | Subjektina on they → Do + subjekti + perusmuoto.
+Do you ___ English at school? | study / studies / studying | Opiskeletko englantia koulussa? | Do-kysymyksessä pääverbi on perusmuodossa.
+___ the shop open at nine? | Does / Do / Is | Aukeaako kauppa yhdeksältä? | The shop (= it) → Does + perusmuoto. Verbinä on open, joten tarvitaan do-apuverbi.
+___ you tired? | Are / Do / Does | Oletko väsynyt? | Be-verbin kysymys: be-verbi subjektin eteen. Tired on adjektiivi, joten do-apuverbiä ei käytetä.
+___ he at home now? | Is / Does / Do | Onko hän nyt kotona? | Be-verbin kysymys: he → Is + subjekti.
+___ your parents at work? | Are / Do / Is | Ovatko vanhempasi töissä? | Your parents = they → Are + subjekti. Verbinä on be.
+___ I late? | Am / Do / Are | Olenko myöhässä? | Be-verbin kysymys: I → Am I…?
+Where ___ you live? | do / does / are | Missä asut? | Kysymyssana + do + subjekti + perusmuoto.
+What time ___ the film start? | does / do / is | Mihin aikaan elokuva alkaa? | Kysymyssana + does + subjekti (the film = it) + perusmuoto.
+Where ___ your friends from? | are / do / does | Mistä ystäväsi ovat kotoisin? | Verbinä on be: kysymyssana + are + subjekti (your friends = they).
+What ___ she do on Saturdays? | does / do / is | Mitä hän tekee lauantaisin? | Kysymyssana + does + she + perusmuoto.
+How often ___ you go swimming? | do / does / are | Kuinka usein käyt uimassa? | How often + do + subjekti + perusmuoto.
+Why ___ he always late? | is / does / do | Miksi hän on aina myöhässä? | Verbinä on be: Why + is + he.
+How much ___ this book cost? | does / do / is | Paljonko tämä kirja maksaa? | This book (= it) → does + perusmuoto.
+Who ___ you live with? | do / does / are | Kenen kanssa asut? | Who + do + you + perusmuoto.
+___ Tom like spinach? | Does / Do / Is | Pitääkö Tom pinaatista? | Tom (= he) → Does + perusmuoto.
+Do cats ___ fish? | like / likes / liking | Pitävätkö kissat kalasta? | Do-kysymyksessä pääverbi on perusmuodossa.
+Does the baby ___ a lot? | cry / cries / crying | Itkeekö vauva paljon? | Does-kysymyksessä verbi on perusmuodossa (cry, ei cries).
+___ we have school tomorrow? | Do / Does / Are | Onko meillä huomenna koulua? | Subjektina on we → Do + subjekti + perusmuoto.
+___ it snow in Finland in winter? | Does / Do / Is | Sataako Suomessa talvella lunta? | It → Does + perusmuoto.
+___ there a bank near here? | Is / Does / Are | Onko lähellä pankkia? | There is / there are -rakenteen kysymys: Is there…? yksikkö.
+___ there any eggs in the fridge? | Are / Is / Do | Onko jääkaapissa munia? | Are there…? monikko (eggs).
+What ___ you want for lunch? | do / does / are | Mitä haluat lounaaksi? | Kysymyssana + do + you + perusmuoto.
+Which bus ___ you take to school? | do / does / are | Minkä bussin otat kouluun? | Which bus + do + you + perusmuoto.
+Whose bag ___ this? | is / does / do | Kenen laukku tämä on? | Verbinä on be: this → is.
+Yes, I do. – ___ you like sport? | Do / Does / Are | Kyllä pidän. – Pidätkö urheilusta? | Lyhyt vastaus Yes, I do viittaa do-kysymykseen: Do you like…?
+___ Anna and Eva go to the same school? | Do / Does / Are | Käyvätkö Anna ja Eva samaa koulua? | Anna and Eva = they → Do + perusmuoto.
+`;
+
 const ENG_SIMPLE = `
 My brother ___ football every Saturday. | plays / play / playing | Veljeni pelaa jalkapalloa joka lauantai. | Toistuva tapa (every Saturday) → present simple. He/she/it-muodossa verbiin lisätään -s.
 We ___ in a small town near Tampere. | live / lives / living | Asumme pienessä kaupungissa Tampereen lähellä. | Pysyvä asia → present simple. We-muodossa verbi on perusmuodossa ilman -s:ää.
@@ -351,6 +384,7 @@ const ENGLISH_CATEGORIES = [
     subs: [
       { id: 'preesens-normaali', name: 'Normaalimuodot', short: 'Normaali', gens: [[choiceGen('Preesens · normaali', ENG_PRESENT_POS), 1]] },
       { id: 'preesens-kielto', name: 'Kielteiset muodot', short: 'Kielteinen', gens: [[choiceGen('Preesens · kielteinen', ENG_PRESENT_NEG), 1]] },
+      { id: 'preesens-kysymys', name: 'Kysymysmuoto', short: 'Kysymys', gens: [[choiceGen('Preesens · kysymys', ENG_PRESENT_Q), 1]] },
     ],
   },
   { id: 'yleis', name: 'Yleisaikamuodot', short: 'Yleis', gens: [[choiceGen('Yleisaikamuodot', ENG_SIMPLE), 1]] },
@@ -362,5 +396,5 @@ const ENGLISH_CATEGORIES = [
 ];
 
 if (typeof module !== 'undefined') {
-  module.exports = { ENGLISH_CATEGORIES, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
+  module.exports = { ENGLISH_CATEGORIES, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
 }
