@@ -5,6 +5,70 @@
 // Monivalintarivit: lause (___ = aukko) | vaihtoehdot, oikea ensin | suomennos | selitys
 // Sanajärjestysrivit: oikeat järjestykset, ensimmäinen ensisijainen | suomennos | selitys
 
+const ENG_PRESENT_POS = `
+She ___ to school by bus. | goes / go / gos | Hän menee kouluun bussilla. | He/she/it-muodossa verbiin tulee -s. Go päättyy o-kirjaimeen, joten pääte on -es: goes.
+My dad ___ at a bank. | works / work / working | Isäni työskentelee pankissa. | Toistuva asia → present simple. My dad (= he) → verbiin tulee -s.
+They ___ football on Sundays. | play / plays / playing | He pelaavat jalkapalloa sunnuntaisin. | Subjektina on they, joten verbi on perusmuodossa ilman -s:ää.
+The baby ___ a lot. | cries / crys / cry | Vauva itkee paljon. | The baby (= it) → -s. Kun y-kirjainta edeltää konsonantti, y vaihtuu muotoon -ies: cry → cries.
+He ___ English very well. | speaks / speak / speaking | Hän puhuu englantia todella hyvin. | He/she/it → verbiin tulee -s.
+I ___ in Helsinki. | live / lives / am live | Asun Helsingissä. | I-muodossa verbi on perusmuodossa ilman -s:ää.
+We ___ breakfast at seven. | have / has / haves | Syömme aamiaisen seitsemältä. | Subjektina on we, joten verbi on perusmuodossa: have.
+She ___ a new bike. | has / have / haves | Hänellä on uusi pyörä. | Epäsäännöllinen verbi: have → has, kun subjektina on he/she/it.
+My cat ___ milk. | likes / like / liking | Kissani pitää maidosta. | My cat (= it) → verbiin tulee -s.
+Anna ___ her teeth twice a day. | brushes / brushs / brush | Anna pesee hampaansa kahdesti päivässä. | Kun verbi päättyy -sh, -ch, -s, -x tai -o, he/she/it-päätteenä on -es: brushes.
+He ___ his homework after school. | does / do / dos | Hän tekee läksynsä koulun jälkeen. | Do → does, kun subjektina on he/she/it.
+The bus ___ at eight. | leaves / leave / leavs | Bussi lähtee kahdeksalta. | The bus (= it) → verbiin tulee -s.
+You ___ very kind. | are / is / am | Olet erittäin ystävällinen. | Be-verbi: I am, you are, he/she/it is, we/you/they are.
+My sister ___ twelve years old. | is / are / am | Siskoni on kaksitoista vuotta vanha. | Be-verbi: my sister (= she) → is.
+I ___ a student. | am / is / are | Olen opiskelija. | Be-verbi: I → am.
+We ___ good friends. | are / is / am | Olemme hyviä ystäviä. | Be-verbi: we → are.
+It ___ cold today. | is / are / am | Tänään on kylmä. | Be-verbi: it → is.
+Tom and Ben ___ brothers. | are / is / am | Tom ja Ben ovat veljeksiä. | Tom and Ben = they (monikko) → are.
+The children ___ in the garden. | play / plays / playing | Lapset leikkivät puutarhassa. | The children = they (monikko), joten verbi on perusmuodossa ilman -s:ää.
+My mum ___ the car on Mondays. | washes / washs / wash | Äitini pesee auton maanantaisin. | Wash päättyy -sh, joten he/she/it-pääte on -es: washes.
+Birds ___ in trees. | live / lives / living | Linnut asuvat puissa. | Birds = they (monikko) → perusmuoto ilman -s:ää.
+The teacher ___ us a lot of homework. | gives / give / gaves | Opettaja antaa meille paljon läksyjä. | The teacher (= she/he) → verbiin tulee -s.
+She ___ TV every evening. | watches / watchs / watch | Hän katsoo televisiota joka ilta. | Watch päättyy -ch, joten pääte on -es: watches.
+A week ___ seven days. | has / have / is | Viikossa on seitsemän päivää. | A week (= it) → have muuttuu muotoon has.
+Sam ___ to music when he runs. | listens / listen / listening | Sam kuuntelee musiikkia juostessaan. | Sam (= he) → verbiin tulee -s.
+My parents ___ coffee in the morning. | drink / drinks / drinking | Vanhempani juovat kahvia aamulla. | My parents = they (monikko) → perusmuoto ilman -s:ää.
+The shop ___ at nine. | opens / open / opening | Kauppa aukeaa yhdeksältä. | The shop (= it) → verbiin tulee -s.
+Fish ___ in water. | swim / swims / swimming | Kalat uivat vedessä. | Fish tarkoittaa tässä monikkoa (they) → perusmuoto ilman -s:ää.
+A bird ___ over the lake. | flies / flys / fly | Lintu lentää järven yli. | A bird (= it) → -s. Konsonanttia edeltävä y vaihtuu muotoon -ies: fly → flies.
+He ___ his friends every week. | visits / visit / visiting | Hän vierailee ystäviensä luona joka viikko. | He → verbiin tulee -s.
+`;
+
+const ENG_PRESENT_NEG = `
+I ___ like spinach. | don't / doesn't / not | En pidä pinaatista. | Present simplen kielto: I/you/we/they → don't + verbin perusmuoto.
+She ___ play the piano. | doesn't / don't / isn't | Hän ei soita pianoa. | He/she/it → doesn't + verbin perusmuoto.
+We ___ have a car. | don't / doesn't / aren't | Meillä ei ole autoa. | Subjektina on we → don't + perusmuoto.
+He doesn't ___ meat. | eat / eats / eating | Hän ei syö lihaa. | Doesn't-sanan jälkeen verbi on perusmuodossa. -s siirtyy apuverbiin (does), ei pääverbiin.
+They ___ live in Turku. | don't / doesn't / aren't | He eivät asu Turussa. | Subjektina on they → don't + perusmuoto.
+My brother ___ like football. | doesn't / don't / not | Veljeni ei pidä jalkapallosta. | My brother (= he) → doesn't + perusmuoto.
+It ___ rain much in summer here. | doesn't / don't / isn't | Täällä ei sada kesällä paljon. | It → doesn't + perusmuoto.
+I ___ tired today. | am not / do not / is not | En ole väsynyt tänään. | Be-verbin kielto: am/is/are + not. Pääverbinä on be, joten do-apuverbiä ei käytetä. I → am not.
+He ___ at home now. | isn't / doesn't / don't | Hän ei ole nyt kotona. | Be-verbin kielto: he → is not (isn't). Do-apuverbiä ei käytetä, kun verbinä on be.
+We ___ late. We are on time. | aren't / don't / isn't | Emme ole myöhässä. Olemme ajoissa. | Be-verbin kielto: we → are not (aren't).
+The shops ___ open on Sundays. | aren't / isn't / don't | Kaupat eivät ole auki sunnuntaisin. | The shops = they (monikko) → are not (aren't). Open on adjektiivi, joten verbinä on be.
+You ___ my friend! | aren't / don't / isn't | Et ole ystäväni! | Be-verbin kielto: you → are not (aren't).
+My teacher doesn't ___ Finnish. | speak / speaks / speaking | Opettajani ei puhu suomea. | Doesn't + perusmuoto. Verbiin ei tule -s:ää.
+They don't ___ TV in the morning. | watch / watches / watching | He eivät katso televisiota aamulla. | Don't + perusmuoto.
+Mia ___ eat fish. | doesn't / isn't / don't | Mia ei syö kalaa. | Mia (= she) → doesn't + perusmuoto.
+The children ___ at school today. | aren't / doesn't / don't | Lapset eivät ole tänään koulussa. | The children = they → are not (aren't). Verbinä on be.
+I ___ know the answer. | don't / doesn't / am not | En tiedä vastausta. | Pääverbi on know (ei be), joten I → don't + perusmuoto.
+This bag ___ belong to me. | doesn't / don't / isn't | Tämä laukku ei ole minun. | This bag (= it) → doesn't + perusmuoto.
+My parents ___ work on Saturdays. | don't / doesn't / aren't | Vanhempani eivät työskentele lauantaisin. | My parents = they → don't + perusmuoto.
+He ___ happy today. | isn't / doesn't / don't | Hän ei ole tänään iloinen. | Be-verbin kielto: he → is not (isn't).
+Cats ___ like water. | don't / doesn't / aren't | Kissat eivät pidä vedestä. | Cats = they (monikko) → don't + perusmuoto.
+She ___ my sister. | isn't / doesn't / don't | Hän ei ole siskoni. | Be-verbin kielto: she → is not (isn't).
+We don't ___ to school on Sundays. | go / goes / going | Emme käy koulussa sunnuntaisin. | Don't + perusmuoto.
+He doesn't ___ his homework. | do / does / doing | Hän ei tee läksyjään. | Doesn't + perusmuoto: do. (Does olisi väärin, koska -s on jo apuverbissä.)
+Tim doesn't ___ in London. | live / lives / living | Tim ei asu Lontoossa. | Doesn't + perusmuoto.
+You ___ allowed to run in the corridor. | aren't / don't / doesn't | Käytävällä ei saa juosta. | Be-verbin kielto: you → are not (aren't).
+There ___ any milk in the fridge. | isn't / aren't / doesn't | Jääkaapissa ei ole maitoa. | There is/isn't + yksikkö tai uncountable (milk).
+There ___ any eggs left. | aren't / isn't / don't | Munia ei ole jäljellä. | There are/aren't + monikko (eggs).
+`;
+
 const ENG_SIMPLE = `
 My brother ___ football every Saturday. | plays / play / playing | Veljeni pelaa jalkapalloa joka lauantai. | Toistuva tapa (every Saturday) → present simple. He/she/it-muodossa verbiin lisätään -s.
 We ___ in a small town near Tampere. | live / lives / living | Asumme pienessä kaupungissa Tampereen lähellä. | Pysyvä asia → present simple. We-muodossa verbi on perusmuodossa ilman -s:ää.
@@ -282,6 +346,13 @@ function orderGen(label, src) {
 }
 
 const ENGLISH_CATEGORIES = [
+  {
+    id: 'preesens', name: 'Preesens', short: 'Preesens',
+    subs: [
+      { id: 'preesens-normaali', name: 'Normaalimuodot', short: 'Normaali', gens: [[choiceGen('Preesens · normaali', ENG_PRESENT_POS), 1]] },
+      { id: 'preesens-kielto', name: 'Kielteiset muodot', short: 'Kielteinen', gens: [[choiceGen('Preesens · kielteinen', ENG_PRESENT_NEG), 1]] },
+    ],
+  },
   { id: 'yleis', name: 'Yleisaikamuodot', short: 'Yleis', gens: [[choiceGen('Yleisaikamuodot', ENG_SIMPLE), 1]] },
   { id: 'kesto', name: 'Kestoaikamuodot', short: 'Kesto', gens: [[choiceGen('Kestoaikamuodot', ENG_CONTINUOUS), 1]] },
   { id: 'futuuri', name: 'Futuuri', short: 'Futuuri', gens: [[choiceGen('Futuuri', ENG_FUTURE), 1]] },
@@ -291,5 +362,5 @@ const ENGLISH_CATEGORIES = [
 ];
 
 if (typeof module !== 'undefined') {
-  module.exports = { ENGLISH_CATEGORIES, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
+  module.exports = { ENGLISH_CATEGORIES, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
 }
