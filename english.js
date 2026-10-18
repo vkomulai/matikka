@@ -186,6 +186,97 @@ Is she ___ a new bike? | buying / buys / buy | Ostaako hän uuden pyörän? | Is
 ___ he sitting next to you? | Is / Are / Does | Istuuko hän vieressäsi? | He → Is + -ing.
 `;
 
+const ENG_PAST_POS = `
+I ___ football with my friends yesterday. | played / play / plays | Pelasin eilen jalkapalloa ystävieni kanssa. | Yesterday = päättynyt aika → imperfekti. Säännöllisen verbin pääte on -ed: play → played.
+She ___ to the cinema last night. | went / goes / gone | Hän meni eilen illalla elokuviin. | Last night = menneisyys → imperfekti. Go on epäsäännöllinen: go – went – gone.
+We ___ pizza for dinner on Saturday. | ate / eat / eaten | Söimme lauantaina pizzaa päivälliseksi. | Epäsäännöllinen verbi: eat – ate – eaten. Imperfektissä käytetään 2. muotoa.
+He ___ his keys yesterday. | lost / losed / lose | Hän hukkasi avaimensa eilen. | Epäsäännöllinen verbi: lose – lost – lost.
+They ___ in Spain two years ago. | lived / live / lives | He asuivat Espanjassa kaksi vuotta sitten. | Ago = päättynyt aika → imperfekti. Live + -d = lived (e-loppuiseen verbiin lisätään vain -d).
+My mum ___ a cake last weekend. | made / maked / makes | Äitini leipoi kakun viime viikonloppuna. | Make on epäsäännöllinen: make – made – made.
+It ___ a lot last winter. | snowed / snow / snows | Viime talvena satoi paljon lunta. | Last winter = menneisyys → snow + -ed.
+The film ___ at eight o'clock. | started / start / starts | Elokuva alkoi kahdeksalta. | Menneen ajan tapahtuma → start + -ed.
+She ___ very tired after the trip. | was / were / is | Hän oli todella väsynyt matkan jälkeen. | Be-verbin imperfekti: I/he/she/it → was, you/we/they → were.
+We ___ at the beach all day. | were / was / are | Olimme rannalla koko päivän. | Be-verbin imperfekti: we → were.
+I ___ at home yesterday. | was / were / am | Olin eilen kotona. | Be-verbin imperfekti: I → was.
+You ___ right about the test. | were / was / are | Olit oikeassa kokeesta. | Be-verbin imperfekti: you → were.
+The weather ___ nice on Sunday. | was / were / is | Sää oli sunnuntaina kaunis. | The weather (= it) → was.
+My parents ___ young in the 1990s. | were / was / are | Vanhempani olivat nuoria 1990-luvulla. | My parents = they → were.
+He ___ the window with a ball. | broke / breaked / broken | Hän rikkoi ikkunan pallolla. | Epäsäännöllinen: break – broke – broken.
+Last summer we ___ a lot of ice cream. | bought / buyed / buy | Viime kesänä ostimme paljon jäätelöä. | Epäsäännöllinen: buy – bought – bought.
+She ___ me a letter last week. | wrote / writed / written | Hän kirjoitti minulle kirjeen viime viikolla. | Epäsäännöllinen: write – wrote – written.
+The teacher ___ us a difficult question. | asked / ask / asks | Opettaja esitti meille vaikean kysymyksen. | Menneen ajan tapahtuma → ask + -ed.
+I ___ the answer in the book. | found / finded / find | Löysin vastauksen kirjasta. | Epäsäännöllinen: find – found – found.
+They ___ the match 3–1. | won / winned / win | He voittivat ottelun 3–1. | Epäsäännöllinen: win – won – won.
+He ___ to school by bike yesterday. | cycled / cycles / cycle | Hän pyöräili eilen kouluun. | Yesterday → cycle + -d = cycled.
+She ___ her homework before dinner. | finished / finish / finishes | Hän lopetti läksyt ennen päivällistä. | Menneen ajan tapahtuma → finish + -ed.
+The dog ___ the ball into the garden. | ran / runned / run | Koira juoksi pallon perässä puutarhaan. | Epäsäännöllinen: run – ran – run.
+It ___ cold, so I wore a jacket. | was / were / is | Oli kylmä, joten puin takin. | It → was. Wear – wore – worn.
+We ___ a great time at the party. | had / have / has | Meillä oli hauskaa juhlissa. | Epäsäännöllinen: have – had – had.
+The children ___ in the park after school. | played / plays / playing | Lapset leikkivät puistossa koulun jälkeen. | Imperfektissä verbi on sama kaikille subjekteille: play + -ed.
+She ___ me last night. | called / call / calls | Hän soitti minulle eilen illalla. | Last night → call + -ed.
+He ___ his bike carefully. | stopped / stoped / stops | Hän pysäytti pyöränsä varovasti. | Lyhyen verbin viimeinen konsonantti kaksinkertaistuu: stop → stopped.
+She ___ at her sister and laughed. | looked / look / looks | Hän katsoi siskoaan ja nauroi. | Menneen ajan tapahtuma → look + -ed.
+They ___ the bus because they were late. | missed / miss / misses | He myöhästyivät bussista, koska olivat myöhässä. | Menneen ajan tapahtuma → miss + -ed.
+`;
+
+const ENG_PAST_NEG = `
+I ___ play football yesterday. | didn't / don't / wasn't | En pelannut eilen jalkapalloa. | Imperfektin kielto: didn't + verbin perusmuoto (kaikille subjekteille).
+She ___ come to the party. | didn't / doesn't / wasn't | Hän ei tullut juhliin. | Didn't + perusmuoto. Didn't on sama kaikille subjekteille.
+We didn't ___ the film. | like / liked / likes | Emme pitäneet elokuvasta. | Didn't-sanan jälkeen verbi on perusmuodossa. Menneen ajan muoto on jo apuverbissä (did).
+He didn't ___ his homework. | do / did / done | Hän ei tehnyt läksyjään. | Didn't + perusmuoto: do (ei did eikä done).
+They ___ go to school on Monday. | didn't / weren't / don't | He eivät menneet kouluun maanantaina. | Pääverbi on go → didn't + perusmuoto.
+I ___ at home last night. | wasn't / didn't / weren't | En ollut kotona eilen illalla. | Be-verbin kielto imperfektissä: I → was not (wasn't). Do-apuverbiä ei käytetä.
+She ___ happy about the news. | wasn't / didn't / weren't | Hän ei ollut iloinen uutisesta. | Be-verbin kielto: she → wasn't.
+We ___ tired after the trip. | weren't / wasn't / didn't | Emme olleet väsyneitä matkan jälkeen. | Be-verbin kielto: we → were not (weren't).
+You ___ late for the lesson. | weren't / wasn't / didn't | Et ollut myöhässä tunnille. | Be-verbin kielto: you → weren't.
+It ___ cold yesterday. | wasn't / weren't / didn't | Eilen ei ollut kylmä. | Be-verbin kielto: it → wasn't.
+The shops ___ open on Sunday. | weren't / wasn't / didn't | Kaupat eivät olleet auki sunnuntaina. | The shops = they → weren't. Verbinä on be.
+He ___ see the sign. | didn't / wasn't / doesn't | Hän ei nähnyt kylttiä. | Pääverbi on see → didn't + perusmuoto.
+My parents ___ buy a new car last year. | didn't / weren't / don't | Vanhempani eivät ostaneet uutta autoa viime vuonna. | Pääverbi on buy → didn't + perusmuoto.
+We didn't ___ the bus. | take / took / taken | Emme ottaneet bussia. | Didn't + perusmuoto: take.
+She didn't ___ me the truth. | tell / told / tells | Hän ei kertonut minulle totuutta. | Didn't + perusmuoto: tell (ei told).
+I ___ hear the phone ring. | didn't / wasn't / don't | En kuullut puhelimen soivan. | Pääverbi on hear → didn't + perusmuoto.
+The children ___ in bed at nine. | weren't / wasn't / didn't | Lapset eivät olleet sängyssä yhdeksältä. | The children = they → weren't. Verbinä on be.
+He ___ eat breakfast this morning. | didn't / wasn't / doesn't | Hän ei syönyt aamiaista tänä aamuna. | Menneen ajan kielto: didn't + perusmuoto.
+Tom ___ at the meeting. | wasn't / didn't / weren't | Tom ei ollut kokouksessa. | Be-verbin kielto: Tom (= he) → wasn't.
+They ___ know the answer. | didn't / weren't / don't | He eivät tienneet vastausta. | Pääverbi on know → didn't + perusmuoto.
+I didn't ___ you were here. | know / knew / known | En tiennyt, että olit täällä. | Didn't + perusmuoto: know (ei knew).
+She didn't ___ the exam. | pass / passed / passes | Hän ei läpäissyt koetta. | Didn't + perusmuoto: pass.
+It ___ rain last week. | didn't / wasn't / weren't | Viime viikolla ei satanut. | Pääverbi on rain → didn't + perusmuoto.
+The film ___ very good. | wasn't / didn't / weren't | Elokuva ei ollut kovin hyvä. | Be-verbin kielto: the film (= it) → wasn't.
+We ___ in London last summer. | weren't / wasn't / didn't | Emme olleet Lontoossa viime kesänä. | Be-verbin kielto: we → weren't.
+`;
+
+const ENG_PAST_Q = `
+___ you play football yesterday? | Did / Do / Were | Pelasitko eilen jalkapalloa? | Imperfektin kysymys: Did + subjekti + verbin perusmuoto.
+___ she go to the party? | Did / Does / Was | Meniko hän juhliin? | Did + subjekti + perusmuoto. Did on sama kaikille subjekteille.
+Did he ___ the door? | close / closed / closes | Sulkiko hän oven? | Did-kysymyksessä pääverbi on perusmuodossa. Menneen ajan muoto on jo did-sanassa.
+Did they ___ the match? | win / won / wins | Voittivatko he ottelun? | Did + perusmuoto: win (ei won).
+___ it rain last night? | Did / Does / Was | Satoiko eilen illalla? | Pääverbi on rain → Did it rain?
+___ you at home yesterday? | Were / Did / Was | Olitko eilen kotona? | Be-verbin kysymys: you → Were + subjekti.
+___ she tired after the trip? | Was / Did / Were | Oliko hän väsynyt matkan jälkeen? | Be-verbin kysymys: she → Was.
+___ I late? | Was / Did / Were | Olinko myöhässä? | Be-verbin kysymys: I → Was I…?
+___ the shops open on Sunday? | Were / Was / Did | Olivatko kaupat auki sunnuntaina? | The shops = they → Were.
+___ your parents at the concert? | Were / Was / Did | Olivatko vanhempasi konsertissa? | Your parents = they → Were.
+___ the weather nice? | Was / Were / Did | Oliko sää kaunis? | The weather (= it) → Was.
+Where ___ you go on holiday? | did / were / do | Minne menit lomalle? | Kysymyssana + did + subjekti + perusmuoto.
+What ___ you do last weekend? | did / were / do | Mitä teit viime viikonloppuna? | Kysymyssana + did + you + perusmuoto.
+When ___ the film start? | did / was / do | Milloin elokuva alkoi? | Kysymyssana + did + subjekti + perusmuoto.
+Why ___ she leave early? | did / was / does | Miksi hän lähti aikaisin? | Pääverbi on leave → Why did she leave?
+How ___ you get to school? | did / were / do | Miten pääsit kouluun? | How + did + you + perusmuoto.
+Who ___ you meet in town? | did / were / do | Kenet tapasit kaupungilla? | Who + did + you + perusmuoto.
+Where ___ you yesterday? | were / did / was | Missä olit eilen? | Verbinä on be → Where were you?
+Why ___ he so angry? | was / did / were | Miksi hän oli niin vihainen? | Verbinä on be → Why was he…?
+How ___ the party? | was / did / were | Millainen juhla oli? | Verbinä on be: the party (= it) → was.
+Did Anna ___ her homework? | do / did / done | Teiko Anna läksynsä? | Did + perusmuoto: do.
+___ they buy a new house last year? | Did / Were / Do | Ostivatko he uuden talon viime vuonna? | Pääverbi on buy → Did + subjekti + perusmuoto.
+Did you ___ my message? | get / got / gets | Saitko viestini? | Did + perusmuoto: get.
+Who ___ the window? | broke / did break / breaked | Kuka rikkoi ikkunan? | Kun who kysyy tekijää (subjektia), kysymyksessä ei käytetä did-apuverbiä: Who broke…?
+Did it ___ a long time? | take / took / takes | Kestikö se kauan? | Did + perusmuoto: take.
+___ you hear that noise? | Did / Were / Do | Kuulitko tuon äänen? | Pääverbi on hear → Did you hear…?
+___ Mia and Tom at school yesterday? | Were / Was / Did | Olivatko Mia ja Tom eilen koulussa? | Mia and Tom = they → Were.
+`;
+
 const ENG_SIMPLE = `
 My brother ___ football every Saturday. | plays / play / playing | Veljeni pelaa jalkapalloa joka lauantai. | Toistuva tapa (every Saturday) → present simple. He/she/it-muodossa verbiin lisätään -s.
 We ___ in a small town near Tampere. | live / lives / living | Asumme pienessä kaupungissa Tampereen lähellä. | Pysyvä asia → present simple. We-muodossa verbi on perusmuodossa ilman -s:ää.
@@ -479,6 +570,14 @@ const ENGLISH_CATEGORIES = [
       { id: 'kestopreesens-kysymys', name: 'Kysymysmuoto', short: 'Kysymys', gens: [[choiceGen('Kestopreesens · kysymys', ENG_PROG_Q), 1]] },
     ],
   },
+  {
+    id: 'imperfekti', name: 'Imperfekti', short: 'Imperfekti',
+    subs: [
+      { id: 'imperfekti-normaali', name: 'Normaalimuodot', short: 'Normaali', gens: [[choiceGen('Imperfekti · normaali', ENG_PAST_POS), 1]] },
+      { id: 'imperfekti-kielto', name: 'Kielteiset muodot', short: 'Kielteinen', gens: [[choiceGen('Imperfekti · kielteinen', ENG_PAST_NEG), 1]] },
+      { id: 'imperfekti-kysymys', name: 'Kysymysmuoto', short: 'Kysymys', gens: [[choiceGen('Imperfekti · kysymys', ENG_PAST_Q), 1]] },
+    ],
+  },
   { id: 'yleis', name: 'Yleisaikamuodot', short: 'Yleis', gens: [[choiceGen('Yleisaikamuodot', ENG_SIMPLE), 1]] },
   { id: 'kesto', name: 'Kestoaikamuodot', short: 'Kesto', gens: [[choiceGen('Kestoaikamuodot', ENG_CONTINUOUS), 1]] },
   { id: 'futuuri', name: 'Futuuri', short: 'Futuuri', gens: [[choiceGen('Futuuri', ENG_FUTURE), 1]] },
@@ -488,5 +587,5 @@ const ENGLISH_CATEGORIES = [
 ];
 
 if (typeof module !== 'undefined') {
-  module.exports = { ENGLISH_CATEGORIES, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
+  module.exports = { ENGLISH_CATEGORIES, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
 }
