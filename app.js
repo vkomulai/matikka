@@ -1114,6 +1114,142 @@ const renderTable = ({ head, rows, foot }) => {
   return `<div class="step-table"><table><thead>${row(head, 'th')}</thead><tbody>${rows.map(r => row(r, 'td')).join('')}</tbody>${foot ? `<tfoot>${row(foot, 'td')}</tfoot>` : ''}</table></div>`;
 };
 
+/* ---------- MAB7: toistokoe ---------- */
+
+const trial = (pct, label, prompt, steps) => ({ ...prob(pct, label, prompt, steps), label: `Toistokoe · ${label}` });
+
+const times = k => (k === 1 ? 'kerran' : `${k} kertaa`);
+const choose = (n, k) => (k === 0 ? 1 : (choose(n - 1, k - 1) * n) / k);
+// Kokonaisluku / 10^d desimaalilukuna ilman liukulukuhäntiä: fd(384, 3) -> "0,384"
+const fd = (int, d) => dec(Number((int / 10 ** d).toFixed(d)));
+const sup = (x, e) => (e === 1 ? x : `${x}<sup>${e}</sup>`);
+
+const TRIAL_STORIES = [
+  {
+    p: [50, 60, 70, 80],
+    setup: (n, p) => `Koripalloilija heittää ${n} vapaaheittoa. Jokainen heitto onnistuu todennäköisyydellä ${p}${PCT}.`,
+    ex: k => `hän onnistuu täsmälleen ${k} heitossa`,
+    one: 'hän onnistuu ainakin yhdessä heitossa',
+    none: 'hän ei onnistu yhdessäkään heitossa',
+    atl: k => `hän onnistuu ainakin ${k} heitossa`,
+  },
+  {
+    p: [50],
+    setup: n => `Kolikkoa heitetään ${n} kertaa. Kruunun todennäköisyys on 50${PCT}.`,
+    ex: k => `kruunu tulee täsmälleen ${times(k)}`,
+    one: 'kruunu tulee ainakin kerran',
+    none: 'kruunua ei tule kertaakaan',
+    atl: k => `kruunu tulee ainakin ${k} kertaa`,
+  },
+  {
+    p: [20],
+    setup: n => `Kokeessa on ${n} monivalintakysymystä, joissa kussakin on viisi vaihtoehtoa. Oppilas arvaa jokaisen vastauksen, joten oikean arvaamisen todennäköisyys on 20${PCT}.`,
+    ex: k => `hän arvaa oikein täsmälleen ${k} kysymyksessä`,
+    one: 'hän arvaa oikein ainakin yhdessä kysymyksessä',
+    none: 'hän ei arvaa oikein yhdessäkään kysymyksessä',
+    atl: k => `hän arvaa oikein ainakin ${k} kysymyksessä`,
+  },
+  {
+    p: [70, 80, 90],
+    setup: (n, p) => `Bussi on ajoissa todennäköisyydellä ${p}${PCT}. Tarkastellaan ${n} peräkkäistä päivää.`,
+    ex: k => `bussi on ajoissa täsmälleen ${k} päivänä`,
+    one: 'bussi on ajoissa ainakin yhtenä päivänä',
+    none: 'bussi ei ole ajoissa yhtenäkään päivänä',
+    atl: k => `bussi on ajoissa ainakin ${k} päivänä`,
+  },
+  {
+    p: [10, 20, 30],
+    setup: (n, p) => `Tehtaan tuote on viallinen todennäköisyydellä ${p}${PCT}. Tarkastetaan ${n} tuotetta.`,
+    ex: k => `viallisia tuotteita on täsmälleen ${k}`,
+    one: 'ainakin yksi tuote on viallinen',
+    none: 'yksikään tuote ei ole viallinen',
+    atl: k => `viallisia tuotteita on ainakin ${k}`,
+  },
+];
+
+// Yhden järjestyksen todennäköisyys, kun p = a/10: kerroin * a^j * b^(n-j) / 10^n
+const trialTerm = (n, j, a) => choose(n, j) * a ** j * (10 - a) ** (n - j);
+
+// O = onnistuu, E = epäonnistuu: kaikki järjestykset, joissa on k kappaletta O:ta
+function orders(n, k) {
+  const out = [];
+  for (let m = 0; m < 2 ** n; m++) {
+    const bits = [...Array(n)].map((_, i) => (m >> (n - 1 - i)) & 1);
+    if (bits.reduce((x, y) => x + y, 0) === k) out.push(bits.map(b => (b ? 'O' : 'E')).join(''));
+  }
+  return out;
+}
+
+const pqStep = (a, p) => ({
+  text: `Merkitään onnistumisen todennäköisyyttä p:llä ja vastatapahtuman (epäonnistumisen) q:lla.`,
+  math: [`p = ${dec(a / 10)}`, `q = 1 − p = ${dec((10 - a) / 10)}`],
+});
+
+function trialExact() {
+  const t = pick(TRIAL_STORIES);
+  const p = pick(t.p), a = p / 10, b = 10 - a;
+  const n = pick([3, 4]);
+  const k = rand(1, n - 1);
+  const C = choose(n, k);
+  const total = trialTerm(n, k, a);
+  const pct = Number((total / 10 ** (n - 2)).toFixed(n - 2));
+  const ord = orders(n, k);
+  return trial(pct, 'täsmälleen k onnistumista', `${t.setup(n, p)} Millä todennäköisyydellä ${t.ex(k)}?`, [
+    pqStep(a, p),
+    {
+      text: `Merkitään onnistuminen kirjaimella O ja epäonnistuminen kirjaimella E. Onnistumisia on ${k} ja epäonnistumisia ${n - k}. Onnistumiset voivat sijoittua ${ord.length} eri tavalla.`,
+      math: [ord.join(', '), `Järjestyksiä on ${C}`],
+    },
+    {
+      text: `Jokaisen järjestyksen todennäköisyys on sama: ${k} onnistumista ja ${n - k} epäonnistumista kerrotaan keskenään. Kerrotaan järjestysten lukumäärällä.`,
+      math: [`P = ${C} · ${sup(dec(a / 10), k)} · ${sup(dec(b / 10), n - k)}`, `P = ${C} · ${fd(a ** k, k)} · ${fd(b ** (n - k), n - k)} = ${fd(total, n)}`],
+    },
+    { text: 'Muutetaan prosenteiksi.', math: [`${fd(total, n)} = ${dec(pct)}${PCT}`] },
+  ]);
+}
+
+function trialAtLeastOne() {
+  const t = pick(TRIAL_STORIES);
+  const p = pick(t.p), a = p / 10, b = 10 - a;
+  const n = pick([2, 3, 4]);
+  const none = trialTerm(n, 0, a);
+  if (Math.random() < 0.3) {
+    const pct = Number((none / 10 ** (n - 2)).toFixed(n - 2));
+    return trial(pct, 'ei yhtään onnistumista', `${t.setup(n, p)} Millä todennäköisyydellä ${t.none}?`, [
+      pqStep(a, p),
+      { text: `Jokaisella kerralla tulee epäonnistua. Toistot ovat riippumattomia, joten kerrotaan todennäköisyydet.`, math: [`P = ${sup(dec(b / 10), n)} = ${fd(none, n)}`] },
+      { text: 'Muutetaan prosenteiksi.', math: [`${fd(none, n)} = ${dec(pct)}${PCT}`] },
+    ]);
+  }
+  const pct = Number((100 - none / 10 ** (n - 2)).toFixed(n - 2));
+  return trial(pct, 'ainakin yksi onnistuminen', `${t.setup(n, p)} Millä todennäköisyydellä ${t.one}?`, [
+    pqStep(a, p),
+    { text: 'Ainakin yhden onnistumisen vastatapahtuma on se, ettei onnistumisia tule yhtään. Lasketaan ensin sen todennäköisyys (kaikki epäonnistuvat).', math: [`P(ei yhtään) = ${sup(dec(b / 10), n)} = ${fd(none, n)}`] },
+    { text: 'Vähennetään luvusta 1.', math: [`P(ainakin yksi) = 1 − ${fd(none, n)} = ${fd(10 ** n - none, n)}`] },
+    { text: 'Muutetaan prosenteiksi.', math: [`${fd(10 ** n - none, n)} = ${dec(pct)}${PCT}`] },
+  ]);
+}
+
+function trialAtLeast() {
+  const t = pick(TRIAL_STORIES);
+  const p = pick(t.p), a = p / 10, b = 10 - a;
+  const [n, k] = pick([[3, 2], [4, 2], [4, 3]]);
+  const js = [];
+  for (let j = k; j <= n; j++) js.push(j);
+  const terms = js.map(j => trialTerm(n, j, a));
+  const total = terms.reduce((x, y) => x + y, 0);
+  const pct = Number((total / 10 ** (n - 2)).toFixed(n - 2));
+  return trial(pct, 'ainakin k onnistumista', `${t.setup(n, p)} Millä todennäköisyydellä ${t.atl(k)}?`, [
+    pqStep(a, p),
+    {
+      text: `Ainakin ${k} onnistumista tarkoittaa, että onnistumisia on ${js.join(', ').replace(/, ([^,]*)$/, ' tai $1')}. Nämä tapaukset sulkevat toisensa pois, joten lasketaan jokaisen todennäköisyys erikseen.`,
+      math: js.map((j, i) => `P(${j}) = ${choose(n, j) === 1 ? '' : choose(n, j) + ' · '}${sup(dec(a / 10), j)}${n - j === 0 ? '' : ' · ' + sup(dec(b / 10), n - j)} = ${fd(terms[i], n)}`),
+    },
+    { text: 'Lasketaan todennäköisyydet yhteen.', math: [`P = ${terms.map(x => fd(x, n)).join(' + ')} = ${fd(total, n)}`] },
+    { text: 'Muutetaan prosenteiksi.', math: [`${fd(total, n)} = ${dec(pct)}${PCT}`] },
+  ]);
+}
+
 /* ---------- Kurssit ja kategoriat ---------- */
 
 const MAY1_CATEGORIES = [
@@ -1158,6 +1294,14 @@ const MAB7_CATEGORIES = [
       { id: 'epatasa', name: 'Epätasaiset todennäköisyydet', short: 'Epätasan', gens: [[evCounts, 1]] },
       { id: 'lukumaara', name: 'Odotettu lukumäärä', short: 'Lukumäärä', gens: [[evCount, 1]] },
       { id: 'arpajaiset', name: 'Arpajaiset', short: 'Arpa', gens: [[evLottery, 1]] },
+    ],
+  },
+  {
+    id: 'toistokoe', name: 'Toistokoe', short: 'Toisto',
+    subs: [
+      { id: 'tasan', name: 'Täsmälleen k onnistumista', short: 'Täsmälleen', gens: [[trialExact, 1]] },
+      { id: 'ainakinyksi', name: 'Ainakin yksi / ei yhtään', short: 'Ainakin 1', gens: [[trialAtLeastOne, 1]] },
+      { id: 'ainakink', name: 'Ainakin k onnistumista', short: 'Ainakin k', gens: [[trialAtLeast, 1]] },
     ],
   },
 ];
@@ -1216,7 +1360,7 @@ function parseSet(str) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { probClassical, evEqual, evCounts, evTable, evCount, evLottery, probComplement, probAddition, probMultiplication, COURSES, VISIBLE_COURSES, CATEGORIES, proportionDirect, proportionInverse, percentMore, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
+  module.exports = { probClassical, trialExact, trialAtLeastOne, trialAtLeast, evEqual, evCounts, evTable, evCount, evLottery, probComplement, probAddition, probMultiplication, COURSES, VISIBLE_COURSES, CATEGORIES, proportionDirect, proportionInverse, percentMore, percentRatio, percentCompound, percentDiscount, percentIncrease, systemKnown, systemXY, linBasic, linBothSides, substitution, squareEq, cubeEq, systemSubst, systemElim, parseNumber, parseSet };
 }
 
 
