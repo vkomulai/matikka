@@ -102,6 +102,90 @@ Yes, I do. – ___ you like sport? | Do / Does / Are | Kyllä pidän. – Pidät
 ___ Anna and Eva go to the same school? | Do / Does / Are | Käyvätkö Anna ja Eva samaa koulua? | Anna and Eva = they → Do + perusmuoto.
 `;
 
+const ENG_PROG_POS = `
+I ___ a book at the moment. | am reading / is reading / read | Luen kirjaa parhaillaan. | Present continuous: am/is/are + verbi + -ing. I → am.
+She ___ a letter right now. | is writing / writes / are writing | Hän kirjoittaa kirjettä juuri nyt. | Right now = juuri nyt → present continuous. She → is. Write → writing (e jää pois).
+We ___ football in the park. | are playing / is playing / play | Pelaamme jalkapalloa puistossa. | Tapahtuu nyt → present continuous. We → are + -ing.
+Look! The dog ___ in the garden. | is running / runs / are running | Katso! Koira juoksee puutarhassa. | Look! = tapahtuu nyt. Lyhyen verbin viimeinen konsonantti kaksinkertaistuu: run → running.
+They ___ TV in the living room. | are watching / is watching / watching | He katsovat televisiota olohuoneessa. | They → are + verbi + -ing.
+My dad ___ dinner now. | is cooking / are cooking / cooks | Isäni laittaa nyt ruokaa. | Now = nyt → present continuous. My dad (= he) → is.
+You ___ too fast! | are driving / is driving / drive | Ajat liian lujaa! | You → are + -ing. Drive → driving (e jää pois).
+The children ___ in the garden today. | are playing / is playing / plays | Lapset leikkivät tänään puutarhassa. | The children = they (monikko) → are + -ing.
+It ___ outside. Take an umbrella. | is raining / rains / are raining | Ulkona sataa. Ota sateenvarjo. | Tapahtuu juuri nyt → present continuous. It → is.
+Listen! Somebody ___ at the door. | is knocking / knocks / are knocking | Kuuntele! Joku koputtaa ovelle. | Listen! = tapahtuu nyt. Somebody (= he/she) → is.
+Tom ___ his homework at the moment. | is doing / does / are doing | Tom tekee parhaillaan läksyjään. | At the moment = parhaillaan → present continuous. Tom → is.
+I ___ to music right now. | am listening / listen / is listening | Kuuntelen musiikkia juuri nyt. | I → am + -ing.
+The sun ___ today. | is shining / shines / are shining | Aurinko paistaa tänään. | Today (tänään, nyt) → present continuous. The sun (= it) → is.
+My sister ___ a bath. | is having / has having / are having | Siskoni on kylvyssä. | Have a bath on toiminta, joten kestomuoto on sallittu: is having. Have → having (e jää pois).
+Mum and Dad ___ the car. | are washing / is washing / washes | Äiti ja isä pesevät autoa. | Mum and Dad = they → are + -ing.
+He ___ a sandwich. | is eating / are eating / eats | Hän syö voileipää. | He → is + verbi + -ing.
+The baby ___ in her bed. | is sleeping / sleep / are sleeping | Vauva nukkuu sängyssään. | The baby (= she) → is + -ing.
+We ___ for the bus. | are waiting / is waiting / waits | Odotamme bussia. | We → are + -ing.
+She ___ a new dress today. | is wearing / wears / are wearing | Hänellä on tänään yllään uusi mekko. | Tänään yllä oleva vaate → present continuous (is wearing).
+I ___ next to my best friend. | am sitting / is sitting / sit | Istun parhaan ystäväni vieressä. | Sit → sitting (konsonantti kaksinkertaistuu). I → am.
+The students ___ an exam. | are taking / is taking / takes | Oppilaat ovat kokeessa. | The students = they → are. Take → taking (e jää pois).
+Dad ___ the grass at the moment. | is cutting / cuts / are cutting | Isä leikkaa nurmikkoa parhaillaan. | Cut → cutting (konsonantti kaksinkertaistuu). Dad (= he) → is.
+My friend ___ in London this month. | is staying / stays / are staying | Ystäväni oleskelee Lontoossa tämän kuun. | Tilapäinen tilanne (this month) → present continuous.
+Prices ___ higher every year. | are getting / is getting / get | Hinnat nousevat joka vuosi. | Muutos käynnissä → present continuous. Prices = they → are. Get → getting.
+He ___ in bed with a cold. | is lying / is laying / lies | Hän makaa sängyssä flunssassa. | Lie → lying (ie → y). Is lying = makaa.
+I ___ to the cinema tonight. We have tickets. | am going / go / is going | Menen elokuviin tänä iltana. Meillä on liput. | Sovittu tuleva meno → present continuous (am going).
+`;
+
+const ENG_PROG_NEG = `
+I ___ TV right now. | am not watching / don't watching / not watching | En katso televisiota juuri nyt. | Present continuousin kielto: am/is/are + not + verbi + -ing. I → am not.
+She ___ her homework. | isn't doing / doesn't doing / isn't do | Hän ei tee läksyjään. | She → is not (isn't) + verbi + -ing.
+We ___ football today. | aren't playing / isn't playing / don't playing | Emme pelaa jalkapalloa tänään. | We → are not (aren't) + -ing.
+They ___ at the moment. | aren't working / isn't working / don't working | He eivät ole töissä tällä hetkellä. | They → aren't + -ing. Don't ei yhdisty -ing-muotoon.
+It ___ now. | isn't raining / aren't raining / doesn't raining | Nyt ei sada. | It → isn't + -ing.
+The baby ___ at the moment. | isn't sleeping / aren't sleeping / doesn't sleeping | Vauva ei nuku tällä hetkellä. | The baby (= she) → isn't + -ing.
+You ___ to me! | aren't listening / isn't listening / don't listening | Et kuuntele minua! | You → aren't + -ing.
+I ___ a new phone. I'm just looking. | am not buying / not buying / don't buying | En osta uutta puhelinta. Katselen vain. | I → am not + -ing.
+My parents ___ today. | aren't working / isn't working / don't working | Vanhempani eivät ole töissä tänään. | My parents = they → aren't + -ing.
+He ___ his bike. It's broken. | isn't riding / aren't riding / doesn't riding | Hän ei ratsasta pyörällään. Se on rikki. | He → isn't + verbi + -ing.
+We ___ any music now. | aren't listening to / isn't listening to / don't listening to | Emme kuuntele nyt musiikkia. | We → aren't + -ing.
+The children ___ in the garden. | aren't playing / isn't playing / don't playing | Lapset eivät leiki puutarhassa. | The children = they → aren't + -ing.
+I ___ because I'm tired. | am not running / not running / don't running | En juokse, koska olen väsynyt. | I → am not + -ing. Run → running.
+Mia ___ her teeth. | isn't brushing / aren't brushing / doesn't brushing | Mia ei harjaa hampaitaan. | Mia (= she) → isn't + -ing.
+Look! Nobody ___ the lesson. | is following / follows / are following | Katso! Kukaan ei seuraa tuntia. | Nobody on jo kielteinen sana, joten verbi on myönteisessä muodossa: nobody is following (ei isn't).
+The shop is closed. They ___ customers. | aren't serving / isn't serving / don't serving | Kauppa on kiinni. He eivät palvele asiakkaita. | They → aren't + -ing.
+My brother ___ at the moment. He is outside. | isn't studying / aren't studying / doesn't studying | Veljeni ei opiskele tällä hetkellä. Hän on ulkona. | My brother (= he) → isn't + -ing. Study → studying.
+Sorry, I ___ you. I can't hear anything. | can't hear / am not hearing / don't hearing | Anteeksi, en kuule sinua. En kuule mitään. | Hear on aistiverbi → ei yleensä kestomuotoa. Käytetään can't hear.
+We ___ to the party tonight. | aren't going / isn't going / don't going | Emme mene juhliin tänä iltana. | We → aren't + going. Sovittu/suunniteltu tuleva asia kielteisenä.
+You ___ your seatbelt! | aren't wearing / isn't wearing / don't wearing | Sinulla ei ole turvavyötä kiinni! | You → aren't + -ing.
+The bus ___ yet. | isn't coming / aren't coming / doesn't coming | Bussi ei ole vielä tulossa. | The bus (= it) → isn't + -ing.
+I ___ English at the moment. I'm doing maths. | am not studying / not studying / don't studying | En opiskele englantia tällä hetkellä. Teen matematiikkaa. | I → am not + -ing.
+They ___ television. They are reading books. | aren't watching / isn't watching / don't watching | He eivät katso televisiota. He lukevat kirjoja. | They → aren't + -ing.
+`;
+
+const ENG_PROG_Q = `
+___ you reading a book? | Are / Do / Is | Luetko kirjaa? | Present continuousin kysymys: am/is/are + subjekti + verbi + -ing. You → Are.
+___ she watching TV? | Is / Are / Does | Katsooko hän televisiota? | She → Is + subjekti + -ing.
+___ it raining outside? | Is / Are / Does | Sataako ulkona? | It → Is + subjekti + -ing.
+___ they playing football? | Are / Is / Do | Pelaavatko he jalkapalloa? | They → Are + -ing.
+___ I disturbing you? | Am / Is / Do | Häiritsenkö sinua? | I → Am I + -ing?
+___ the baby sleeping? | Is / Are / Does | Nukkuuko vauva? | The baby (= she) → Is + -ing.
+___ your parents working today? | Are / Is / Do | Ovatko vanhempasi töissä tänään? | Your parents = they → Are + -ing.
+Is Tom ___ his homework? | doing / does / do | Tekeekö Tom läksyjään? | Is-kysymyksessä pääverbi saa -ing-päätteen: doing.
+Are you ___ to me? | listening / listen / listens | Kuunteletko minua? | Are you + verbi + -ing.
+___ we waiting for the right bus? | Are / Is / Do | Odotammeko oikeaa bussia? | We → Are + -ing.
+What ___ you doing? | are / do / is | Mitä teet? | Kysymyssana + are + you + -ing.
+What ___ she wearing today? | is / does / are | Mitä hänellä on tänään yllään? | Kysymyssana + is + she + -ing.
+Where ___ you going? | are / do / is | Minne olet menossa? | Kysymyssana + are + you + -ing.
+Why ___ he crying? | is / does / are | Miksi hän itkee? | Kysymyssana + is + he + -ing.
+Who ___ you talking to? | are / do / is | Kenelle puhut? | Who + are + you + -ing.
+What ___ the children doing? | are / is / do | Mitä lapset tekevät? | The children = they → are.
+Why ___ it snowing in May? | is / does / are | Miksi sataa lunta toukokuussa? | It → is + -ing.
+What ___ I doing wrong? | am / is / do | Mitä teen väärin? | I → am + -ing.
+Which film ___ you watching? | are / do / is | Minkä elokuvan katsot? | Which film + are + you + -ing.
+How ___ you getting to school today? | are / do / is | Miten pääset tänään kouluun? | How + are + you + -ing.
+Is he ___ the guitar now? | playing / plays / play | Soittaako hän kitaraa nyt? | Is he + verbi + -ing.
+___ Anna and Eva coming to the party? | Are / Is / Do | Tulevatko Anna ja Eva juhliin? | Anna and Eva = they → Are + -ing.
+Are you ___ dinner tonight? | cooking / cook / cooks | Laitatko ruokaa tänä iltana? | Are you + verbi + -ing.
+___ you having lunch at the moment? | Are / Do / Have | Syötkö lounasta juuri nyt? | At the moment → present continuous → Are you having…?
+Is she ___ a new bike? | buying / buys / buy | Ostaako hän uuden pyörän? | Is she + verbi + -ing.
+___ he sitting next to you? | Is / Are / Does | Istuuko hän vieressäsi? | He → Is + -ing.
+`;
+
 const ENG_SIMPLE = `
 My brother ___ football every Saturday. | plays / play / playing | Veljeni pelaa jalkapalloa joka lauantai. | Toistuva tapa (every Saturday) → present simple. He/she/it-muodossa verbiin lisätään -s.
 We ___ in a small town near Tampere. | live / lives / living | Asumme pienessä kaupungissa Tampereen lähellä. | Pysyvä asia → present simple. We-muodossa verbi on perusmuodossa ilman -s:ää.
@@ -387,6 +471,14 @@ const ENGLISH_CATEGORIES = [
       { id: 'preesens-kysymys', name: 'Kysymysmuoto', short: 'Kysymys', gens: [[choiceGen('Preesens · kysymys', ENG_PRESENT_Q), 1]] },
     ],
   },
+  {
+    id: 'kestopreesens', name: 'Kestopreesens', short: 'Kesto-pr.',
+    subs: [
+      { id: 'kestopreesens-normaali', name: 'Normaalimuodot', short: 'Normaali', gens: [[choiceGen('Kestopreesens · normaali', ENG_PROG_POS), 1]] },
+      { id: 'kestopreesens-kielto', name: 'Kielteiset muodot', short: 'Kielteinen', gens: [[choiceGen('Kestopreesens · kielteinen', ENG_PROG_NEG), 1]] },
+      { id: 'kestopreesens-kysymys', name: 'Kysymysmuoto', short: 'Kysymys', gens: [[choiceGen('Kestopreesens · kysymys', ENG_PROG_Q), 1]] },
+    ],
+  },
   { id: 'yleis', name: 'Yleisaikamuodot', short: 'Yleis', gens: [[choiceGen('Yleisaikamuodot', ENG_SIMPLE), 1]] },
   { id: 'kesto', name: 'Kestoaikamuodot', short: 'Kesto', gens: [[choiceGen('Kestoaikamuodot', ENG_CONTINUOUS), 1]] },
   { id: 'futuuri', name: 'Futuuri', short: 'Futuuri', gens: [[choiceGen('Futuuri', ENG_FUTURE), 1]] },
@@ -396,5 +488,5 @@ const ENGLISH_CATEGORIES = [
 ];
 
 if (typeof module !== 'undefined') {
-  module.exports = { ENGLISH_CATEGORIES, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
+  module.exports = { ENGLISH_CATEGORIES, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
 }
