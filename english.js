@@ -277,6 +277,240 @@ ___ you hear that noise? | Did / Were / Do | Kuulitko tuon äänen? | Pääverbi
 ___ Mia and Tom at school yesterday? | Were / Was / Did | Olivatko Mia ja Tom eilen koulussa? | Mia and Tom = they → Were.
 `;
 
+const ENG_PERF_POS = `
+I ___ my homework already. | have done / did / has done | Olen jo tehnyt läksyni. | Perfekti: have/has + verbin 3. muoto. I → have. Do – did – done.
+She ___ in Helsinki since 2015. | has lived / lived / have lived | Hän on asunut Helsingissä vuodesta 2015. | Since + alkuhetki, tilanne jatkuu yhä → perfekti. She → has + 3. muoto.
+We ___ this film three times. | have seen / saw / has seen | Olemme nähneet tämän elokuvan kolme kertaa. | Kokemus elämän varrella → perfekti. We → have + seen (see – saw – seen).
+He ___ just lost his keys. | has / have / did | Hän on juuri hukannut avaimensa. | Just = juuri äsken → perfekti. He → has + 3. muoto.
+They ___ here for ten years now. | have lived / lived / has lived | He ovat asuneet täällä jo kymmenen vuotta. | For + kesto ja now: tilanne jatkuu yhä → perfekti. They → have + 3. muoto.
+I ___ to Sweden twice. | have been / was / has been | Olen käynyt Ruotsissa kahdesti. | Kokemus elämän varrella → perfekti. Be – was/were – been.
+My brother ___ just left. | has / have / is | Veljeni on juuri lähtenyt. | Just = juuri äsken → perfekti. My brother (= he) → has + left.
+She has ___ the book. | read / reads / reading | Hän on lukenut kirjan. | Perfekti: has + 3. muoto. Read – read – read (kirjoitetaan samoin, ääntäminen vaihtuu).
+We ___ never eaten sushi. | have / has / did | Emme ole koskaan syöneet sushia. | Never ilmaisee ettei kokemusta ole. We → have never + 3. muoto (eaten).
+The film ___ already started. | has / have / did | Elokuva on jo alkanut. | Already = jo → perfekti. The film (= it) → has + started.
+I ___ lost my phone. Can you help me look for it? | have / has / did | Olen hukannut puhelimeni. Voitko auttaa etsimään sitä? | Seuraus näkyy nyt → perfekti. I → have + lost.
+He has ___ in London for two years. | worked / work / works | Hän on työskennellyt Lontoossa kaksi vuotta. | Perfekti: has + 3. muoto (worked).
+My parents ___ married for 20 years. | have been / has been / are | Vanhempani ovat olleet naimisissa 20 vuotta. | For 20 years, jatkuu yhä → perfekti. My parents = they → have been.
+Tom has ___ his arm, so he can't play. | broken / broke / break | Tom on murtanut kätensä, joten hän ei voi pelata. | Perfekti: has + 3. muoto. Break – broke – broken.
+I ___ this song a hundred times in my life. | have heard / heard / has heard | Olen kuullut tämän kappaleen sata kertaa elämäni aikana. | Kokemus elämän varrella → perfekti. I → have + heard.
+She has ___ three books this month. | written / wrote / write | Hän on kirjoittanut kolme kirjaa tässä kuussa. | Perfekti: has + 3. muoto. Write – wrote – written.
+We have ___ our dinner. | eaten / ate / eat | Olemme syöneet päivällisen. | Perfekti: have + 3. muoto. Eat – ate – eaten.
+The children ___ grown a lot this year. | have / has / are | Lapset ovat kasvaneet paljon tänä vuonna. | The children = they → have + 3. muoto (grown).
+She ___ her homework yesterday. | did / has done / have done | Hän teki läksynsä eilen. | Yesterday on päättynyt aika → imperfekti, ei perfekti. Do – did – done.
+`;
+
+const ENG_PERF_NEG = `
+I ___ my homework yet. | haven't done / didn't done / hasn't done | En ole vielä tehnyt läksyjäni. | Perfektin kielto: haven't/hasn't + 3. muoto. Yet = vielä (kieltolauseen lopussa). I → haven't.
+She ___ to Spain. | has never been / have never been / never was | Hän ei ole koskaan käynyt Espanjassa. | Never + perfekti: has never been. She → has.
+We ___ seen that film. | haven't / hasn't / didn't | Emme ole nähneet tuota elokuvaa. | Perfektin kielto: we → haven't + seen.
+He ___ called me this week. | hasn't / haven't / doesn't | Hän ei ole soittanut minulle tällä viikolla. | He → hasn't + 3. muoto.
+They haven't ___ yet. | arrived / arrive / arriving | He eivät ole vielä saapuneet. | Haven't + 3. muoto (arrived).
+My sister ___ eaten breakfast. | hasn't / haven't / isn't | Siskoni ei ole syönyt aamiaista. | My sister (= she) → hasn't + eaten.
+I ___ never seen snow. | have / has / am | En ole koskaan nähnyt lunta. | Never on jo kielteinen sana, joten apuverbi on myönteinen: I have never seen. Ei haven't never.
+The bus ___ come yet. | hasn't / haven't / isn't | Bussi ei ole vielä tullut. | The bus (= it) → hasn't + come.
+You ___ finished your dinner. | haven't / hasn't / aren't | Et ole syönyt päivällistäsi loppuun. | You → haven't + 3. muoto.
+We haven't ___ each other for years. | seen / saw / see | Emme ole nähneet toisiamme vuosiin. | Haven't + 3. muoto. See – saw – seen.
+She hasn't ___ her room yet. | cleaned / clean / cleaning | Hän ei ole vielä siivonnut huonettaan. | Hasn't + 3. muoto (cleaned).
+They ___ lived here for long. | haven't / hasn't / didn't | He eivät ole asuneet täällä pitkään. | They → haven't + lived.
+I haven't ___ him since June. | seen / saw / see | En ole nähnyt häntä kesäkuun jälkeen. | Since + alkuhetki → perfekti. Haven't + 3. muoto.
+It ___ rained for weeks. | hasn't / haven't / doesn't | Ei ole satanut viikkoihin. | It → hasn't + rained.
+He hasn't ___ his homework. | done / did / do | Hän ei ole tehnyt läksyjään. | Hasn't + 3. muoto. Do – did – done.
+We ___ decided yet. | haven't / hasn't / aren't | Emme ole vielä päättäneet. | We → haven't + decided.
+My friends ___ called yet. | haven't / hasn't / didn't | Ystäväni eivät ole vielä soittaneet. | My friends = they → haven't + called.
+She hasn't ___ me the answer. | given / gave / give | Hän ei ole antanut minulle vastausta. | Hasn't + 3. muoto. Give – gave – given.
+I ___ been to Japan. | haven't / hasn't / wasn't | En ole käynyt Japanissa. | I → haven't + been.
+He ___ finished yet. | hasn't / haven't / didn't | Hän ei ole vielä valmis. | He → hasn't + finished.
+`;
+
+const ENG_PERF_Q = `
+___ you finished your homework? | Have / Has / Did | Oletko tehnyt läksysi loppuun? | Perfektin kysymys: Have/Has + subjekti + 3. muoto. You → Have.
+___ she ever been to Italy? | Has / Have / Did | Onko hän koskaan käynyt Italiassa? | She → Has + subjekti + 3. muoto.
+Have they ___ yet? | arrived / arrive / arriving | Ovatko he jo saapuneet? | Have + subjekti + 3. muoto (arrived).
+___ your brother seen this film? | Has / Have / Did | Onko veljesi nähnyt tämän elokuvan? | Your brother (= he) → Has.
+Has he ___ his room? | cleaned / clean / cleaning | Onko hän siivonnut huoneensa? | Has + subjekti + 3. muoto.
+___ the children had lunch? | Have / Has / Did | Ovatko lapset syöneet lounasta? | The children = they → Have.
+How long ___ you lived here? | have / did / are | Kuinka kauan olet asunut täällä? | How long + perfekti: have + you + 3. muoto.
+How long ___ she known him? | has / did / does | Kuinka kauan hän on tuntenut hänet? | How long + has + she + 3. muoto.
+Where ___ you been? | have / did / has | Missä olet ollut? | Where + have + you + been.
+What ___ he done? | has / did / does | Mitä hän on tehnyt? | What + has + he + 3. muoto (done).
+Have you ___ my keys? | seen / saw / see | Oletko nähnyt avaimiani? | Have you + 3. muoto. See – saw – seen.
+Has it ___ yet? | stopped / stop / stopping | Onko se jo lakannut? | Has + it + 3. muoto.
+___ we met before? | Have / Has / Did | Olemmeko tavanneet aiemmin? | We → Have + 3. muoto.
+___ they ever eaten sushi? | Have / Has / Did | Ovatko he koskaan syöneet sushia? | Ever + perfekti. They → Have.
+Have you ever ___ a horse? | ridden / rode / ride | Oletko koskaan ratsastanut hevosella? | Have you ever + 3. muoto. Ride – rode – ridden.
+How many books ___ you read this year? | have / are / were | Montako kirjaa olet lukenut tänä vuonna? | How many … + have you + 3. muoto.
+Why ___ she left? | has / did / does | Miksi hän on lähtenyt? | Why + has + she + 3. muoto.
+Has anyone ___ my phone? | seen / saw / see | Onko kukaan nähnyt puhelintani? | Anyone (= he/she) → Has + 3. muoto.
+___ you tried this cake? | Have / Has / Did | Oletko maistanut tätä kakkua? | You → Have + 3. muoto.
+`;
+
+const ENG_PERFPROG_POS = `
+I ___ for you for an hour. | have been waiting / am waiting / have wait | Olen odottanut sinua tunnin. | Kestoperfekti: have/has + been + -ing. For an hour: alkoi aiemmin ja jatkuu yhä.
+It ___ all day. | has been raining / is raining / rains | On satanut koko päivän. | Kestoperfekti: it → has been + -ing.
+She ___ English since 2020. | has been learning / learns / has learn | Hän on opiskellut englantia vuodesta 2020. | Since + alkuhetki, jatkuu yhä → has been + -ing.
+We ___ in this town for years. | have been living / are living / have live | Olemme asuneet tässä kaupungissa vuosia. | For years → have been + -ing.
+They ___ football since lunch. | have been playing / are playing / has been playing | He ovat pelanneet jalkapalloa lounaasta asti. | They → have been + -ing.
+He is tired because he ___ all day. | has been working / works / is working | Hän on väsynyt, koska hän on työskennellyt koko päivän. | Syy on juuri päättynyt toiminta → kestoperfekti.
+My eyes hurt. I ___ at the screen too long. | have been looking / am looking / have look | Silmäni ovat kipeät. Olen katsonut ruutua liian kauan. | Seuraus näkyy nyt → have been + -ing.
+How long ___ you been waiting? | have / did / do | Kuinka kauan olet odottanut? | How long + have you been + -ing.
+She has been ___ since morning. | studying / study / studied | Hän on opiskellut aamusta asti. | Has been + -ing. Study → studying.
+The children ___ in the garden all afternoon. | have been playing / are playing / has been playing | Lapset ovat leikkineet puutarhassa koko iltapäivän. | The children = they → have been + -ing.
+I have been ___ you all morning! | calling / call / called | Olen soittanut sinulle koko aamun! | Have been + -ing.
+Tom ___ the guitar for three years. | has been playing / plays / have been playing | Tom on soittanut kitaraa kolme vuotta. | For three years → has been + -ing.
+We have been ___ the house since May. | painting / paint / painted | Olemme maalanneet taloa toukokuusta asti. | Have been + -ing.
+Her hands are dirty. She ___ in the garden. | has been working / is working / has working | Hänen kätensä ovat likaiset. Hän on työskennellyt puutarhassa. | Seuraus näkyy nyt → has been + -ing.
+It has been ___ since Monday. | snowing / snow / snowed | On satanut lunta maanantaista asti. | Has been + -ing.
+My parents ___ for a new house for months. | have been looking / are looking / has been looking | Vanhempani ovat etsineet uutta taloa kuukausia. | For months → have been + -ing.
+I ___ to learn the piano for a year. | have been trying / am trying / have trying | Olen yrittänyt oppia pianonsoittoa vuoden. | For a year → have been trying.
+You look hot. ___ you been running? | Have / Did / Do | Näytät kuumalta. Oletko juossut? | Have you been + -ing.
+She ___ on that report all week. | has been working / works / have been working | Hän on tehnyt sitä raporttia koko viikon. | All week → has been + -ing.
+`;
+
+const ENG_PERFPROG_NEG = `
+I ___ for you for long. | haven't been waiting / am not waiting / didn't waiting | En ole odottanut sinua kauan. | Kestoperfektin kielto: haven't/hasn't + been + -ing. I → haven't.
+It ___ all day. | has been raining / is raining / rains | On satanut koko päivän. | Kestoperfekti: it → has been + -ing.
+She ___ English for long. | hasn't been learning / haven't been learning / isn't learning | Hän ei ole opiskellut englantia kauan. | She → hasn't been + -ing.
+We ___ here long. | haven't been living / hasn't been living / aren't living | Emme ole asuneet täällä kauan. | We → haven't been + -ing.
+They haven't been ___ well recently. | feeling / feel / felt | He eivät ole voineet hyvin viime aikoina. | Haven't been + -ing.
+He hasn't been ___ much sleep. | getting / get / got | Hän ei ole saanut paljon unta. | Hasn't been + -ing. Get → getting.
+I haven't been ___ lately. | studying / study / studied | En ole opiskellut viime aikoina. | Haven't been + -ing. Study → studying.
+My brother ___ his homework for hours. | hasn't been doing / haven't been doing / isn't doing | Veljeni ei ole tehnyt läksyjään tuntikausiin. | My brother (= he) → hasn't been + -ing.
+The kids ___ outside today. | haven't been playing / hasn't been playing / aren't playing | Lapset eivät ole leikkineet ulkona tänään. | The kids = they → haven't been + -ing.
+You ___ listening to me! | haven't been / hasn't been / aren't been | Et ole kuunnellut minua! | You → haven't been + -ing.
+She hasn't been ___ well. | feeling / feel / felt | Hän ei ole voinut hyvin. | Hasn't been + -ing.
+We haven't been ___ much TV lately. | watching / watch / watched | Emme ole katsoneet paljon televisiota viime aikoina. | Haven't been + -ing.
+It ___ working since yesterday. | hasn't been / haven't been / isn't been | Se ei ole toiminut eilisestä asti. | It → hasn't been + -ing.
+My parents ___ travelling this year. | haven't been / hasn't been / aren't been | Vanhempani eivät ole matkustaneet tänä vuonna. | My parents = they → haven't been + -ing.
+I ___ sleeping well this week. | haven't been / hasn't been / am not been | En ole nukkunut hyvin tällä viikolla. | I → haven't been + -ing.
+He hasn't been ___ the guitar much. | playing / play / played | Hän ei ole soittanut kitaraa paljon. | Hasn't been + -ing.
+`;
+
+const ENG_PERFPROG_Q = `
+How long ___ you been waiting? | have / has / are | Kuinka kauan olet odottanut? | Kestoperfektin kysymys: How long + have/has + subjekti + been + -ing. You → have.
+How long ___ she been studying English? | has / have / is | Kuinka kauan hän on opiskellut englantia? | She → has.
+___ it been raining all day? | Has / Have / Is | Onko satanut koko päivän? | It → Has + it + been + -ing.
+Have you been ___ for me? | waiting / wait / waited | Oletko odottanut minua? | Have you been + -ing.
+___ they been playing football? | Have / Has / Are | Ovatko he pelanneet jalkapalloa? | They → Have + they + been + -ing.
+What ___ you been doing? | have / has / are | Mitä olet tehnyt? | What + have + you + been + -ing.
+What has she been ___? | doing / do / did | Mitä hän on tehnyt? | Has she been + -ing.
+Where ___ you been staying? | have / has / are | Missä olet yöpynyt? | Where + have + you + been + -ing.
+How long ___ they been living here? | have / has / are | Kuinka kauan he ovat asuneet täällä? | They → have.
+Has he been ___ hard? | working / work / worked | Onko hän tehnyt töitä ahkerasti? | Has he been + -ing.
+Why ___ you been crying? | have / has / did | Miksi olet itkenyt? | Why + have you been + -ing.
+Have you been ___ well? | feeling / feel / felt | Oletko voinut hyvin? | Have you been + -ing.
+How long ___ it been snowing? | has / have / is | Kuinka kauan on satanut lunta? | It → has.
+___ your parents been travelling? | Have / Has / Are | Ovatko vanhempasi matkustaneet? | Your parents = they → Have.
+___ he been working here long? | Has / Have / Is | Onko hän työskennellyt täällä kauan? | He → Has + he + been + -ing.
+How long have you been ___ the guitar? | playing / play / played | Kuinka kauan olet soittanut kitaraa? | Have you been + -ing.
+Who ___ been using my laptop? | has / did / does | Kuka on käyttänyt kannettavaani? | Who (= he/she) → has been + -ing.
+`;
+
+const ENG_PLUP_POS = `
+When we arrived, the film ___ already started. | had / has / was | Kun saavuimme, elokuva oli jo alkanut. | Pluskvamperfekti: had + 3. muoto. Tapahtui ennen toista mennyttä tapahtumaa.
+She ___ left before I called. | had / has / was | Hän oli lähtenyt ennen kuin soitin. | Aikaisempi menneisyys → had + left.
+I ___ never seen snow before I moved to Finland. | had / have / was | En ollut koskaan nähnyt lunta ennen kuin muutin Suomeen. | Ennen toista mennyttä hetkeä → had + 3. muoto.
+After they ___ dinner, they watched TV. | had eaten / have eaten / ate | Syötyään he katsoivat televisiota. | Ensin syötiin, sitten katsottiin → aiempi teko pluskvamperfektiin.
+He was late because he ___ the bus. | had missed / has missed / miss | Hän oli myöhässä, koska oli myöhästynyt bussista. | Syy tapahtui ennen myöhästymistä → had + missed.
+We ___ finished our homework when she arrived. | had / has / have | Olimme tehneet läksymme, kun hän saapui. | Had + 3. muoto.
+She said she ___ the book before. | had read / has read / reads | Hän sanoi lukeneensa kirjan aiemmin. | Kerrottu asia tapahtui ennen sanomista → had + read.
+They ___ already gone when we got there. | had / have / would | He olivat jo menneet, kun pääsimme sinne. | Had + gone.
+I couldn't get in because I ___ my keys. | had lost / have lost / has lost | En päässyt sisään, koska olin hukannut avaimeni. | Hukkaaminen oli ennen yritystä → had lost.
+By the time we arrived, they ___ eaten everything. | had / have / has | Kun saavuimme, he olivat syöneet kaiken. | By the time … → pluskvamperfekti: had + eaten.
+The teacher was angry because we ___ our homework. | hadn't done / haven't done / didn't done | Opettaja oli vihainen, koska emme olleet tehneet läksyjä. | Pluskvamperfektin kielto: hadn't + 3. muoto.
+He ___ studied hard, so he passed the test. | had / has / was | Hän oli opiskellut ahkerasti, joten hän läpäisi kokeen. | Had + studied.
+She looked sad. She ___ bad news. | had heard / has heard / hears | Hän näytti surulliselta. Hän oli kuullut huonoja uutisia. | Syy oli ennen näkyvää tilaa → had + heard.
+Before he became a doctor, he ___ in a shop. | had worked / has worked / was work | Ennen kuin hänestä tuli lääkäri, hän oli työskennellyt kaupassa. | Aiempi vaihe → had + worked.
+When I got home, my parents ___ gone to bed. | had / have / were | Kun tulin kotiin, vanhempani olivat menneet nukkumaan. | My parents = they; had on sama kaikille subjekteille.
+We ___ been friends for years before we moved. | had / have / were | Olimme olleet ystäviä vuosia ennen kuin muutimme. | Had been (= olimme olleet).
+`;
+
+const ENG_PLUP_NEG = `
+When I arrived, she ___ left yet. | hadn't / hasn't / didn't | Kun saavuin, hän ei ollut vielä lähtenyt. | Pluskvamperfektin kielto: hadn't + 3. muoto.
+We ___ eaten, so we were hungry. | hadn't / haven't / didn't | Emme olleet syöneet, joten meillä oli nälkä. | Hadn't + eaten.
+He ___ seen the film before. | hadn't / hasn't / wasn't | Hän ei ollut nähnyt elokuvaa aiemmin. | Hadn't + 3. muoto. Hadn't on sama kaikille subjekteille.
+They ___ finished when the teacher came in. | hadn't / haven't / weren't | He eivät olleet valmiita, kun opettaja tuli sisään. | Hadn't + finished.
+I ___ never been to Italy before last year. | had / have / was | En ollut koskaan käynyt Italiassa ennen viime vuotta. | Never on jo kielteinen → apuverbi myönteinen: had never been.
+She was upset because I ___ called her. | hadn't / haven't / didn't | Hän oli pahoillaan, koska en ollut soittanut hänelle. | Hadn't + called.
+We ___ booked a table, so we waited. | hadn't / haven't / weren't | Emme olleet varanneet pöytää, joten odotimme. | Hadn't + booked.
+The train ___ arrived when we reached the station. | hadn't / hasn't / wasn't | Juna ei ollut vielä saapunut, kun pääsimme asemalle. | Hadn't + arrived.
+He ___ slept, so he was very tired. | hadn't / hasn't / didn't | Hän ei ollut nukkunut, joten hän oli todella väsynyt. | Hadn't + slept.
+I realised I ___ locked the door. | hadn't / haven't / wasn't | Tajusin, etten ollut lukinnut ovea. | Hadn't + locked.
+She ___ ever seen the sea before. | had never / has never / never was | Hän ei ollut koskaan ennen nähnyt merta. | Had never + 3. muoto.
+The kids ___ done their homework, so they couldn't play. | hadn't / haven't / didn't | Lapset eivät olleet tehneet läksyjä, joten he eivät saaneet leikkiä. | Hadn't + done.
+They ___ told anyone about the plan. | hadn't / hasn't / weren't | He eivät olleet kertoneet kenellekään suunnitelmasta. | Hadn't + told.
+He ___ understood the question. | hadn't / hasn't / didn't | Hän ei ollut ymmärtänyt kysymystä. | Hadn't + understood.
+We ___ met before that day. | hadn't / haven't / didn't | Emme olleet tavanneet ennen sitä päivää. | Hadn't + met.
+My mum ___ cooked yet when we got home. | hadn't / hasn't / wasn't | Äitini ei ollut vielä laittanut ruokaa, kun tulimme kotiin. | Hadn't + cooked.
+`;
+
+const ENG_PLUP_Q = `
+___ you finished your homework before dinner? | Had / Have / Did | Olitko tehnyt läksysi ennen päivällistä? | Pluskvamperfektin kysymys: Had + subjekti + 3. muoto.
+___ she left when you arrived? | Had / Has / Was | Oliko hän lähtenyt, kun saavuit? | Had + she + left. Had on sama kaikille subjekteille.
+Had they ___ before the lesson started? | arrived / arrive / arriving | Olivatko he saapuneet ennen tunnin alkua? | Had + subjekti + 3. muoto.
+___ you ever seen snow before you came here? | Had / Have / Did | Olitko koskaan nähnyt lunta ennen kuin tulit tänne? | Aikaisempi menneisyys → Had you ever seen…?
+___ he already eaten when you called? | Had / Has / Did | Oliko hän jo syönyt, kun soitit? | Had + he + eaten.
+Had the film ___ when you got there? | started / start / starting | Oliko elokuva alkanut, kun pääsit sinne? | Had + subjekti + 3. muoto.
+Where ___ you been before that? | had / did / do | Missä olit ollut sitä ennen? | Where + had + you + been.
+What ___ they done before the party? | had / did / do | Mitä he olivat tehneet ennen juhlia? | What + had + they + 3. muoto.
+Why ___ she gone home early? | had / did / does | Miksi hän oli mennyt aikaisin kotiin? | Why + had + she + 3. muoto.
+How long ___ they known each other before they married? | had / did / do | Kuinka kauan he olivat tunteneet toisensa ennen naimisiinmenoa? | How long + had + they + 3. muoto.
+Had you ___ him before? | met / meet / meeting | Olitko tavannut hänet aiemmin? | Had you + 3. muoto.
+___ the train left before you reached the station? | Had / Has / Did | Oliko juna lähtenyt ennen kuin pääsit asemalle? | Had + the train + left.
+Had he ___ the answer? | known / knew / know | Oliko hän tiennyt vastauksen? | Had he + 3. muoto. Know – knew – known.
+___ everyone gone home by ten? | Had / Has / Did | Olivatko kaikki menneet kotiin kymmeneen mennessä? | Had + everyone + gone.
+Who ___ eaten my sandwich? | had / did / does | Kuka oli syönyt voileipäni? | Who + had + 3. muoto.
+Had they ___ the tickets before they left? | bought / buy / buying | Olivatko he ostaneet liput ennen lähtöä? | Had they + 3. muoto. Buy – bought – bought.
+`;
+
+const ENG_PLUPPROG_POS = `
+He was out of breath because he ___ running. | had been / has been / have been | Hän oli hengästynyt, koska hän oli juossut. | Kestopluskvamperfekti: had + been + -ing. Toiminta oli jatkunut ennen toista menneen ajan hetkeä.
+We ___ waiting for two hours when the bus came. | had been / has been / have been | Olimme odottaneet kaksi tuntia, kun bussi tuli. | Had been + -ing.
+Her eyes were red. She ___ crying. | had been / has been / have been | Hänen silmänsä olivat punaiset. Hän oli itkenyt. | Seuraus oli näkyvissä menneessä → had been + -ing.
+It ___ raining all night, so the ground was wet. | had been / has been / have been | Oli satanut koko yön, joten maa oli märkä. | Had been + -ing.
+They ___ playing for an hour when it started to rain. | had been / has been / have been | He olivat pelanneet tunnin, kun alkoi sataa. | Had been + -ing.
+I ___ working all day, so I was tired. | had been / has been / have been | Olin tehnyt töitä koko päivän, joten olin väsynyt. | Had been + -ing. I:lle ja muillekin subjekteille had on sama.
+She ___ studying for hours before the exam. | had been / has been / have been | Hän oli opiskellut tuntikausia ennen koetta. | Had been + -ing.
+My hands were cold because I ___ standing outside. | had been / has been / have been | Käteni olivat kylmät, koska olin seissyt ulkona. | Had been + -ing.
+The kids ___ playing outside all day. | had been / has been / have been | Lapset olivat leikkineet ulkona koko päivän. | Had been + -ing.
+How long ___ you been waiting when she arrived? | had / did / do | Kuinka kauan olit odottanut, kun hän saapui? | How long + had + you + been + -ing.
+He had been ___ for a job for months. | looking / look / looked | Hän oli etsinyt työtä kuukausia. | Had been + -ing.
+We had been ___ the house before we moved in. | painting / paint / painted | Olimme maalanneet taloa ennen kuin muutimme sinne. | Had been + -ing.
+She ___ been learning Spanish for a year before she moved to Madrid. | had / have / did | Hän oli opiskellut espanjaa vuoden ennen muuttoaan Madridiin. | Had been learning.
+The road was wet. It ___ snowing. | had been / has been / have been | Tie oli märkä. Oli satanut lunta. | Had been + -ing.
+They had been ___ all night. | talking / talk / talked | He olivat jutelleet koko yön. | Had been + -ing.
+I had been ___ for you for an hour before you called. | waiting / wait / waited | Olin odottanut sinua tunnin ennen kuin soitit. | Had been + -ing.
+`;
+
+const ENG_PLUPPROG_NEG = `
+I was fresh because I ___ working all day. | hadn't been / hasn't been / haven't been | Olin pirteä, koska en ollut tehnyt töitä koko päivää. | Kestopluskvamperfektin kielto: hadn't been + -ing.
+She ___ sleeping well, so she was tired. | hadn't been / hasn't been / haven't been | Hän ei ollut nukkunut hyvin, joten hän oli väsynyt. | Hadn't been + -ing.
+We ___ waiting long when the bus arrived. | hadn't been / hasn't been / haven't been | Emme olleet odottaneet kauan, kun bussi tuli. | Hadn't been + -ing.
+It ___ raining, so the ground was dry. | hadn't been / hasn't been / haven't been | Ei ollut satanut, joten maa oli kuiva. | Hadn't been + -ing.
+He hadn't been ___ attention. | paying / pay / paid | Hän ei ollut kiinnittänyt huomiota. | Hadn't been + -ing.
+They ___ been working hard, so they weren't tired. | hadn't / haven't / didn't | He eivät olleet tehneet ahkerasti töitä, joten he eivät olleet väsyneitä. | Hadn't been working.
+I hadn't been ___ well before I went to the doctor. | feeling / feel / felt | En ollut voinut hyvin ennen kuin menin lääkäriin. | Hadn't been + -ing.
+We ___ been living there long when we left. | hadn't / haven't / didn't | Emme olleet asuneet siellä kauan, kun lähdimme. | Hadn't been living.
+She hadn't been ___ much before the exam. | studying / study / studied | Hän ei ollut opiskellut paljon ennen koetta. | Hadn't been + -ing.
+The children ___ been behaving well. | hadn't / haven't / didn't | Lapset eivät olleet käyttäytyneet hyvin. | Hadn't been behaving.
+He ___ been listening, so he didn't know. | hadn't / haven't / didn't | Hän ei ollut kuunnellut, joten hän ei tiennyt. | Hadn't been listening.
+I hadn't been ___ for long when you called. | sleeping / sleep / slept | En ollut nukkunut kauan, kun soitit. | Hadn't been + -ing.
+`;
+
+const ENG_PLUPPROG_Q = `
+How long ___ you been waiting when she arrived? | had / did / do | Kuinka kauan olit odottanut, kun hän saapui? | Kestopluskvamperfektin kysymys: How long + had + subjekti + been + -ing.
+___ it been raining before you left? | Had / Did / Does | Oliko satanut ennen kuin lähdit? | Had + it + been + -ing.
+Had she been ___ long? | waiting / wait / waited | Oliko hän odottanut kauan? | Had she been + -ing.
+___ they been playing for long when it started to rain? | Had / Did / Do | Olivatko he pelanneet kauan, kun alkoi sataa? | Had + they + been + -ing.
+What ___ you been doing before I came? | had / did / do | Mitä olit tehnyt ennen kuin tulin? | What + had + you + been + -ing.
+Why ___ he been crying? | had / did / does | Miksi hän oli itkenyt? | Why + had + he + been + -ing.
+How long ___ she been working there before she quit? | had / did / does | Kuinka kauan hän oli työskennellyt siellä ennen irtisanoutumistaan? | How long + had + she + been + -ing.
+Had you been ___ hard before the test? | studying / study / studied | Olitko opiskellut ahkerasti ennen koetta? | Had you been + -ing.
+Where ___ they been living before? | had / did / do | Missä he olivat asuneet aiemmin? | Where + had + they + been + -ing.
+___ he been waiting long when you arrived? | Had / Did / Does | Oliko hän odottanut kauan, kun saavuit? | Had + he + been + -ing.
+Had the children been ___ outside? | playing / play / played | Olivatko lapset leikkineet ulkona? | Had + subjekti + been + -ing.
+Who ___ been using my computer? | had / did / does | Kuka oli käyttänyt tietokonettani? | Who + had + been + -ing.
+`;
+
 const ENG_SIMPLE = `
 My brother ___ football every Saturday. | plays / play / playing | Veljeni pelaa jalkapalloa joka lauantai. | Toistuva tapa (every Saturday) → present simple. He/she/it-muodossa verbiin lisätään -s.
 We ___ in a small town near Tampere. | live / lives / living | Asumme pienessä kaupungissa Tampereen lähellä. | Pysyvä asia → present simple. We-muodossa verbi on perusmuodossa ilman -s:ää.
@@ -578,6 +812,38 @@ const ENGLISH_CATEGORIES = [
       { id: 'imperfekti-kysymys', name: 'Kysymysmuoto', short: 'Kysymys', gens: [[choiceGen('Imperfekti · kysymys', ENG_PAST_Q), 1]] },
     ],
   },
+  {
+    id: 'perfekti', name: 'Perfekti', short: 'Perfekti',
+    subs: [
+      { id: 'perfekti-normaali', name: 'Normaalimuodot', short: 'Normaali', gens: [[choiceGen('Perfekti · normaali', ENG_PERF_POS), 1]] },
+      { id: 'perfekti-kielto', name: 'Kielteiset muodot', short: 'Kielteinen', gens: [[choiceGen('Perfekti · kielteinen', ENG_PERF_NEG), 1]] },
+      { id: 'perfekti-kysymys', name: 'Kysymysmuoto', short: 'Kysymys', gens: [[choiceGen('Perfekti · kysymys', ENG_PERF_Q), 1]] },
+    ],
+  },
+  {
+    id: 'kestoperfekti', name: 'Kestoperfekti', short: 'Kesto-perf.',
+    subs: [
+      { id: 'kestoperfekti-normaali', name: 'Normaalimuodot', short: 'Normaali', gens: [[choiceGen('Kestoperfekti · normaali', ENG_PERFPROG_POS), 1]] },
+      { id: 'kestoperfekti-kielto', name: 'Kielteiset muodot', short: 'Kielteinen', gens: [[choiceGen('Kestoperfekti · kielteinen', ENG_PERFPROG_NEG), 1]] },
+      { id: 'kestoperfekti-kysymys', name: 'Kysymysmuoto', short: 'Kysymys', gens: [[choiceGen('Kestoperfekti · kysymys', ENG_PERFPROG_Q), 1]] },
+    ],
+  },
+  {
+    id: 'pluskvamperfekti', name: 'Pluskvamperfekti', short: 'Pluskvam.',
+    subs: [
+      { id: 'pluskvamperfekti-normaali', name: 'Normaalimuodot', short: 'Normaali', gens: [[choiceGen('Pluskvamperfekti · normaali', ENG_PLUP_POS), 1]] },
+      { id: 'pluskvamperfekti-kielto', name: 'Kielteiset muodot', short: 'Kielteinen', gens: [[choiceGen('Pluskvamperfekti · kielteinen', ENG_PLUP_NEG), 1]] },
+      { id: 'pluskvamperfekti-kysymys', name: 'Kysymysmuoto', short: 'Kysymys', gens: [[choiceGen('Pluskvamperfekti · kysymys', ENG_PLUP_Q), 1]] },
+    ],
+  },
+  {
+    id: 'kestopluskvamperfekti', name: 'Kestopluskvamperfekti', short: 'Kesto-pluskv.',
+    subs: [
+      { id: 'kestopluskvamperfekti-normaali', name: 'Normaalimuodot', short: 'Normaali', gens: [[choiceGen('Kestopluskvamperfekti · normaali', ENG_PLUPPROG_POS), 1]] },
+      { id: 'kestopluskvamperfekti-kielto', name: 'Kielteiset muodot', short: 'Kielteinen', gens: [[choiceGen('Kestopluskvamperfekti · kielteinen', ENG_PLUPPROG_NEG), 1]] },
+      { id: 'kestopluskvamperfekti-kysymys', name: 'Kysymysmuoto', short: 'Kysymys', gens: [[choiceGen('Kestopluskvamperfekti · kysymys', ENG_PLUPPROG_Q), 1]] },
+    ],
+  },
   { id: 'yleis', name: 'Yleisaikamuodot', short: 'Yleis', gens: [[choiceGen('Yleisaikamuodot', ENG_SIMPLE), 1]] },
   { id: 'kesto', name: 'Kestoaikamuodot', short: 'Kesto', gens: [[choiceGen('Kestoaikamuodot', ENG_CONTINUOUS), 1]] },
   { id: 'futuuri', name: 'Futuuri', short: 'Futuuri', gens: [[choiceGen('Futuuri', ENG_FUTURE), 1]] },
@@ -587,5 +853,5 @@ const ENGLISH_CATEGORIES = [
 ];
 
 if (typeof module !== 'undefined') {
-  module.exports = { ENGLISH_CATEGORIES, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
+  module.exports = { ENGLISH_CATEGORIES, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
 }
