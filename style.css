@@ -579,3 +579,20 @@ body {
 .step-table th, .step-table td { padding: 6px 10px; text-align: center; border-bottom: 1px solid var(--border, rgba(128, 128, 128, .3)); }
 .step-table th { color: var(--muted); font-weight: 600; font-size: .85rem; }
 .step-table tfoot td { font-weight: 700; border-bottom: 0; }
+
+/* --- Aukkotekstit --- */
+.cloze { margin: 0; font-size: 1.1rem; line-height: 2.5; }
+.gap { display: inline-block; white-space: nowrap; }
+.gap sup { color: var(--muted); font-size: .65rem; margin-right: 2px; }
+.gap select {
+  font: inherit;
+  font-size: 1rem;
+  max-width: 100%;
+  padding: 4px 6px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--key);
+  color: var(--text);
+}
+.gap select.right { border-color: var(--ok); background: var(--ok-soft); }
+.gap select.wrong { border-color: var(--bad); background: var(--bad-soft); }

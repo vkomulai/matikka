@@ -787,6 +787,71 @@ function orderGen(label, src) {
   };
 }
 
+/* ---------- Aukkotehtävät: teksti, jossa jokaiseen aukkoon valitaan oikea muoto ---------- */
+
+// Aukko: [[oikea / väärä / väärä ; selitys]]
+const CLOZE_PRESENT = [
+  { title: 'An interview with a pilot', text: `– Tell us about your day, Captain Lehto. – Well, I usually [[get / am getting / got ; Usually = toistuva tapa → yleispreesens.]] up at six, and my wife always [[makes / is making / made ; Always = toistuva tapa → yleispreesens. Wife (= she) → -s.]] coffee for me. I [[fly / am flying / flew ; Every month = toistuva tapa → yleispreesens.]] to Spain every month. At the moment I [[write / am writing / wrote ; At the moment = parhaillaan → kestopreesens (am + -ing).]] a book about flying, so right now my kids [[play / are playing / played ; Right now = juuri nyt → kestopreesens.]] in the garden. Look! A plane [[lands / is landing / landed ; Look! = tapahtuu nyt → kestopreesens.]] on the lake. My wife [[doesn't like / isn't liking / didn't like ; Like on tilaverbi → yleispreesens, ei kestomuotoa.]] flying, so she [[stays / is staying / stayed ; When I travel = toistuva tilanne → yleispreesens. She → -s.]] at home when I travel.` },
+  { title: 'A visit from Canada', text: `My cousin Emma [[lives / is living / lived ; Pysyvä asia → yleispreesens.]] in Canada, but this month she [[is visiting / visits / visited ; This month = tilapäinen tilanne → kestopreesens.]] us in Finland. She usually [[drinks / is drinking / drank ; Usually = tapa → yleispreesens.]] tea, but right now she [[is drinking / drinks / drank ; Right now = juuri nyt → kestopreesens.]] coffee. Emma [[speaks / is speaking / spoke ; Pysyvä taito → yleispreesens.]] three languages. Listen! She [[is talking / talks / talked ; Listen! = tapahtuu nyt → kestopreesens.]] to my grandma in Finnish. Grandma [[doesn't understand / isn't understanding / didn't understand ; Understand on tilaverbi → yleispreesens.]] English, but she always [[smiles / is smiling / smiled ; Always = tapa → yleispreesens.]] at Emma.` },
+];
+
+const CLOZE_PAST = [
+  { title: 'A day at the market', text: `Last Saturday I [[went / go / have gone ; Last Saturday = päättynyt aika → imperfekti. Go – went.]] to the market. The sun [[shone / shines / has shone ; Menneen tapahtuman kerronta → imperfekti.]] and many people [[bought / buy / have bought ; Kerronta menneessä → imperfekti. Buy – bought.]] fruit. I [[met / meet / have met ; Kerronta menneessä → imperfekti. Meet – met.]] my old teacher there. We [[were talking / talked / talk ; Pidempi toiminta, jonka toinen tapahtuma keskeytti (when …) → past continuous: were + -ing.]] when a dog suddenly [[stole / steals / has stolen ; Keskeyttävä lyhyt tapahtuma → imperfekti. Steal – stole.]] a sausage from a stall. The seller [[shouted / shouts / has shouted ; Kerronta menneessä → imperfekti.]] and [[ran / run / has run ; Kerronta menneessä → imperfekti. Run – ran.]] after it, but the dog [[didn't stop / doesn't stop / hasn't stopped ; Imperfektin kielto: didn't + perusmuoto.]].` },
+  { title: 'Meeting the parents', text: `It was Thanksgiving last year when I [[met / meet / have met ; Last year → imperfekti. Meet – met.]] my spouse's parents for the first time. It [[snowed / snows / has snowed ; Kerronta menneessä → imperfekti.]] heavily, so we were late for dinner. When we finally [[arrived / arrive / have arrived ; Kerronta menneessä → imperfekti.]], I [[noticed / notice / have noticed ; Kerronta menneessä → imperfekti.]] that my spouse [[felt / feels / has felt ; Kerronta menneessä → imperfekti. Feel – felt.]] fine, but I [[wasn't / am not / haven't been ; Be-verbin imperfekti: I → wasn't.]] calm. My mother-in-law [[greeted / greets / has greeted ; Kerronta menneessä → imperfekti.]] us at the door while her husband [[set / sets / has set ; Kerronta menneessä → imperfekti. Set – set – set.]] the table.` },
+];
+
+const CLOZE_PERFECT = [
+  { title: 'A young runner', text: `Tom is a young runner. He [[has won / has been winning / won ; So far = tähän asti, lukumäärä → perfekti: has + 3. muoto.]] six medals so far. He [[has been training / trained / is trained ; Since January, jatkuu yhä → kestoperfekti: has been + -ing.]] every day since January, and he [[hasn't missed / hasn't been missing / didn't miss ; Perfektin kielto: hasn't + 3. muoto. Yksittäinen tulos → ei kestomuotoa.]] a single session. This week he [[has run / has been running / ran ; Tämä viikko kestää yhä, kilometrimäärä (tulos) → perfekti: has + 3. muoto.]] 80 kilometres. His coach [[has been helping / helped / helps ; For two years, jatkuu yhä → kestoperfekti.]] him for two years. Tom [[has taken / has been taking / took ; Valmis teko (muutama vapaapäivä) → perfekti: has + 3. muoto.]] a few days off, and his parents [[have already booked / have already been booking / already books ; Already + valmis teko → perfekti: have + 3. muoto.]] a holiday for him.` },
+  { title: 'New in town', text: `We [[have lived / lived / has lived ; Since January, jatkuu yhä → perfekti: we → have + 3. muoto.]] in Oulu since January and we [[haven't made / haven't make / hasn't made ; Yet = vielä → perfektin kielto: haven't + 3. muoto.]] many friends yet. My brother [[has joined / have joined / joined ; Perfekti: he → has + 3. muoto.]] a football team, and he [[has been training / is train / have been training ; For weeks, jatkuu yhä → has been + -ing. He → has.]] with them for weeks. My mum [[has found / have found / find ; Perfekti: she → has + 3. muoto. Find – found – found.]] a new job at a hospital. I [[have never been / never was / has never been ; Never + perfekti: I → have never been.]] to such a cold place before.` },
+];
+
+const CLOZE_PLUPERFECT = [
+  { title: 'A new hobby', text: `I [[had been looking / looked / have been looking ; Toiminta oli jatkunut jo, kun toinen asia tapahtui → kestopluskvamperfekti: had been + -ing.]] for a new hobby for some time when I [[found / had found / have found ; Päätapahtuma menneisyydessä → imperfekti.]] parkour. I [[had been playing / have been playing / was played ; For 6 years ennen muutosta → had been + -ing.]] football for six years, but I thought the time [[had come / has come / comes ; Aikaisempi menneisyys → had + 3. muoto.]] to try something new. Football [[hadn't been giving / hasn't been giving / didn't be giving ; Aikaisempi tila → hadn't been + -ing.]] me much, and I felt that I [[hadn't been enjoying / haven't enjoyed / wasn't enjoy ; Aikaisempi jatkunut tila → hadn't been + -ing.]] it for a long time. I [[hadn't told / haven't told / didn't telled ; Aikaisempi teko → hadn't + 3. muoto.]] my coach about quitting, but I knew that he [[had seen / has seen / sees ; Aikaisempi teko → had + 3. muoto. See – saw – seen.]] the change in me.` },
+  { title: 'The missing key', text: `When I got home, I realised that I [[had left / have left / leave ; Aikaisempi teko → had + 3. muoto. Leave – left – left.]] my keys at school. My parents [[had gone / have gone / go ; Aikaisempi teko → had + 3. muoto. Go – went – gone.]] to a party, so I couldn't get in. I [[had been waiting / have been waiting / was wait ; Jatkui, kun naapuri tuli → had been + -ing.]] for an hour when my neighbour [[came / had come / comes ; Päätapahtuma menneisyydessä → imperfekti.]] home. She [[hadn't heard / hasn't heard / didn't heard ; Aikaisempi tapahtuma → hadn't + 3. muoto.]] about my problem, but she [[offered / has offered / offers ; Päätapahtuma menneisyydessä → imperfekti.]] me a cup of tea. Luckily, my mum [[had put / has put / had putted ; Aikaisempi teko → had + 3. muoto.]] a spare key under the flowerpot, and I [[had never noticed / have never noticed / never notices ; Never + pluskvamperfekti → had never noticed.]] it before.` },
+];
+
+const CLOZE_MIXED = [
+  { title: 'A summer job', text: `Last summer I [[worked / work / have worked ; Last summer → imperfekti.]] at a café in Helsinki. I [[have wanted / wanted / am wanting ; Want on tilaverbi. Tapa ja pitkäaikainen toive tähän asti → perfekti.]] to work there since I was twelve. Every day I [[made / make / have made ; Every day viittaa menneen kesän toistuvaan tapaan → imperfekti.]] coffee for hundreds of people. Right now I [[am studying / study / have studied ; Right now → kestopreesens.]] for my exams, but I [[have been thinking / was think / am thought ; Tähän asti jatkunut ajattelu → kestoperfekti.]] about my next summer job. My friend [[has already found / have already found / already finds ; Already + nyt voimassa oleva tilanne → perfekti.]] one. Before she got the job, she [[had sent / has sent / was sending ; Aikaisempi teko ennen työn saamista → pluskvamperfekti.]] twenty applications.` },
+  { title: 'Weekend plans', text: `It [[is raining / rains / has rain ; Tapahtuu nyt → kestopreesens.]] outside, so we [[stay / are stay / stays ; Nykyhetken päätös → preesens. We → perusmuoto.]] at home today. Yesterday we [[went / go / had gone ; Yesterday → imperfekti.]] to the cinema, and the film [[was / is / has been ; Yesterday → imperfekti. Film (= it) → was.]] great. I [[have seen / saw / see ; Kokemus elämän varrella tähän asti → perfekti.]] it twice now. My sister [[hasn't watched / haven't watched / hadn't watched ; Perfektin kielto: hasn't + 3. muoto.]] it yet. When we [[arrived / have arrived / arrive ; Menneen tapahtuman kerronta → imperfekti.]] at the cinema, the film [[had already started / has already started / already starts ; Aikaisempi teko → pluskvamperfekti.]], so we [[missed / miss / have missed ; Menneen tapahtuman kerronta → imperfekti.]] the beginning.` },
+];
+
+// Muuttaa tekstin aukoiksi: { segments: [teksti, aukko, teksti, ...], gaps: [{ options, value, why }] }
+function parseCloze(src) {
+  const re = /\[\[(.+?)\]\]/g;
+  const segments = [];
+  const gaps = [];
+  let last = 0, m;
+  while ((m = re.exec(src)) !== null) {
+    segments.push(src.slice(last, m.index));
+    const [opts, why] = m[1].split(' ; ').map(s => s.trim());
+    const options = opts.split(' / ');
+    gaps.push({ options, value: options[0], why });
+    last = m.index + m[0].length;
+  }
+  segments.push(src.slice(last));
+  return { segments, gaps };
+}
+
+function clozeGen(label, passages, instruction = 'Valitse jokaiseen aukkoon oikea vaihtoehto.') {
+  const next = deck(passages);
+  return () => {
+    const { title, text } = next();
+    const { segments, gaps } = parseCloze(text);
+    const shuffled = gaps.map(g => ({ ...g, options: shuffle(g.options) }));
+    const filled = segments.map((seg, i) => seg + (i < gaps.length ? `<strong>${gaps[i].value}</strong>` : '')).join('');
+    return {
+      label,
+      text: true,
+      why: '',
+      prompt: `${instruction}<span class="fi">${title}</span>`,
+      problem: '',
+      answer: { type: 'cloze', segments, gaps: shuffled, filled },
+      steps: gaps.map((g, i) => ({ text: `${i + 1}. ${g.why}`, math: [g.value] })),
+      final: filled,
+    };
+  };
+}
+
 const ENGLISH_CATEGORIES = [
   {
     id: 'preesens', name: 'Preesens', short: 'Preesens',
@@ -844,6 +909,16 @@ const ENGLISH_CATEGORIES = [
       { id: 'kestopluskvamperfekti-kysymys', name: 'Kysymysmuoto', short: 'Kysymys', gens: [[choiceGen('Kestopluskvamperfekti · kysymys', ENG_PLUPPROG_Q), 1]] },
     ],
   },
+  {
+    id: 'aukko', name: 'Aukkotehtävät', short: 'Aukot',
+    subs: [
+      { id: 'aukko-preesens', name: 'Preesens', short: 'Preesens', gens: [[clozeGen('Aukkoteksti · preesens', CLOZE_PRESENT, 'Valitse oikea muoto (yleis- tai kestopreesens).'), 1]] },
+      { id: 'aukko-imperfekti', name: 'Imperfekti', short: 'Imperfekti', gens: [[clozeGen('Aukkoteksti · imperfekti', CLOZE_PAST, 'Valitse oikea muoto (yleis- tai kestoimperfekti).'), 1]] },
+      { id: 'aukko-perfekti', name: 'Perfekti', short: 'Perfekti', gens: [[clozeGen('Aukkoteksti · perfekti', CLOZE_PERFECT, 'Valitse paras vaihtoehto (yleis- tai kestoperfekti).'), 1]] },
+      { id: 'aukko-pluskvamperfekti', name: 'Pluskvamperfekti', short: 'Pluskvam.', gens: [[clozeGen('Aukkoteksti · pluskvamperfekti', CLOZE_PLUPERFECT, 'Valitse paras vaihtoehto (yleis- tai kestopluskvamperfekti).'), 1]] },
+      { id: 'aukko-kaikki', name: 'Kaikki aikamuodot', short: 'Kaikki', gens: [[clozeGen('Aukkoteksti · sekaisin', CLOZE_MIXED, 'Valitse oikea vaihtoehto (preesens, imperfekti, perfekti, pluskvamperfekti).'), 1]] },
+    ],
+  },
   { id: 'yleis', name: 'Yleisaikamuodot', short: 'Yleis', gens: [[choiceGen('Yleisaikamuodot', ENG_SIMPLE), 1]] },
   { id: 'kesto', name: 'Kestoaikamuodot', short: 'Kesto', gens: [[choiceGen('Kestoaikamuodot', ENG_CONTINUOUS), 1]] },
   { id: 'futuuri', name: 'Futuuri', short: 'Futuuri', gens: [[choiceGen('Futuuri', ENG_FUTURE), 1]] },
@@ -853,5 +928,5 @@ const ENGLISH_CATEGORIES = [
 ];
 
 if (typeof module !== 'undefined') {
-  module.exports = { ENGLISH_CATEGORIES, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
+  module.exports = { ENGLISH_CATEGORIES, parseCloze, CLOZE_PRESENT, CLOZE_PAST, CLOZE_PERFECT, CLOZE_PLUPERFECT, CLOZE_MIXED, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
 }

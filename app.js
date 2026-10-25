@@ -1399,7 +1399,7 @@ if (typeof document !== 'undefined') {
     btn.setAttribute('aria-label', ariaLabel || '');
   }
 
-  const isText = answer => answer.type === 'choice' || answer.type === 'order';
+  const isText = answer => answer.type === 'choice' || answer.type === 'order' || answer.type === 'cloze';
 
   // Monivalinta: vaihtoehdot napteina. Sanajärjestys: rakennettava lause ja sanavarasto.
   function renderTextInputs(answer) {
@@ -1411,6 +1411,18 @@ if (typeof document !== 'undefined') {
           `<button type="button" class="choice" data-choice="${i}"><span class="choice-key">${i + 1}</span>${o}</button>`
         ).join('') + '</div>' +
         '<div class="text-actions"><button type="button" class="btn btn-primary" data-act="next" hidden>Seuraava →</button></div>';
+    } else if (answer.type === 'cloze') {
+      state.hint = 'Valitse jokaiseen aukkoon oikea vaihtoehto. Punaiset kohdat ovat vielä väärin.';
+      els.inputs.innerHTML =
+        '<p class="cloze">' + answer.segments.map((seg, i) => {
+          const gap = answer.gaps[i];
+          return seg + (gap
+            ? `<span class="gap"><sup>${i + 1}</sup><select data-gap="${i}" aria-label="Aukko ${i + 1}">` +
+              '<option value="" selected>valitse</option>' +
+              gap.options.map(o => `<option value="${o}">${o}</option>`).join('') + '</select></span>'
+            : '');
+        }).join('') + '</p>' +
+        '<div class="text-actions"><button type="button" class="btn btn-primary" data-act="check">Tarkista</button></div>';
     } else {
       state.built = [];
       state.hint = 'Napauta sanoja oikeassa järjestyksessä. Sanan saa pois napauttamalla sitä uudelleen.';
@@ -1527,6 +1539,21 @@ if (typeof document !== 'undefined') {
         els.problem.innerHTML = a.filled;
         for (const b of els.inputs.querySelectorAll('.choice')) b.disabled = true;
         els.inputs.querySelector('[data-act="next"]').hidden = false;
+      }
+    } else if (a.type === 'cloze') {
+      const sels = [...els.inputs.querySelectorAll('select')];
+      if (sels.some(sel => sel.value === '')) return setFeedback(false, 'Valitse vastaus jokaiseen aukkoon.');
+      const right = sels.map((sel, i) => sel.value === a.gaps[i].value);
+      sels.forEach((sel, i) => {
+        sel.classList.toggle('right', right[i]);
+        sel.classList.toggle('wrong', !right[i]);
+      });
+      ok = right.every(Boolean);
+      if (ok) {
+        sels.forEach(sel => { sel.disabled = true; });
+        els.inputs.querySelector('[data-act="check"]').textContent = 'Seuraava →';
+      } else {
+        msg = `${right.filter(Boolean).length} / ${right.length} oikein. Korjaa punaiset kohdat.`;
       }
     } else if (a.type === 'order') {
       if (state.built.length < a.tiles.length) return setFeedback(false, 'Käytä kaikki sanat.');
@@ -1647,9 +1674,17 @@ if (typeof document !== 'undefined') {
     paintOrder();
   });
 
+  // Aukkotekstin valinnan muutos poistaa kyseisen aukon oikein/väärin-merkin
+  els.inputs.addEventListener('change', e => {
+    const sel = e.target.closest('select[data-gap]');
+    if (!sel) return;
+    sel.classList.remove('right', 'wrong');
+    clearFeedback();
+  });
+
   function textKey(e) {
     const a = state.task.answer;
-    if (e.key === 'Enter') return state.solved ? newTask() : a.type === 'order' ? check() : null;
+    if (e.key === 'Enter') return state.solved ? newTask() : a.type === 'order' || a.type === 'cloze' ? check() : null;
     if (state.solved) return;
     if (a.type === 'choice' && /^[1-9]$/.test(e.key) && Number(e.key) <= a.options.length) {
       const btn = els.inputs.querySelector(`[data-choice="${Number(e.key) - 1}"]`);
@@ -1675,6 +1710,7 @@ if (typeof document !== 'undefined') {
     const focused = document.activeElement;
     if (e.key === 'Enter' && focused && focused.matches('a, button:not(.field-box)')) return;
     const type = state.task.answer.type;
+    if (type === 'cloze' && focused && focused.matches('select')) return;
     if (isText(state.task.answer)) {
       if (['Enter', 'Backspace'].includes(e.key) || /^\d$/.test(e.key)) e.preventDefault();
       return textKey(e);
