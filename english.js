@@ -709,6 +709,39 @@ do you know what time it is? | Tiedätkö, paljonko kello on? | Epäsuora kysymy
 I don't know where he lives. | En tiedä, missä hän asuu. | Epäsuorassa kysymyksessä ei käytetä do/does-apuverbiä: where he lives.
 `;
 
+const ENG_PRON_OBJ = `
+Can you help ___? | me / I / my | Voitko auttaa minua? | Verbin (help) jälkeen pronomini on objektimuodossa: I → me.
+I love ___, Mum. | you / your / yours | Rakastan sinua, äiti. | You on sama subjekti- ja objektimuodossa.
+Where is Tom? I can't see ___. | him / he / his | Missä Tom on? En näe häntä. | Tom = he. Verbin (see) jälkeen objektimuoto: he → him.
+I know Anna. I met ___ at school. | her / she / hers | Tunnen Annan. Tapasin hänet koulussa. | Anna = she. Objektimuoto on her.
+This book is great. I read ___ last week. | it / its / they | Tämä kirja on loistava. Luin sen viime viikolla. | The book = it. It on sama subjekti- ja objektimuodossa.
+Our teacher often helps ___. | us / we / our | Opettajamme auttaa meitä usein. | Verbin (helps) jälkeen objektimuoto: we → us.
+Where are my keys? I can't find ___. | them / they / their | Missä avaimeni ovat? En löydä niitä. | My keys = they. Objektimuoto: they → them.
+Look at ___! He is dancing. | him / he / his | Katso häntä! Hän tanssii. | Prepositiosanan (at) jälkeen tulee objektimuoto: him.
+This present is for ___, Grandma. | you / your / yours | Tämä lahja on sinulle, mummi. | Preposition (for) jälkeen objektimuoto. You pysyy samana.
+Please come with ___ to the cinema. | us / we / our | Tule meidän kanssamme elokuviin. | Preposition (with) jälkeen objektimuoto: we → us.
+My sister is ill. I made soup for ___. | her / she / hers | Siskoni on sairas. Tein hänelle keittoa. | My sister = she. Preposition (for) jälkeen objektimuoto: her.
+Give ___ the ball, please. | me / I / mine | Anna pallo minulle, kiitos. | Verbin (give) jälkeen objektimuoto: I → me.
+The cats are hungry. Can you feed ___? | them / they / their | Kissat ovat nälkäisiä. Voitko ruokkia ne? | The cats = they. Objektimuoto: them.
+Do you like this song? – Yes, I love ___. | it / its / him | Pidätkö tästä laulusta? – Kyllä, rakastan sitä. | The song = it. Asioista ja eläimistä käytetään it, ei him tai her.
+Mr Smith is our neighbour. We often talk to ___. | him / he / his | Herra Smith on naapurimme. Juttelemme hänen kanssaan usein. | Mr Smith = he. Preposition (to) jälkeen objektimuoto: him.
+Emma and Leo are my friends. I play with ___ every day. | them / they / their | Emma ja Leo ovat ystäviäni. Leikin heidän kanssaan joka päivä. | Emma and Leo = they. Objektimuoto: them.
+Wait for ___! I'm coming. | me / I / my | Odota minua! Olen tulossa. | Preposition (for) jälkeen objektimuoto: me.
+Mum called ___ and my brother home. | me / I / my | Äiti kutsui minut ja veljeni kotiin. | Objektina on "minut ja veljeni" → me and my brother, ei I and my brother.
+Between you and ___, I don't like this film. | me / I / my | Meidän kesken: en pidä tästä elokuvasta. | Preposition (between) jälkeen objektimuoto: you and me.
+Who is that girl? Do you know ___? | her / she / hers | Kuka tuo tyttö on? Tunnetko hänet? | That girl = she. Objektimuoto: her.
+The teacher gave ___ a lot of homework. | us / we / our | Opettaja antoi meille paljon läksyjä. | Verbin (gave) jälkeen objektimuoto: us.
+My shoes are dirty. I must clean ___. | them / they / it | Kenkäni ovat likaiset. Minun täytyy puhdistaa ne. | My shoes on monikko = they → them.
+Our dog is lost. Have you seen ___? | it / its / them | Koiramme on kadonnut. Oletko nähnyt sen? | Yksi koira = it. Objektimuoto: it.
+My grandparents live in Oulu. We visit ___ every summer. | them / they / their | Isovanhempani asuvat Oulussa. Käymme heidän luonaan joka kesä. | My grandparents = they. Objektimuoto: them.
+Can I sit next to ___, Sara? | you / your / yours | Voinko istua viereesi, Sara? | Preposition (next to) jälkeen objektimuoto. You pysyy samana.
+Dad is cooking. Let's help ___. | him / he / his | Isä laittaa ruokaa. Autetaan häntä. | Dad = he. Objektimuoto: him.
+Listen to ___! We have good news. | us / we / our | Kuunnelkaa meitä! Meillä on hyviä uutisia. | Preposition (to) jälkeen objektimuoto: us.
+Who broke the window? – It wasn't ___! | me / I / my | Kuka rikkoi ikkunan? – En se ollut minä! | Puhekielessä it was/wasn't jälkeen käytetään objektimuotoa: it wasn't me.
+Lisa sent ___ a postcard from Spain. | me / I / mine | Lisa lähetti minulle postikortin Espanjasta. | Verbin (sent) jälkeen objektimuoto: me.
+These cookies are for you and ___. | him / he / his | Nämä keksit ovat sinulle ja hänelle. | Preposition (for) jälkeen molemmat pronominit ovat objektimuodossa: you and him.
+`;
+
 const engRows = src => src.trim().split('\n').map(line => line.split(' | ').map(s => s.trim()));
 
 const shuffle = arr => {
@@ -986,8 +1019,14 @@ const ENGLISH_CATEGORIES = [
   { id: 'konditionaali', name: 'Konditionaali', short: 'Kondit.', gens: [[choiceGen('Konditionaali', ENG_CONDITIONAL), 1]] },
   { id: 'ehtolauseet', name: 'Ehtolauseet', short: 'If', gens: [[choiceGen('Ehtolauseet', ENG_IF), 1]] },
   { id: 'sanajarjestys', name: 'Sanajärjestys', short: 'Järjestys', gens: [[orderGen('Sanajärjestys', ENG_ORDER), 1]] },
+  {
+    id: 'pronominit', name: 'Persoonapronominit', short: 'Pronominit',
+    subs: [
+      { id: 'pronominit-objekti', name: 'Objektimuoto', short: 'Objekti', gens: [[choiceGen('Persoonapronominit · objektimuoto', ENG_PRON_OBJ), 1]] },
+    ],
+  },
 ];
 
 if (typeof module !== 'undefined') {
-  module.exports = { ENGLISH_CATEGORIES, parseCloze, CLOZE_PRESENT, CLOZE_PAST, CLOZE_PERFECT, CLOZE_PLUPERFECT, CLOZE_MIXED, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, engRows };
+  module.exports = { ENGLISH_CATEGORIES, parseCloze, CLOZE_PRESENT, CLOZE_PAST, CLOZE_PERFECT, CLOZE_PLUPERFECT, CLOZE_MIXED, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, ENG_PRON_OBJ, engRows };
 }
