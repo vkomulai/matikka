@@ -808,6 +808,39 @@ He said the money was ___. | his / him / he's | Hän sanoi, että rahat olivat h
 Your answer is right, but ___ is wrong. | mine / my / me | Sinun vastauksesi on oikein, mutta minun on väärin. | Mine = my answer.
 `;
 
+const ENG_PRON_REFL = `
+I cut ___ with a knife. | myself / me / mineself | Viilsin itseäni veitsellä. | Kun tekijä ja kohde ovat sama henkilö, käytetään refleksiivimuotoa: I → myself.
+Be careful! Don't hurt ___. | yourself / you / yourselfs | Ole varovainen! Älä satuta itseäsi. | Yksi henkilö (you) → yourself.
+Tom looked at ___ in the mirror. | himself / hisself / him | Tom katsoi itseään peilistä. | Tom = he → himself. Muotoa hisself ei ole.
+Anna taught ___ to play the guitar. | herself / hersself / her | Anna opetteli itse soittamaan kitaraa. | Anna = she → herself.
+The cat is washing ___. | itself / itselves / it | Kissa peseytyy. | The cat = it → itself.
+We enjoyed ___ at the party. | ourselves / ourself / us | Meillä oli hauskaa juhlissa. | Enjoy oneself = pitää hauskaa. We → ourselves.
+The children dressed ___. | themselves / theirselves / them | Lapset pukeutuivat itse. | The children = they → themselves. Muotoa theirselves ei ole.
+Help ___ to some cake, kids! | yourselves / yourself / you | Ottakaa kakkua, lapset! | Monta henkilöä (kids) → yourselves. Help yourself = ota itse.
+He made the cake by ___. | himself / him / hisself | Hän teki kakun ihan itse. | By + refleksiivimuoto = yksin, ilman apua: by himself.
+I live by ___. | myself / me / my | Asun yksin. | By myself = yksin.
+She is very proud of ___. | herself / her / hers | Hän on hyvin ylpeä itsestään. | Tekijä ja kohde sama henkilö (she) → herself.
+Did you paint this ___, Leo? | yourself / yourselves / you | Maalasitko tämän itse, Leo? | Painottava käyttö: itse, ei kukaan muu. Yksi henkilö → yourself.
+My parents built the house ___. | themselves / theirselves / them | Vanhempani rakensivat talon itse. | My parents = they → themselves.
+We should introduce ___ to the new neighbours. | ourselves / us / ourself | Meidän pitäisi esittäytyä uusille naapureille. | Introduce oneself = esittäytyä. We → ourselves.
+The door opened by ___. | itself / it / itselfs | Ovi aukesi itsestään. | The door = it → by itself.
+I talk to ___ when I'm nervous. | myself / me / I | Puhun itsekseni, kun jännitän. | Talk to oneself = puhua itsekseen.
+He hurt ___ when he fell off his bike. | himself / him / his | Hän satutti itsensä pudotessaan pyörältä. | He → himself.
+Please make ___ at home, everyone. | yourselves / yourself / you | Olkaa kuin kotonanne, kaikki. | Monta henkilöä → yourselves. Make yourself at home = ole kuin kotonasi.
+The dog hurt ___ on the fence. | itself / himself / it | Koira satutti itsensä aitaan. | Eläimestä käytetään yleensä it → itself.
+Lisa and I did the project ___. | ourselves / themselves / us | Lisa ja minä teimme projektin itse. | Lisa and I = we → ourselves.
+She looked at ___ and smiled. | herself / her / she | Hän katsoi itseään ja hymyili. | She → herself.
+The boys blamed ___ for the accident. | themselves / theirselves / them | Pojat syyttivät itseään onnettomuudesta. | The boys = they → themselves.
+Did you enjoy ___ at the concert, girls? | yourselves / yourself / you | Oliko teillä hauskaa konsertissa, tytöt? | Monta henkilöä (girls) → yourselves.
+I made ___ a sandwich. | myself / me / my | Tein itselleni voileivän. | Make oneself something = tehdä itselleen jotain.
+The machine turns ___ off at night. | itself / it / themselves | Kone sammuu itsestään yöllä. | The machine = it → itself.
+The president ___ came to our school. | himself / him / hisself | Presidentti itse tuli koulullemme. | Painottava käyttö: itse presidentti. The president (= he) → himself.
+We built this treehouse all by ___. | ourselves / ourself / us | Rakensimme tämän puumajan ihan itse. | By ourselves = itse, ilman apua.
+Mia and Sara, you must look after ___. | yourselves / yourself / you | Mia ja Sara, teidän täytyy pitää huolta itsestänne. | Kaksi henkilöä → yourselves.
+My grandma talks to ___ in the kitchen. | herself / her / hers | Mummini puhuu itsekseen keittiössä. | My grandma = she → herself.
+Don't worry, I can do it ___. | myself / me / mine | Älä huoli, osaan tehdä sen itse. | Painottava käyttö: itse. I → myself.
+`;
+
 const engRows = src => src.trim().split('\n').map(line => line.split(' | ').map(s => s.trim()));
 
 const shuffle = arr => {
@@ -1091,10 +1124,11 @@ const ENGLISH_CATEGORIES = [
       { id: 'pronominit-objekti', name: 'Objektimuoto', short: 'Objekti', gens: [[choiceGen('Persoonapronominit · objektimuoto', ENG_PRON_OBJ), 1]] },
       { id: 'pronominit-omistus', name: 'Adjektiiviset omistusmuodot', short: 'my, your', gens: [[choiceGen('Persoonapronominit · adjektiivinen omistusmuoto', ENG_PRON_POSS), 1]] },
       { id: 'pronominit-itsenainen', name: 'Itsenäiset omistusmuodot', short: 'mine, yours', gens: [[choiceGen('Persoonapronominit · itsenäinen omistusmuoto', ENG_PRON_INDEP), 1]] },
+      { id: 'pronominit-refleksiivi', name: 'Refleksiivimuoto', short: 'myself', gens: [[choiceGen('Persoonapronominit · refleksiivimuoto', ENG_PRON_REFL), 1]] },
     ],
   },
 ];
 
 if (typeof module !== 'undefined') {
-  module.exports = { ENGLISH_CATEGORIES, parseCloze, CLOZE_PRESENT, CLOZE_PAST, CLOZE_PERFECT, CLOZE_PLUPERFECT, CLOZE_MIXED, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, ENG_PRON_OBJ, ENG_PRON_POSS, ENG_PRON_INDEP, engRows };
+  module.exports = { ENGLISH_CATEGORIES, parseCloze, CLOZE_PRESENT, CLOZE_PAST, CLOZE_PERFECT, CLOZE_PLUPERFECT, CLOZE_MIXED, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, ENG_PRON_OBJ, ENG_PRON_POSS, ENG_PRON_INDEP, ENG_PRON_REFL, engRows };
 }
