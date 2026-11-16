@@ -742,6 +742,72 @@ Lisa sent ___ a postcard from Spain. | me / I / mine | Lisa lähetti minulle pos
 These cookies are for you and ___. | him / he / his | Nämä keksit ovat sinulle ja hänelle. | Preposition (for) jälkeen molemmat pronominit ovat objektimuodossa: you and him.
 `;
 
+const ENG_PRON_POSS = `
+This is ___ bike. | my / me / mine | Tämä on minun pyöräni. | Substantiivin (bike) edessä käytetään adjektiivista omistusmuotoa: I → my.
+What is ___ name? | your / you / yours | Mikä sinun nimesi on? | Substantiivin (name) edessä: you → your.
+Tom lives with ___ parents. | his / him / he | Tom asuu vanhempiensa kanssa. | Tom = he. Omistusmuoto substantiivin edessä: his.
+Anna is brushing ___ hair. | her / hers / she | Anna harjaa hiuksiaan. | Anna = she. Substantiivin (hair) edessä: her.
+The dog is eating ___ food. | its / it's / it | Koira syö ruokaansa. | The dog = it. Omistusmuoto on its ilman heittomerkkiä. It's = it is.
+We love ___ new house. | our / us / ours | Rakastamme uutta taloamme. | Substantiivin (house) edessä: we → our.
+The children are playing with ___ toys. | their / there / they're | Lapset leikkivät leluillaan. | The children = they → their. There = siellä, they're = they are.
+I can't find ___ phone. | my / mine / me | En löydä puhelintani. | Suomen -ni-pääte on englanniksi my: puhelimeni = my phone.
+Is this ___ bag, Lisa? | your / yours / you | Onko tämä sinun laukkusi, Lisa? | Substantiivin (bag) edessä: your.
+My brother washed ___ car yesterday. | his / her / him | Veljeni pesi autonsa eilen. | My brother = he → his. Omistusmuoto määräytyy omistajan mukaan.
+My sister forgot ___ keys at home. | her / his / hers | Siskoni unohti avaimensa kotiin. | My sister = she → her.
+Finland is famous for ___ lakes. | its / it's / their | Suomi on kuuluisa järvistään. | Finland = it → its.
+We did ___ homework together. | our / ours / we | Teimme läksymme yhdessä. | Substantiivin (homework) edessä: our.
+My grandparents sold ___ old car. | their / theirs / them | Isovanhempani myivät vanhan autonsa. | My grandparents = they → their.
+Mr Brown is ___ English teacher. | our / us / ours | Herra Brown on englanninopettajamme. | Opettajamme = our teacher.
+Have you done ___ homework, boys? | your / yours / you | Oletteko tehneet läksynne, pojat? | Your on sama yksikössä ja monikossa: sinun / teidän.
+The cat hurt ___ leg. | its / it's / her | Kissa satutti jalkaansa. | The cat = it → its. It's tarkoittaa it is.
+I'm going to ___ friend's house. | my / me / mine | Olen menossa ystäväni luo. | Substantiivin (friend's house) edessä: my.
+Emma and Leo are with ___ mother. | their / they / theirs | Emma ja Leo ovat äitinsä kanssa. | Emma and Leo = they → their.
+Pekka called ___ girlfriend. | his / her / him | Pekka soitti tyttöystävälleen. | Pekka = he → his. Omistaja (Pekka) ratkaisee, ei omistettava (girlfriend).
+Maria visited ___ brother in Tampere. | her / his / hers | Maria kävi veljensä luona Tampereella. | Maria = she → her. Omistaja (Maria) ratkaisee, ei omistettava (brother).
+Look! That bird has built ___ nest. | its / it's / his | Katso! Tuo lintu on rakentanut pesänsä. | The bird = it → its.
+Where did you put ___ jacket, Mia? | your / you / yours | Mihin laitoit takkisi, Mia? | Substantiivin (jacket) edessä: your.
+We are visiting ___ cousins this weekend. | our / ours / us | Vierailemme serkkujemme luona tänä viikonloppuna. | Substantiivin (cousins) edessä: our.
+The students opened ___ books. | their / there / them | Oppilaat avasivat kirjansa. | The students = they → their.
+I brush ___ teeth twice a day. | my / mine / me | Pesen hampaani kahdesti päivässä. | Englannissa ruumiinosien edessä käytetään omistusmuotoa: my teeth.
+He broke ___ arm last winter. | his / him / he | Hän mursi kätensä viime talvena. | Ruumiinosan edessä omistusmuoto: his arm.
+The company changed ___ logo. | its / it's / their | Yritys vaihtoi logonsa. | The company = it → its.
+She lost ___ wallet on the bus. | her / hers / she | Hän hukkasi lompakkonsa bussissa. | Substantiivin (wallet) edessä: her.
+They are proud of ___ son. | their / theirs / they're | He ovat ylpeitä pojastaan. | Substantiivin (son) edessä: their.
+`;
+
+const ENG_PRON_INDEP = `
+This bike isn't yours. It's ___. | mine / my / me | Tämä pyörä ei ole sinun. Se on minun. | Kun omistusmuodon perässä ei ole substantiivia, käytetään itsenäistä muotoa: mine.
+Is this pen ___? | yours / your / you | Onko tämä kynä sinun? | Ei substantiivia perässä → itsenäinen muoto: yours.
+That jacket is Tom's. It's ___. | his / him / he's | Tuo takki on Tomin. Se on hänen. | His on sama adjektiivisena ja itsenäisenä muotona.
+The red bag is Anna's. It's ___. | hers / her / she | Punainen laukku on Annan. Se on hänen. | Anna = she. Itsenäinen muoto: hers.
+This house is ___. We bought it last year. | ours / our / us | Tämä talo on meidän. Ostimme sen viime vuonna. | Ei substantiivia perässä → ours.
+Those dogs are ___. They belong to our neighbours. | theirs / their / them | Nuo koirat ovat heidän. Ne kuuluvat naapureillemme. | Ei substantiivia perässä → theirs.
+My phone is old, but ___ is new. | yours / your / you | Minun puhelimeni on vanha, mutta sinun on uusi. | Yours = your phone. Itsenäinen muoto korvaa substantiivin.
+Whose book is this? – It's ___. | mine / my / I | Kenen kirja tämä on? – Se on minun. | Vastauksessa ei ole substantiivia → mine.
+Your room is bigger than ___. | mine / my / me | Sinun huoneesi on isompi kuin minun. | Mine = my room.
+Our car is blue, and ___ is red. | theirs / their / they | Meidän automme on sininen ja heidän punainen. | Theirs = their car.
+Can I borrow your pen? I forgot ___. | mine / my / me | Voinko lainata kynääsi? Unohdin omani. | Mine = my pen.
+Lisa has a cat. This cat is ___. | hers / her / she's | Lisalla on kissa. Tämä kissa on hänen. | Lisa = she → hers. Hers ei ole heittomerkkiä.
+These seats are ___. We booked them. | ours / our / our's | Nämä paikat ovat meidän. Varasimme ne. | Itsenäisissä omistusmuodoissa ei ole heittomerkkiä: ours.
+Is this coat ___ or mine? | yours / your / your's | Onko tämä takki sinun vai minun? | Yours kirjoitetaan ilman heittomerkkiä.
+My brother's bike is faster than ___. | mine / my / me | Veljeni pyörä on nopeampi kuin minun. | Mine = my bike.
+Mark has his ticket, and Sara has ___. | hers / her / his | Markilla on lippunsa, ja Saralla omansa. | Sara = she → hers (= her ticket).
+The idea was ___, not mine. | his / him / he | Idea oli hänen, ei minun. | His toimii myös itsenäisenä muotona.
+My parents' garden is small, but ___ is huge. | theirs / their / them | Vanhempieni puutarha on pieni, mutta heidän on valtava. | Theirs = their garden.
+Is that umbrella ___? – No, it's Tom's. | yours / your / you | Onko tuo sateenvarjo sinun? – Ei, se on Tomin. | Ei substantiivia perässä → yours.
+Their school is old, but ___ is new. | ours / our / us | Heidän koulunsa on vanha, mutta meidän on uusi. | Ours = our school.
+A friend of ___ lives in London. | mine / my / me | Eräs ystäväni asuu Lontoossa. | Rakenne a friend of + itsenäinen omistusmuoto: a friend of mine.
+Emma is a cousin of ___. | ours / our / us | Emma on serkkumme. | A cousin of + itsenäinen muoto: a cousin of ours.
+This isn't my sandwich. ___ has cheese in it. | Mine / My / Me | Tämä ei ole minun voileipäni. Omassani on juustoa. | Mine toimii lauseen subjektina = my sandwich.
+Whose shoes are these? Are they ___, Leo? | yours / your / you | Kenen kengät nämä ovat? Ovatko ne sinun, Leo? | Ei substantiivia perässä → yours.
+I like your drawing, but I like ___ too. | hers / her / she | Pidän sinun piirustuksestasi, mutta pidän hänenkin piirustuksestaan. | Hers = her drawing.
+Those aren't our bags. ___ are in the car. | Ours / Our / Us | Nuo eivät ole meidän laukkujamme. Meidän laukkumme ovat autossa. | Ours = our bags, toimii subjektina.
+This is your coffee, and this one is ___. | mine / my / me | Tämä on sinun kahvisi, ja tämä on minun. | Mine = my coffee.
+The neighbours have a big dog. The dog in our garden is ___. | theirs / their / they | Naapureilla on iso koira. Puutarhassamme oleva koira on heidän. | Theirs = their dog.
+He said the money was ___. | his / him / he's | Hän sanoi, että rahat olivat hänen. | Ei substantiivia perässä → his.
+Your answer is right, but ___ is wrong. | mine / my / me | Sinun vastauksesi on oikein, mutta minun on väärin. | Mine = my answer.
+`;
+
 const engRows = src => src.trim().split('\n').map(line => line.split(' | ').map(s => s.trim()));
 
 const shuffle = arr => {
@@ -1023,10 +1089,12 @@ const ENGLISH_CATEGORIES = [
     id: 'pronominit', name: 'Persoonapronominit', short: 'Pronominit',
     subs: [
       { id: 'pronominit-objekti', name: 'Objektimuoto', short: 'Objekti', gens: [[choiceGen('Persoonapronominit · objektimuoto', ENG_PRON_OBJ), 1]] },
+      { id: 'pronominit-omistus', name: 'Adjektiiviset omistusmuodot', short: 'my, your', gens: [[choiceGen('Persoonapronominit · adjektiivinen omistusmuoto', ENG_PRON_POSS), 1]] },
+      { id: 'pronominit-itsenainen', name: 'Itsenäiset omistusmuodot', short: 'mine, yours', gens: [[choiceGen('Persoonapronominit · itsenäinen omistusmuoto', ENG_PRON_INDEP), 1]] },
     ],
   },
 ];
 
 if (typeof module !== 'undefined') {
-  module.exports = { ENGLISH_CATEGORIES, parseCloze, CLOZE_PRESENT, CLOZE_PAST, CLOZE_PERFECT, CLOZE_PLUPERFECT, CLOZE_MIXED, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, ENG_PRON_OBJ, engRows };
+  module.exports = { ENGLISH_CATEGORIES, parseCloze, CLOZE_PRESENT, CLOZE_PAST, CLOZE_PERFECT, CLOZE_PLUPERFECT, CLOZE_MIXED, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, ENG_PRON_OBJ, ENG_PRON_POSS, ENG_PRON_INDEP, engRows };
 }
