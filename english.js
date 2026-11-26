@@ -874,6 +874,39 @@ ___ dark already. | It is / There is / There are | On jo pimeää. | Valoisuudes
 ___ enough chairs for everyone. | There aren't / It isn't / There isn't | Tuoleja ei ole tarpeeksi kaikille. | Chairs on monikko → there aren't.
 `;
 
+const ENG_CAPITALS = `
+Every year, we enjoy a big family dinner on ___. | Christmas Day / christmas day / Christmas day | Joka vuosi syömme isoa perheillallista joulupäivänä. | Juhlapyhien nimet kirjoitetaan isolla, myös jokainen nimen sana: Christmas Day.
+What will you do on ___ this year? | New Year's Eve / new year's eve / New year's eve | Mitä teet tänä vuonna uudenvuodenaattona? | Juhlapyhän nimen kaikki sanat isolla: New Year's Eve.
+My friends Swapna and Amrita are ___ from Delhi. | Indian students / indian students / Indian Students | Ystäväni Swapna ja Amrita ovat intialaisia opiskelijoita Delhistä. | Kansallisuussanat kirjoitetaan isolla (Indian), mutta tavallinen substantiivi pienellä (students).
+You will meet them on ___. | Friday night / friday night / Friday Night | Tapaat heidät perjantai-iltana. | Viikonpäivät isolla (Friday). Night on tavallinen sana → pienellä.
+Did you know that the ___ is one of the oldest in the world? | Sanskrit language / sanskrit language / Sanskrit Language | Tiesitkö, että sanskritin kieli on yksi maailman vanhimmista? | Kielten nimet isolla (Sanskrit). Language on tavallinen sana → pienellä.
+When did ___ take office? | Prime Minister Narendra Modi / prime minister Narendra Modi / Prime minister Narendra Modi | Milloin pääministeri Narendra Modi aloitti tehtävässään? | Nimen edessä oleva arvonimi kirjoitetaan isolla: Prime Minister Narendra Modi.
+My birthday is in ___. | July / july / JULY | Syntymäpäiväni on heinäkuussa. | Kuukausien nimet kirjoitetaan englannissa isolla, toisin kuin suomessa.
+We have a test on ___. | Monday / monday / MONDAY | Meillä on koe maanantaina. | Viikonpäivät kirjoitetaan isolla.
+I love ___. It's my favourite season. | summer / Summer / SUMMER | Rakastan kesää. Se on lempivuodenaikani. | Vuodenajat kirjoitetaan pienellä: spring, summer, autumn, winter.
+Can you speak ___? | Finnish / finnish / FINNISH | Osaatko puhua suomea? | Kielten nimet kirjoitetaan isolla.
+My best subject is ___. | maths / Maths / MATHS | Paras aineeni on matematiikka. | Kouluaineet kirjoitetaan pienellä, paitsi kielet (English, Swedish).
+Our ___ teacher is from Scotland. | English / english / ENGLISH | Englanninopettajamme on Skotlannista. | English on kielen nimi → aina isolla, myös kouluaineena.
+Yesterday ___ went to the cinema. | I / i / me | Eilen menin elokuviin. | Persoonapronomini I kirjoitetaan aina isolla.
+Have you ever been to ___? | the United States / the united states / The United states | Oletko koskaan käynyt Yhdysvalloissa? | Maiden nimet isolla, kaikki nimen pääsanat: the United States. The pysyy pienellä lauseen keskellä.
+My cousin lives in ___. | Stockholm, Sweden / stockholm, sweden / Stockholm, sweden | Serkkuni asuu Tukholmassa, Ruotsissa. | Kaupunkien ja maiden nimet isolla.
+We drank ___ coffee at the café. | Italian / italian / ITALIAN | Joimme italialaista kahvia kahvilassa. | Kansallisuutta tarkoittavat adjektiivit isolla: Italian, French, Finnish.
+My neighbour is a ___. | doctor / Doctor / DOCTOR | Naapurini on lääkäri. | Ammattinimike ilman nimeä kirjoitetaan pienellä.
+Have you met ___? | Doctor Smith / doctor Smith / Doctor smith | Oletko tavannut tohtori Smithin? | Arvonimi nimen edessä kirjoitetaan isolla: Doctor Smith.
+We are going to ___ this weekend. | Lake Saimaa / lake Saimaa / Lake saimaa | Menemme Saimaalle tänä viikonloppuna. | Maantieteellisten nimien kaikki sanat isolla: Lake Saimaa, Mount Everest.
+I live on ___. | Main Street / main street / Main street | Asun Main Streetillä. | Kadunnimissä kaikki sanat isolla.
+Have you read ___? | Harry Potter and the Philosopher's Stone / Harry potter and the philosopher's stone / harry potter and the philosopher's stone | Oletko lukenut Harry Potter ja viisasten kiven? | Kirjojen ja elokuvien nimissä pääsanat isolla, pienet sanat (and, the, of) pienellä.
+My grandparents visit us at ___. | Easter / easter / EASTER | Isovanhempani käyvät luonamme pääsiäisenä. | Juhlapyhät kirjoitetaan isolla.
+Most people in Finland are ___. | Lutherans / lutherans / LUTHERANS | Useimmat suomalaiset ovat luterilaisia. | Uskontoihin liittyvät sanat isolla: Lutheran, Christian, Muslim, Buddhist.
+My favourite band is ___. | the Beatles / the beatles / The beatles | Lempibändini on the Beatles. | Yhtyeiden nimet isolla. The pysyy yleensä pienellä lauseen keskellä.
+I sent you a message on ___. | Instagram / instagram / INSTAGRAM | Lähetin sinulle viestin Instagramissa. | Yritysten ja palveluiden nimet isolla.
+The ___ is the longest river in Africa. | Nile / nile / NILE | Niili on Afrikan pisin joki. | Jokien nimet isolla.
+We have a long holiday in the ___. | autumn / Autumn / AUTUMN | Meillä on pitkä loma syksyllä. | Vuodenajat kirjoitetaan pienellä.
+Next ___ we will go skiing in Lapland. | winter / Winter / WINTER | Ensi talvena menemme hiihtämään Lappiin. | Vuodenajat pienellä, mutta paikannimi Lapland isolla.
+My dad works for ___. | the European Union / the european union / the European union | Isäni työskentelee Euroopan unionille. | Järjestöjen nimissä kaikki pääsanat isolla.
+We celebrate ___ on 6 December. | Independence Day / independence day / Independence day | Vietämme itsenäisyyspäivää 6. joulukuuta. | Juhlapäivän nimen kaikki sanat isolla.
+`;
+
 const engRows = src => src.trim().split('\n').map(line => line.split(' | ').map(s => s.trim()));
 
 const shuffle = arr => {
@@ -1138,6 +1171,14 @@ const CLOZE_IT_THERE_PAST = [
   { title: 'A night at the cottage', text: `[[It was / There was / There were ; Ajasta puhuttaessa → it.]] midnight at our summer cottage. [[There were / There was / It was ; Stars on monikko → there were.]] thousands of stars in the sky, and [[there wasn't / it wasn't / there weren't ; Wind on ainesana → there wasn't.]] any wind. [[It was / There was / There were ; Sää → it.]] so quiet. Suddenly [[there was / it was / there were ; A noise on yksikkö → there was.]] a strange noise outside. [[Was there / Was it / Were there ; Kysymys: was there + yksikkö (somebody).]] somebody in the garden? I looked out of the window. [[It was / There was / There were ; Painotus: kuka tai mikä se oli → it was.]] only a hedgehog!` },
 ];
 
+const CLOZE_CAPITALS = [
+  { title: 'A holiday in London', text: `Last [[summer / Summer / SUMMER ; Vuodenajat kirjoitetaan pienellä.]] my family went to [[London / london / LONDON ; Kaupunkien nimet isolla.]]. We flew there on a [[Tuesday / tuesday / TUESDAY ; Viikonpäivät isolla.]] in [[August / august / AUGUST ; Kuukaudet kirjoitetaan englannissa isolla.]]. We visited [[Buckingham Palace / buckingham palace / Buckingham palace ; Rakennusten ja nähtävyyksien nimissä kaikki pääsanat isolla.]] and walked along the [[River Thames / river Thames / river thames ; Joen nimi isolla, ja River on osa nimeä → isolla.]]. My little brother wanted to meet [[King Charles / king Charles / King charles ; Arvonimi nimen edessä isolla.]], but he was busy. We ate [[Indian / indian / INDIAN ; Kansallisuussanat isolla.]] food every evening. [[I / i / Me ; Pronomini I aina isolla.]] want to go back next year!` },
+  { title: 'My school week', text: `On [[Mondays / mondays / MONDAYS ; Viikonpäivät isolla, myös monikossa.]] I have [[maths / Maths / MATHS ; Kouluaineet pienellä (paitsi kielet).]] and [[Swedish / swedish / SWEDISH ; Kielten nimet isolla, myös kouluaineena.]]. Our [[history / History / HISTORY ; Kouluaine → pienellä.]] teacher, [[Mr Virtanen / mr Virtanen / Mr virtanen ; Mr nimen edessä isolla, samoin sukunimi.]], is very funny. On [[Friday / friday / FRIDAY ; Viikonpäivä isolla.]] we have [[English / english / ENGLISH ; Kieli → isolla.]], which is my favourite subject. In [[spring / Spring / SPRING ; Vuodenajat pienellä.]] our class is going on a trip to [[Tallinn, Estonia / tallinn, estonia / Tallinn, estonia ; Kaupunkien ja maiden nimet isolla.]].` },
+  { title: 'Holidays around the year', text: `In [[December / december / DECEMBER ; Kuukaudet isolla.]] we celebrate [[Christmas / christmas / CHRISTMAS ; Juhlapyhät isolla.]]. On [[Christmas Eve / christmas eve / Christmas eve ; Juhlapyhän nimen kaikki sanat isolla.]] we eat ham and rice pudding. After that comes [[New Year's Day / new year's day / New year's day ; Kaikki juhlapyhän nimen sanat isolla.]]. In [[spring / Spring / SPRING ; Vuodenajat pienellä.]] we have [[Easter / easter / EASTER ; Juhlapyhä isolla.]], and on [[May Day / may day / May day ; Vappu = May Day, molemmat sanat isolla.]] we wear student caps. My [[American / american / AMERICAN ; Kansallisuussana isolla.]] friend celebrates [[Thanksgiving / thanksgiving / THANKSGIVING ; Juhlapyhä isolla.]] in [[November / november / NOVEMBER ; Kuukausi isolla.]].` },
+  { title: 'My pen friend', text: `My pen friend is called [[Lucía / lucía / LUCÍA ; Henkilön nimi isolla.]]. She is [[Spanish / spanish / SPANISH ; Kansallisuussana isolla.]] and lives in [[Madrid / madrid / MADRID ; Kaupungin nimi isolla.]]. Her mother is a [[teacher / Teacher / TEACHER ; Ammattinimike ilman nimeä → pienellä.]] and her father works for [[Google / google / GOOGLE ; Yritysten nimet isolla.]]. Lucía speaks [[Spanish / spanish / SPANISH ; Kielen nimi isolla.]], [[English / english / ENGLISH ; Kielen nimi isolla.]] and a little [[French / french / FRENCH ; Kielen nimi isolla.]]. She wants to visit [[Finland / finland / FINLAND ; Maan nimi isolla.]] in the [[winter / Winter / WINTER ; Vuodenaika pienellä.]] to see the snow.` },
+  { title: 'A trip to Lapland', text: `In [[February / february / FEBRUARY ; Kuukausi isolla.]] we took the night train to [[Rovaniemi / rovaniemi / ROVANIEMI ; Kaupungin nimi isolla.]]. We arrived on [[Saturday morning / saturday morning / Saturday Morning ; Viikonpäivä isolla, morning pienellä.]]. First we visited [[Santa Claus Village / santa claus village / Santa Claus village ; Paikan nimen kaikki sanat isolla.]]. There were many [[Japanese / japanese / JAPANESE ; Kansallisuussana isolla.]] tourists there. In the evening we saw the [[northern lights / Northern Lights / Northern lights ; Revontulet (northern lights) on luonnonilmiö, ei erisnimi → pienellä.]]. [[I / i / Me ; Pronomini I aina isolla.]] took lots of photos. It was the best [[winter / Winter / WINTER ; Vuodenaika pienellä.]] holiday ever.` },
+];
+
 function parseCloze(src) {
   const re = /\[\[(.+?)\]\]/g;
   const segments = [];
@@ -1266,8 +1307,15 @@ const ENGLISH_CATEGORIES = [
     ],
   },
   { id: 'pilkut', name: 'Pilkutus', short: 'Pilkut', gens: [[commaGen('Pilkutus', ENG_COMMAS), 1]] },
+  {
+    id: 'isot', name: 'Isot alkukirjaimet', short: 'Isot kirj.',
+    subs: [
+      { id: 'isot-valitse', name: 'Valitse oikea vaihtoehto', short: 'Valitse', gens: [[choiceGen('Isot alkukirjaimet · valitse', ENG_CAPITALS), 1]] },
+      { id: 'isot-aukko', name: 'Aukkotekstit', short: 'Aukot', gens: [[clozeGen('Isot alkukirjaimet · aukkoteksti', CLOZE_CAPITALS, 'Valitse oikein kirjoitettu vaihtoehto (isot ja pienet alkukirjaimet).'), 1]] },
+    ],
+  },
 ];
 
 if (typeof module !== 'undefined') {
-  module.exports = { ENGLISH_CATEGORIES, parseCloze, CLOZE_PRESENT, CLOZE_PAST, CLOZE_PERFECT, CLOZE_PLUPERFECT, CLOZE_MIXED, CLOZE_PRONOUNS, CLOZE_IT_THERE, CLOZE_IT_THERE_PAST, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, ENG_PRON_OBJ, ENG_PRON_POSS, ENG_PRON_INDEP, ENG_PRON_REFL, ENG_IT_THERE, ENG_COMMAS, engRows };
+  module.exports = { ENGLISH_CATEGORIES, parseCloze, CLOZE_PRESENT, CLOZE_PAST, CLOZE_PERFECT, CLOZE_PLUPERFECT, CLOZE_MIXED, CLOZE_PRONOUNS, CLOZE_IT_THERE, CLOZE_IT_THERE_PAST, CLOZE_CAPITALS, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, ENG_PRON_OBJ, ENG_PRON_POSS, ENG_PRON_INDEP, ENG_PRON_REFL, ENG_IT_THERE, ENG_COMMAS, ENG_CAPITALS, engRows };
 }
