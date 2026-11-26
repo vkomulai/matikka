@@ -1428,7 +1428,7 @@ if (typeof document !== 'undefined') {
       els.inputs.innerHTML =
         '<p class="commas">' + answer.words.map((w, i) =>
           `<span class="cword">${w}</span>` + (i < answer.words.length - 1
-            ? `<button type="button" class="cslot" data-slot="${i}" aria-label="Pilkku sanan ${i + 1} jälkeen" aria-pressed="false"></button>`
+            ? `<button type="button" class="cslot" data-slot="${i}" aria-label="Pilkku sanan ${i + 1} jälkeen" aria-pressed="false">,</button>`
             : '')
         ).join('') + '</p>' +
         '<div class="text-actions"><button type="button" class="btn btn-primary" data-act="check">Tarkista</button></div>';
