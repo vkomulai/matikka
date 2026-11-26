@@ -596,3 +596,30 @@ body {
 }
 .gap select.right { border-color: var(--ok); background: var(--ok-soft); }
 .gap select.wrong { border-color: var(--bad); background: var(--bad-soft); }
+
+/* --- Pilkutus --- */
+.commas { margin: 0; font-size: 1.15rem; line-height: 2.4; -webkit-tap-highlight-color: transparent; }
+.cword { white-space: nowrap; }
+.cslot {
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+  width: 20px;
+  height: 1.6em;
+  margin: 0 1px;
+  padding: 0;
+  border: 0;
+  border-bottom: 2px dotted var(--border);
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+.cslot.on::before { content: ','; }
+/* Näkymätön laajennus kasvattaa napautusalueen sormelle sopivaksi viemättä tilaa riviltä. */
+.cslot::after { content: ''; position: absolute; inset: -8px -10px; }
+.cslot.on { border-bottom-color: var(--accent); }
+.cslot.wrong { border-bottom: 2px solid var(--bad); background: var(--bad-soft); border-radius: 4px; }
+.cslot:disabled { cursor: default; border-bottom-color: transparent; }

@@ -1399,7 +1399,7 @@ if (typeof document !== 'undefined') {
     btn.setAttribute('aria-label', ariaLabel || '');
   }
 
-  const isText = answer => answer.type === 'choice' || answer.type === 'order' || answer.type === 'cloze';
+  const isText = answer => answer.type === 'choice' || answer.type === 'order' || answer.type === 'cloze' || answer.type === 'commas';
 
   // Monivalinta: vaihtoehdot napteina. Sanajärjestys: rakennettava lause ja sanavarasto.
   function renderTextInputs(answer) {
@@ -1422,6 +1422,15 @@ if (typeof document !== 'undefined') {
               gap.options.map(o => `<option value="${o}">${o}</option>`).join('') + '</select></span>'
             : '');
         }).join('') + '</p>' +
+        '<div class="text-actions"><button type="button" class="btn btn-primary" data-act="check">Tarkista</button></div>';
+    } else if (answer.type === 'commas') {
+      state.hint = 'Napauta sanojen väliä lisätäksesi tai poistaaksesi pilkun.';
+      els.inputs.innerHTML =
+        '<p class="commas">' + answer.words.map((w, i) =>
+          `<span class="cword">${w}</span>` + (i < answer.words.length - 1
+            ? `<button type="button" class="cslot" data-slot="${i}" aria-label="Pilkku sanan ${i + 1} jälkeen" aria-pressed="false"></button>`
+            : '')
+        ).join('') + '</p>' +
         '<div class="text-actions"><button type="button" class="btn btn-primary" data-act="check">Tarkista</button></div>';
     } else {
       state.built = [];
@@ -1555,6 +1564,23 @@ if (typeof document !== 'undefined') {
       } else {
         msg = `${right.filter(Boolean).length} / ${right.length} oikein. Korjaa punaiset kohdat.`;
       }
+    } else if (a.type === 'commas') {
+      const slots = [...els.inputs.querySelectorAll('.cslot')];
+      let missing = 0, extra = 0;
+      slots.forEach((b, i) => {
+        const on = b.classList.contains('on');
+        const bad = on ? !a.need.includes(i) && !a.optional.includes(i) : a.need.includes(i);
+        b.classList.toggle('wrong', bad);
+        if (bad) on ? extra++ : missing++;
+      });
+      ok = missing === 0 && extra === 0;
+      if (ok) {
+        slots.forEach(b => { b.disabled = true; });
+        els.inputs.querySelector('[data-act="check"]').textContent = 'Seuraava →';
+      } else {
+        msg = [missing && `${missing} pilkku${missing > 1 ? 'a' : ''} puuttuu`, extra && `${extra} pilkku${extra > 1 ? 'a' : ''} liikaa`]
+          .filter(Boolean).join(', ') + '. Punaiset kohdat ovat väärin.';
+      }
     } else if (a.type === 'order') {
       if (state.built.length < a.tiles.length) return setFeedback(false, 'Käytä kaikki sanat.');
       ok = a.accepted.includes(state.built.map(i => a.tiles[i]).join(' '));
@@ -1674,6 +1700,16 @@ if (typeof document !== 'undefined') {
     paintOrder();
   });
 
+  // Pilkutustehtävässä sanojen välin napautus lisää tai poistaa pilkun
+  els.inputs.addEventListener('click', e => {
+    const slot = e.target.closest('.cslot');
+    if (!slot || state.solved) return;
+    const on = slot.classList.toggle('on');
+    slot.setAttribute('aria-pressed', String(on));
+    for (const b of els.inputs.querySelectorAll('.cslot.wrong')) b.classList.remove('wrong');
+    clearFeedback();
+  });
+
   // Aukkotekstin valinnan muutos poistaa kyseisen aukon oikein/väärin-merkin
   els.inputs.addEventListener('change', e => {
     const sel = e.target.closest('select[data-gap]');
@@ -1684,7 +1720,7 @@ if (typeof document !== 'undefined') {
 
   function textKey(e) {
     const a = state.task.answer;
-    if (e.key === 'Enter') return state.solved ? newTask() : a.type === 'order' || a.type === 'cloze' ? check() : null;
+    if (e.key === 'Enter') return state.solved ? newTask() : a.type === 'order' || a.type === 'cloze' || a.type === 'commas' ? check() : null;
     if (state.solved) return;
     if (a.type === 'choice' && /^[1-9]$/.test(e.key) && Number(e.key) <= a.options.length) {
       const btn = els.inputs.querySelector(`[data-choice="${Number(e.key) - 1}"]`);

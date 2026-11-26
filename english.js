@@ -953,6 +953,71 @@ function orderGen(label, src) {
   };
 }
 
+// Pilkkurivit: virke oikein pilkutettuna, (,) = vapaaehtoinen pilkku | suomennos | selitys
+const ENG_COMMAS = `
+If you want to enjoy authentic Italian food, try the new restaurant next to the pharmacy. | Jos haluat nauttia aidosta italialaisesta ruoasta, kokeile uutta ravintolaa apteekin vieressä. | Kun if-sivulause on virkkeen alussa, sen perään tulee pilkku.
+In fact(,) we could go there together if you don't have any plans for Saturday. | Itse asiassa voisimme mennä sinne yhdessä, jos sinulla ei ole suunnitelmia lauantaille. | Kun if-sivulause on virkkeen lopussa, pilkkua ei tule. In fact -sanan jälkeen pilkku on vapaaehtoinen.
+The restaurant serves a variety of dishes, including pasta, pizza, risotto, salads, soups(,) and desserts. | Ravintola tarjoilee monenlaisia ruokia, kuten pastaa, pizzaa, risottoa, salaatteja, keittoja ja jälkiruokia. | Luettelon sanat erotetaan pilkuilla. Pilkku ennen viimeistä and-sanaa (Oxford comma) on vapaaehtoinen. Including-sanan eteen tulee pilkku.
+When I got home, my dog was waiting at the door. | Kun tulin kotiin, koirani odotti ovella. | Kun when-sivulause on virkkeen alussa, sen perään tulee pilkku.
+My dog was waiting at the door when I got home. | Koirani odotti ovella, kun tulin kotiin. | Kun when-sivulause on lopussa, pilkkua ei tule. Suomessa pilkku tulisi, englannissa ei.
+I think that English is easy. | Minusta englanti on helppoa. | That-sivulauseen eteen ei tule pilkkua, toisin kuin suomessa.
+She said that she would be late. | Hän sanoi, että hän myöhästyy. | That-sivulauseen eteen ei tule pilkkua.
+I don't know where he lives. | En tiedä, missä hän asuu. | Kysymyssanalla alkavan sivulauseen eteen ei tule pilkkua.
+We stayed inside because it was raining. | Pysyimme sisällä, koska satoi. | Because-sivulauseen eteen ei yleensä tule pilkkua, kun se on lopussa.
+Because it was raining, we stayed inside. | Koska satoi, pysyimme sisällä. | Kun because-sivulause on alussa, sen perään tulee pilkku.
+I bought apples, bananas(,) and oranges. | Ostin omenoita, banaaneja ja appelsiineja. | Luettelon osat erotetaan pilkuilla. Pilkku ennen and-sanaa on vapaaehtoinen.
+However, the weather was terrible. | Sää oli kuitenkin kamala. | Virkkeen alussa olevan however-sanan perään tulee pilkku.
+Unfortunately, the shop was closed. | Valitettavasti kauppa oli kiinni. | Alussa olevan lauseadverbin (unfortunately, luckily, of course) perään tulee pilkku.
+Tom, can you help me? | Tom, voitko auttaa minua? | Puhuttelusana erotetaan pilkulla.
+Can you help me, Tom? | Voitko auttaa minua, Tom? | Puhuttelusana erotetaan pilkulla myös lopussa.
+Yes, I would love to come. | Kyllä, tulisin mielelläni. | Yes ja no erotetaan muusta lauseesta pilkulla.
+It's cold today, isn't it? | Tänään on kylmä, eikö olekin? | Question tag (isn't it, don't you) erotetaan pilkulla.
+You like pizza, don't you? | Pidät pizzasta, ethän? | Question tag erotetaan pilkulla.
+My brother, who lives in Turku, is a doctor. | Veljeni, joka asuu Turussa, on lääkäri. | Lisätietoa antava who-sivulause erotetaan pilkuilla. Veljiä on yksi, joten tieto ei rajaa.
+The boy who lives next door is my friend. | Poika, joka asuu naapurissa, on ystäväni. | Rajaava who-sivulause (kuka poika?) ei saa pilkkuja englannissa, toisin kuin suomessa.
+Helsinki, which is the capital of Finland, is by the sea. | Helsinki, joka on Suomen pääkaupunki, on meren rannalla. | Lisätietoa antava which-sivulause erotetaan pilkuilla.
+The book that I read yesterday was boring. | Kirja, jonka luin eilen, oli tylsä. | Rajaava that-sivulause ei saa pilkkuja.
+Mr Smith, our new teacher, comes from London. | Herra Smith, uusi opettajamme, tulee Lontoosta. | Selittävä lisäys (our new teacher) erotetaan pilkuilla.
+I wanted to go out, but it was too cold. | Halusin mennä ulos, mutta oli liian kylmä. | Kun but yhdistää kaksi päälausetta, sen eteen tulee pilkku.
+I was tired, so I went to bed early. | Olin väsynyt, joten menin aikaisin nukkumaan. | Kun so yhdistää kaksi päälausetta, sen eteen tulee pilkku.
+After the film ended, we went for a pizza. | Elokuvan loputtua menimme syömään pizzaa. | Alussa olevan after-sivulauseen perään tulee pilkku.
+We went for a pizza after the film ended. | Menimme syömään pizzaa elokuvan loputtua. | Kun after-sivulause on lopussa, pilkkua ei tule.
+On Monday, 5 May, we have a test. | Maanantaina 5. toukokuuta meillä on koe. | Päivämäärä viikonpäivän jälkeen erotetaan pilkuilla.
+She was born in Oulu, Finland, in 2012. | Hän syntyi Oulussa Suomessa vuonna 2012. | Kaupungin ja maan väliin tulee pilkku, ja maan perään myös.
+Luckily(,) nobody was hurt. | Onneksi kukaan ei loukkaantunut. | Lyhyen alkusanan (luckily) jälkeen pilkku on tavallinen mutta vapaaehtoinen.
+If it rains tomorrow, we will stay at home. | Jos huomenna sataa, jäämme kotiin. | Alussa olevan if-sivulauseen perään tulee pilkku.
+We will stay at home if it rains tomorrow. | Jäämme kotiin, jos huomenna sataa. | Lopussa olevan if-sivulauseen eteen ei tule pilkkua.
+`;
+
+// Pilkutustehtävä: virke ilman pilkkuja, sanojen väleihin napautetaan pilkut.
+function commaGen(label, src) {
+  const next = deck(engRows(src));
+  return () => {
+    const [marked, fi, why] = next();
+    const words = [], need = [], optional = [];
+    marked.split(' ').forEach((w, i) => {
+      if (w.endsWith('(,)')) { optional.push(i); w = w.slice(0, -3); }
+      else if (w.endsWith(',')) { need.push(i); w = w.slice(0, -1); }
+      words.push(w);
+    });
+    const filled = marked.replace(/\(,\)/g, ',');
+    const variants = optional.length ? [filled, marked.replace(/\(,\)/g, '')] : [filled];
+    return {
+      label,
+      text: true,
+      why,
+      prompt: `Lisää pilkut tarvittaessa. Napauta sanojen väliä.<span class="fi">${fi}</span>`,
+      problem: '',
+      answer: { type: 'commas', words, need, optional, filled },
+      steps: [
+        { text: why, math: variants },
+        { text: 'Suomeksi:', math: [fi] },
+      ],
+      final: filled,
+    };
+  };
+}
+
 /* ---------- Aukkotehtävät: teksti, jossa jokaiseen aukkoon valitaan oikea muoto ---------- */
 
 // Aukko: [[oikea / väärä / väärä ; selitys]]
@@ -1200,8 +1265,9 @@ const ENGLISH_CATEGORIES = [
       { id: 'itthere-aukko-imperfekti', name: 'Aukkotekstit (imperfekti)', short: 'Aukot (was)', gens: [[clozeGen('It ja there · aukkoteksti imperfekti', CLOZE_IT_THERE_PAST, 'Valitse it tai there ja be-verbin oikea imperfektimuoto.'), 1]] },
     ],
   },
+  { id: 'pilkut', name: 'Pilkutus', short: 'Pilkut', gens: [[commaGen('Pilkutus', ENG_COMMAS), 1]] },
 ];
 
 if (typeof module !== 'undefined') {
-  module.exports = { ENGLISH_CATEGORIES, parseCloze, CLOZE_PRESENT, CLOZE_PAST, CLOZE_PERFECT, CLOZE_PLUPERFECT, CLOZE_MIXED, CLOZE_PRONOUNS, CLOZE_IT_THERE, CLOZE_IT_THERE_PAST, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, ENG_PRON_OBJ, ENG_PRON_POSS, ENG_PRON_INDEP, ENG_PRON_REFL, ENG_IT_THERE, engRows };
+  module.exports = { ENGLISH_CATEGORIES, parseCloze, CLOZE_PRESENT, CLOZE_PAST, CLOZE_PERFECT, CLOZE_PLUPERFECT, CLOZE_MIXED, CLOZE_PRONOUNS, CLOZE_IT_THERE, CLOZE_IT_THERE_PAST, ENG_PRESENT_POS, ENG_PRESENT_NEG, ENG_PRESENT_Q, ENG_PROG_POS, ENG_PROG_NEG, ENG_PROG_Q, ENG_PAST_POS, ENG_PAST_NEG, ENG_PAST_Q, ENG_PERF_POS, ENG_PERF_NEG, ENG_PERF_Q, ENG_PERFPROG_POS, ENG_PERFPROG_NEG, ENG_PERFPROG_Q, ENG_PLUP_POS, ENG_PLUP_NEG, ENG_PLUP_Q, ENG_PLUPPROG_POS, ENG_PLUPPROG_NEG, ENG_PLUPPROG_Q, ENG_SIMPLE, ENG_CONTINUOUS, ENG_FUTURE, ENG_CONDITIONAL, ENG_IF, ENG_ORDER, ENG_PRON_OBJ, ENG_PRON_POSS, ENG_PRON_INDEP, ENG_PRON_REFL, ENG_IT_THERE, ENG_COMMAS, engRows };
 }
